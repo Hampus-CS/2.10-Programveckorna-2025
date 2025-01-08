@@ -1,10 +1,13 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 
 public class Buttons : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject defaultView;
+    public TMPro.TextMeshProUGUI time;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -21,10 +24,11 @@ public class Buttons : MonoBehaviour
         }
     }
 
-
-
     public void pause()
     {
+        Time.timeScale = 0;
+        print("Timescale 0");
+
         defaultView.SetActive(false);
         pauseMenu.SetActive(true);
     }
@@ -33,6 +37,8 @@ public class Buttons : MonoBehaviour
     {
         defaultView.SetActive(true);
         pauseMenu.SetActive(false);
+        Time.timeScale = 1;
+        print("Timescale 1");
     }
 
     public void Quit()

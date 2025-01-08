@@ -697,6 +697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1229380988}
   defaultView: {fileID: 197174296}
+  time: {fileID: 0}
 --- !u!4 &383198733
 Transform:
   m_ObjectHideFlags: 0
