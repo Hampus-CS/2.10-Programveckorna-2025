@@ -2303,6 +2303,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
+
         m_MethodName: SkillInfo
         m_Mode: 3
         m_Arguments:

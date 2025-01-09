@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
@@ -11,9 +11,9 @@ public class Buttons : MonoBehaviour
     private Dictionary<int, ISkillInfo> skillInfoHandlers = new(); // Hanterar skills dynamiskt
 
     [Header("Stockpile UI")]
-    [SerializeField] private GameObject buttonTemplate; // Mall för vapenknappar
+    [SerializeField] private GameObject buttonTemplate; // Mall fÃ¶r vapenknappar
     [SerializeField] private Transform content; // Scroll View content
-    [SerializeField] private Text scrapText; // Text för Scrap
+    [SerializeField] private Text scrapText; // Text fÃ¶r Scrap
     [SerializeField] private StockpileManager stockpileManager; // Hanterar vapnen
     [SerializeField] private GameManager gameManager; // Hanterar Scrap
     private List<GameObject> stockpileButtons = new();
@@ -22,7 +22,7 @@ public class Buttons : MonoBehaviour
     {
         Time.timeScale = 0;
 
-        // Viktiga Menyinställningar
+        // Viktiga MenyinstÃ¤llningar
         menus[0].SetActive(false); // def
         menus[1].SetActive(false); // pause
         menus[2].SetActive(true); // start
@@ -48,7 +48,6 @@ public class Buttons : MonoBehaviour
         */
 
         UpdateStockpileUI();
-
     }
 
     /// <summary>
@@ -127,9 +126,9 @@ public class Buttons : MonoBehaviour
     public void SkillTree()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false); // Stäng huvudmenyn
-        menus[4].SetActive(true);  // Öppna skill tree
-        Debug.Log("Öppna tree");
+        menus[0].SetActive(false); // StÃ¤ng huvudmenyn
+        menus[4].SetActive(true);  // Ãppna skill tree
+        Debug.Log("Ãppna tree");
     }
 
     public void SkillInfo(int skillId)
@@ -143,9 +142,9 @@ public class Buttons : MonoBehaviour
 
     public void SkillsDone()
     {
-        menus[5].SetActive(false); // Stäng aktuell skill-info
-        menus[4].SetActive(true);  // Återgå till skill tree
-        Debug.Log("Öppna skill tree");
+        menus[5].SetActive(false); // StÃ¤ng aktuell skill-info
+        menus[4].SetActive(true);  // ÃtergÃ¥ till skill tree
+        Debug.Log("Ãppna skill tree");
     }
 
     /// <summary>
@@ -155,8 +154,8 @@ public class Buttons : MonoBehaviour
     public void ShowStockpileMenu()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false); // Stäng huvudmenyn
-        menus[5].SetActive(true); // Öppna vapenmenyn
+        menus[0].SetActive(false); // StÃ¤ng huvudmenyn
+        menus[5].SetActive(true); // Ãppna vapenmenyn
         UpdateStockpileUI();
     }
 
@@ -172,14 +171,14 @@ public class Buttons : MonoBehaviour
         // Uppdatera Scrap-text
         scrapText.text = $"Scrap: {gameManager.GetScrap()}";
 
-        // Skapa nya knappar för vapnen
+        // Skapa nya knappar fÃ¶r vapnen
         foreach (var weapon in stockpileManager.Weapons)
         {
             GameObject button = Instantiate(buttonTemplate, content);
             button.transform.Find("Text").GetComponent<Text>().text =
-                $"{weapon.Name} (x{(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())})";
+                $"{weapon.Name} (x{(weapon.Quantity == -1 ? "â" : weapon.Quantity.ToString())})";
 
-            // Lägg till klickfunktion
+            // LÃ¤gg till klickfunktion
             button.GetComponent<Button>().onClick.AddListener(() =>
             {
                 stockpileManager.UseWeapon(weapon.Name);
@@ -193,7 +192,7 @@ public class Buttons : MonoBehaviour
 }
 
 /// <summary>
-/// Interface för att visa skill-info.
+/// Interface fÃ¶r att visa skill-info.
 /// </summary>
 
 public interface ISkillInfo
@@ -202,7 +201,7 @@ public interface ISkillInfo
 }
 
 /// <summary>
-/// Implementation av skill tree Inteface för hantering av skills.
+/// Implementation av skill tree Inteface fÃ¶r hantering av skills.
 /// </summary>
 
 public class SkillInfo : ISkillInfo
@@ -216,8 +215,8 @@ public class SkillInfo : ISkillInfo
 
     public void ShowSkillInfo(List<GameObject> menus)
     {
-        menus[4].SetActive(false); // Stäng skill tree
-        menus[skillMenuIndex].SetActive(true); // Öppna relevant skill-info
-        Debug.Log($"Öppna skill {skillMenuIndex} info");
+        menus[4].SetActive(false); // StÃ¤ng skill tree
+        menus[skillMenuIndex].SetActive(true); // Ãppna relevant skill-info
+        Debug.Log($"Ãppna skill {skillMenuIndex} info");
     }
 }
