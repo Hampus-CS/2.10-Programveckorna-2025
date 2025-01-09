@@ -46,6 +46,10 @@ public class Settings : MonoBehaviour
     public void SetMiscVolume(float volume)
     {
         miscVolume = Mathf.Clamp(volume, 0f, 1f);
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+
+        }
         // Skicka värdet till ljudeffekthanteraren (om du har en separat ljudkomponent)
     }
 
