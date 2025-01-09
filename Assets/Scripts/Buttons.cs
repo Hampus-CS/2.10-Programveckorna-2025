@@ -1,22 +1,31 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using UnityEditor.Rendering;
+using System.Collections.Generic;
 
 public class Buttons : MonoBehaviour
 {
-    public GameObject pauseMenu;
-    public GameObject defaultView;
-    public TMPro.TextMeshProUGUI time;
+    public List<GameObject> menus = new List<GameObject>();
 
+    private void Start()
+    {
+        Time.timeScale = 0;
+
+        menus[2].SetActive(true);
+        menus[0].SetActive(false);
+        menus[1].SetActive(false);
+        menus[3].SetActive(false);
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (pauseMenu.activeSelf == false)
+            if (menus[1].activeSelf == false)
             {
-                pause();
+                Pause();
             }
-            else if (pauseMenu.activeSelf == true)
+            else if (menus[1].activeSelf == true)
             {
                 Resume();
             }
@@ -24,21 +33,43 @@ public class Buttons : MonoBehaviour
         }
     }
 
-    public void pause()
+    public void Play()
+    {
+        menus[2].SetActive(false);
+        menus[0].SetActive(true);
+
+        Time.timeScale = 1;
+        print("TimeScale " + Time.timeScale);
+    }
+
+    public void Settings()
+    {
+        menus[2].SetActive(false);
+        menus[3].SetActive(true);
+    }
+
+    public void Done()
+    {
+        menus[3].SetActive(false);
+        menus[2].SetActive(true);
+    }
+
+    public void Pause()
     {
         Time.timeScale = 0;
-        print("Timescale 0");
+        print("TimeScale " + Time.timeScale);
 
-        defaultView.SetActive(false);
-        pauseMenu.SetActive(true);
+        menus[0].SetActive(false);
+        menus[1].SetActive(true);
     }
 
     public void Resume()
     {
-        defaultView.SetActive(true);
-        pauseMenu.SetActive(false);
+        menus[1].SetActive(false);
+        menus[0].SetActive(true);
+
         Time.timeScale = 1;
-        print("Timescale 1");
+        print("TimeScale " + Time.timeScale);
     }
 
     public void Quit()
