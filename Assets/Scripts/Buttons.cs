@@ -1,22 +1,41 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEditor.Rendering;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class Buttons : MonoBehaviour
 {
+    [Header("All Menus")]
     public List<GameObject> menus = new();
+
+    [Header("Skill tree")]
+    private Dictionary<int, ISkillInfo> skillInfoHandlers = new(); // Hanterar skills dynamiskt
+
+    [Header("Stockpile UI")]
+    [SerializeField] private GameObject buttonTemplate; // Mall fÃ¶r vapenknappar
+    [SerializeField] private Transform content; // Scroll View content
+    [SerializeField] private Text scrapText; // Text fÃ¶r Scrap
+    [SerializeField] private StockpileManager stockpileManager; // Hanterar vapnen
+    [SerializeField] private GameManager gameManager; // Hanterar Scrap
+    private List<GameObject> stockpileButtons = new();
 
     private void Start()
     {
         Time.timeScale = 0;
 
-        menus[2].SetActive(true);
-        menus[0].SetActive(false);
-        menus[1].SetActive(false);
-        menus[3].SetActive(false);
-        menus[4].SetActive(false);
+        // Viktiga MenyinstÃ¤llningar
+        menus[0].SetActive(false); // def
+        menus[1].SetActive(false); // pause
+        menus[2].SetActive(true); // start
+        menus[3].SetActive(false); // settings
+        menus[4].SetActive(false); // skill tree
+
+        // Registrera skills
+        skillInfoHandlers[1] = new SkillInfo(5); // Skill 1 Info (index 5 i menus)
+        skillInfoHandlers[2] = new SkillInfo(6); // Skill 2 Info (index 6 i menus)
+        skillInfoHandlers[3] = new SkillInfo(7); // Skill 3 Info (index 7 i menus)
+        skillInfoHandlers[4] = new SkillInfo(8); // Skill 4 Info (index 8 i menus)
+        skillInfoHandlers[5] = new SkillInfo(9); // Skill 5 Info (index 9 i menus)
+        skillInfoHandlers[6] = new SkillInfo(10); // Skill 6 Info (index 10 i menus)
 
         /*
          0 = def
@@ -28,7 +47,13 @@ public class Buttons : MonoBehaviour
          6 = skill 2 info
         */
 
+        UpdateStockpileUI();
     }
+
+    /// <summary>
+    /// Main
+    /// </summary>
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -94,33 +119,104 @@ public class Buttons : MonoBehaviour
         print("Save");
     }
 
+    /// <summary>
+    /// Skill Tree UI
+    /// </summary>
+
     public void SkillTree()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false);
-        menus[4].SetActive(true);
-        print("�ppna tree");
+        menus[0].SetActive(false); // StÃ¤ng huvudmenyn
+        menus[4].SetActive(true);  // Ãppna skill tree
+        Debug.Log("Ãppna tree");
     }
 
-    public void Skills1Info()
+    public void SkillInfo(int skillId)
     {
-        Time.timeScale = 0;
-        menus[4].SetActive(false);
-        menus[5].SetActive(true);
-        print("�ppna skill 1 info");
-    }
-    public void Skills2Info()
-    {
-        Time.timeScale = 0;
-        menus[4].SetActive(false);
-        menus[6].SetActive(true);
-        print("�ppna skill 1 info");
+        if (skillInfoHandlers.TryGetValue(skillId, out ISkillInfo skillInfo))
+        {
+            Time.timeScale = 0;
+            skillInfo.ShowSkillInfo(menus);
+        }
     }
 
     public void SkillsDone()
     {
-        menus[5].SetActive(false);
-        menus[4].SetActive(true);
-        print("�ppna skill tree");
+        menus[5].SetActive(false); // StÃ¤ng aktuell skill-info
+        menus[4].SetActive(true);  // ÃtergÃ¥ till skill tree
+        Debug.Log("Ãppna skill tree");
+    }
+
+    /// <summary>
+    /// Stockpile UI
+    /// </summary>
+
+    public void ShowStockpileMenu()
+    {
+        Time.timeScale = 0;
+        menus[0].SetActive(false); // StÃ¤ng huvudmenyn
+        menus[5].SetActive(true); // Ãppna vapenmenyn
+        UpdateStockpileUI();
+    }
+
+    public void UpdateStockpileUI()
+    {
+        // Rensa gamla knappar
+        foreach (var button in stockpileButtons)
+        {
+            Destroy(button);
+        }
+        stockpileButtons.Clear();
+
+        // Uppdatera Scrap-text
+        scrapText.text = $"Scrap: {gameManager.GetScrap()}";
+
+        // Skapa nya knappar fÃ¶r vapnen
+        foreach (var weapon in stockpileManager.Weapons)
+        {
+            GameObject button = Instantiate(buttonTemplate, content);
+            button.transform.Find("Text").GetComponent<Text>().text =
+                $"{weapon.Name} (x{(weapon.Quantity == -1 ? "â" : weapon.Quantity.ToString())})";
+
+            // LÃ¤gg till klickfunktion
+            button.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                stockpileManager.UseWeapon(weapon.Name);
+                UpdateStockpileUI();
+            });
+
+            stockpileButtons.Add(button);
+        }
+    }
+
+}
+
+/// <summary>
+/// Interface fÃ¶r att visa skill-info.
+/// </summary>
+
+public interface ISkillInfo
+{
+    void ShowSkillInfo(List<GameObject> menus);
+}
+
+/// <summary>
+/// Implementation av skill tree Inteface fÃ¶r hantering av skills.
+/// </summary>
+
+public class SkillInfo : ISkillInfo
+{
+    private int skillMenuIndex;
+
+    public SkillInfo(int skillMenuIndex)
+    {
+        this.skillMenuIndex = skillMenuIndex;
+    }
+
+    public void ShowSkillInfo(List<GameObject> menus)
+    {
+        menus[4].SetActive(false); // StÃ¤ng skill tree
+        menus[skillMenuIndex].SetActive(true); // Ãppna relevant skill-info
+        Debug.Log($"Ãppna skill {skillMenuIndex} info");
     }
 }
