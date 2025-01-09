@@ -15,7 +15,13 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            troopNavigation.MoveForwards();
+            troopNavigation.forwards = true;
+            troopNavigation.holdPosition = false;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            troopNavigation.forwards = false;
+            troopNavigation.holdPosition = true;
         }
     }
 }
