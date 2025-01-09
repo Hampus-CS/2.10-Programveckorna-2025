@@ -4,12 +4,11 @@ public class GameManager1 : MonoBehaviour
 {
     
 
-    [System.Serializable]
-    public class Weapon 
+     [System.Serializable]
+    public class Weapon
     {
-        public GameObject DamageButton;
-        public GameObject RangeButton;
-        public GameObject bulletPrefab;
+        
+       [SerializeField] public GameObject bulletPrefab; //prefab for bullets
         public int damage = 10;
         public int range = 5;
 
