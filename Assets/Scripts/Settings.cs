@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
+
 public class Settings : MonoBehaviour
 {
     public SaveHandler saveHandler;
@@ -99,15 +100,13 @@ public class Settings : MonoBehaviour
     public void SetMusicVolume(float volume)
     {
         musicVolume = Mathf.Clamp(volume, 0f, 1f);
-        // Skicka v‰rdet till musikhanteraren (om du har en separat musikkomponent)
+        // Skicka v√§rdet till musikhanteraren (om du har en separat musikkomponent)
     }
 
     public void SetMiscVolume(float volume)
     {
         miscVolume = Mathf.Clamp(volume, 0f, 1f);
-        // Skicka v‰rdet till ljudeffekthanteraren (om du har en separat ljudkomponent)
-    }
-    /*
+
     public void SaveSettings()
     {
         GameState currentState = new GameState
@@ -135,11 +134,12 @@ public class Settings : MonoBehaviour
             miscVolume = loadedState.MiscVolume;
         }
     }
-    */
+
     private void ApplySettings()
     {
         Screen.SetResolution(resolutionWidth, resolutionHeight, isFullscreen);
         AudioListener.volume = masterVolume;
-        print($"Settings Applied: {resolutionWidth}x{resolutionHeight}, Fullscreen: {isFullscreen}, MasterVolume: {masterVolume}");
+        Debug.Log($"Settings Applied: {resolutionWidth}x{resolutionHeight}, Fullscreen: {isFullscreen}, MasterVolume: {masterVolume}");
+
     }
 }
