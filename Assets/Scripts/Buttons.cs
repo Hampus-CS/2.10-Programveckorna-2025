@@ -1,8 +1,8 @@
 using Unity.VisualScripting;
 using UnityEngine;
-using TMPro;
 using UnityEditor.Rendering;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Buttons : MonoBehaviour
 {
@@ -16,13 +16,18 @@ public class Buttons : MonoBehaviour
         menus[0].SetActive(false);
         menus[1].SetActive(false);
         menus[3].SetActive(false);
+        menus[4].SetActive(false);
 
         /*
          0 = def
          1 = pause
          2 = start
          3 = settings
+         4 = skill tree
+         5 = skill 1 info
+         6 = skill 2 info
         */
+
     }
     private void Update()
     {
@@ -54,7 +59,7 @@ public class Buttons : MonoBehaviour
         menus[3].SetActive(true);
     }
 
-    public void Done()
+    public void SettingsDone()
     {
         menus[3].SetActive(false);
         menus[2].SetActive(true);
@@ -87,5 +92,35 @@ public class Buttons : MonoBehaviour
     public void Save()
     {
         print("Save");
+    }
+
+    public void SkillTree()
+    {
+        Time.timeScale = 0;
+        menus[0].SetActive(false);
+        menus[4].SetActive(true);
+        print("Öppna tree");
+    }
+
+    public void Skills1Info()
+    {
+        Time.timeScale = 0;
+        menus[4].SetActive(false);
+        menus[5].SetActive(true);
+        print("Öppna skill 1 info");
+    }
+    public void Skills2Info()
+    {
+        Time.timeScale = 0;
+        menus[4].SetActive(false);
+        menus[6].SetActive(true);
+        print("Öppna skill 1 info");
+    }
+
+    public void SkillsDone()
+    {
+        menus[5].SetActive(false);
+        menus[4].SetActive(true);
+        print("Öppna skill tree");
     }
 }
