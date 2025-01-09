@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class Buttons : MonoBehaviour
 {
-    public List<GameObject> menus = new List<GameObject>();
+    public List<GameObject> menus = new();
 
     private void Start()
     {
@@ -16,6 +16,13 @@ public class Buttons : MonoBehaviour
         menus[0].SetActive(false);
         menus[1].SetActive(false);
         menus[3].SetActive(false);
+
+        /*
+         0 = def
+         1 = pause
+         2 = start
+         3 = settings
+        */
     }
     private void Update()
     {
@@ -29,7 +36,6 @@ public class Buttons : MonoBehaviour
             {
                 Resume();
             }
-
         }
     }
 
