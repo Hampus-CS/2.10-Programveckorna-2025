@@ -22,14 +22,14 @@ public class Buttons : MonoBehaviour
     {
         Time.timeScale = 0;
 
-        // Viktiga MenyinstÃ¤llningar
+        // Important Menu settings
         menus[0].SetActive(false); // game
         menus[1].SetActive(false); // pause
         menus[2].SetActive(true); // start
         menus[3].SetActive(false); // settings
         menus[4].SetActive(false); // skill tree
 
-        // Registrera skills
+        // Reg skills
         skillInfoHandlers[1] = new SkillInfo(5); // Skill 1 Info (index 5 i menus)
         skillInfoHandlers[2] = new SkillInfo(6); // Skill 2 Info (index 6 i menus)
         skillInfoHandlers[3] = new SkillInfo(7); // Skill 3 Info (index 7 i menus)
@@ -126,9 +126,9 @@ public class Buttons : MonoBehaviour
     public void SkillTree()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false);
-        menus[4].SetActive(true); 
-        Debug.Log("Ãppna tree");
+        menus[0].SetActive(false); // Close main menu
+        menus[4].SetActive(true);  // Open skill tree
+        Debug.Log("Open tree");
     }
 
     public void SkillInfo(int skillId)
@@ -142,9 +142,9 @@ public class Buttons : MonoBehaviour
 
     public void SkillsDone()
     {
-        menus[5].SetActive(false);
-        menus[4].SetActive(true);
-        Debug.Log("Ãppna skill tree");
+        menus[5].SetActive(false); // Close active skill-info menu
+        menus[4].SetActive(true);  // Close skill tree
+        Debug.Log("Open skill tree");
     }
 
     /// <summary>
@@ -154,8 +154,8 @@ public class Buttons : MonoBehaviour
     public void ShowStockpileMenu()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false); // Close main menu
-        menus[5].SetActive(true); // Open weapon menu
+        menus[0].SetActive(false); // Close Main menu
+        menus[5].SetActive(true); // Open Weapon menu
         UpdateStockpileUI();
     }
 
@@ -176,7 +176,7 @@ public class Buttons : MonoBehaviour
         {
             GameObject button = Instantiate(buttonTemplate, content);
             button.transform.Find("Text").GetComponent<Text>().text =
-                $"{weapon.Name} (x{(weapon.Quantity == -1 ? "â" : weapon.Quantity.ToString())})";
+                $"{weapon.Name} (x{(weapon.Quantity == -1 ? "and" : weapon.Quantity.ToString())})";
 
             // Add click event
             button.GetComponent<Button>().onClick.AddListener(() =>
@@ -216,7 +216,7 @@ public class SkillInfo : ISkillInfo
     public void ShowSkillInfo(List<GameObject> menus)
     {
         menus[4].SetActive(false); // Close skill tree
-        menus[skillMenuIndex].SetActive(true); // Open relevent skill-info
-        Debug.Log($"Ãppna skill {skillMenuIndex} info");
+        menus[skillMenuIndex].SetActive(true); // Open relevent skill-info
+        Debug.Log($"Open skill {skillMenuIndex} info");
     }
 }
