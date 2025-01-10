@@ -671,6 +671,7 @@ GameObject:
   - component: {fileID: 564529467}
   - component: {fileID: 564529469}
   - component: {fileID: 564529468}
+  - component: {fileID: 564529470}
   m_Layer: 0
   m_Name: Player
   m_TagString: FriendlyTroop
@@ -825,6 +826,18 @@ MonoBehaviour:
   inCombat: 0
   holdPosition: 0
   moveForwards: 0
+--- !u!114 &564529470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564529461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69bc9daf3f2e9419a99487709e5af6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &616603298
 GameObject:
   m_ObjectHideFlags: 0
