@@ -11,9 +11,9 @@ public class Buttons : MonoBehaviour
     private Dictionary<int, ISkillInfo> skillInfoHandlers = new(); // Hanterar skills dynamiskt
 
     [Header("Stockpile UI")]
-    [SerializeField] private GameObject buttonTemplate; // Mall fÃ¶r vapenknappar
+    [SerializeField] private GameObject buttonTemplate; // Mall för vapenknappar
     [SerializeField] private Transform content; // Scroll View content
-    [SerializeField] private Text scrapText; // Text fÃ¶r Scrap
+    [SerializeField] private Text scrapText; // Text för Scrap
     [SerializeField] private StockpileManager stockpileManager; // Hanterar vapnen
     [SerializeField] private GameManager gameManager; // Hanterar Scrap
     private List<GameObject> stockpileButtons = new();
@@ -126,8 +126,8 @@ public class Buttons : MonoBehaviour
     public void SkillTree()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false); // StÃ¤ng huvudmenyn
-        menus[4].SetActive(true);  // Ãppna skill tree
+        menus[0].SetActive(false); // Stäng huvudmenyn
+        menus[4].SetActive(true);  // Öppna skill tree
         Debug.Log("Ãppna tree");
     }
 
@@ -142,8 +142,8 @@ public class Buttons : MonoBehaviour
 
     public void SkillsDone()
     {
-        menus[5].SetActive(false); // StÃ¤ng aktuell skill-info
-        menus[4].SetActive(true);  // ÃtergÃ¥ till skill tree
+        menus[5].SetActive(false); // Stäng aktuell skill-info
+        menus[4].SetActive(true);  // Stäng skill tree
         Debug.Log("Ãppna skill tree");
     }
 
@@ -154,8 +154,8 @@ public class Buttons : MonoBehaviour
     public void ShowStockpileMenu()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false); // StÃ¤ng huvudmenyn
-        menus[5].SetActive(true); // Ãppna vapenmenyn
+        menus[0].SetActive(false); // Stäng huvudmenyn
+        menus[5].SetActive(true); // Öppna vapenmenyn
         UpdateStockpileUI();
     }
 
@@ -171,7 +171,7 @@ public class Buttons : MonoBehaviour
         // Uppdatera Scrap-text
         scrapText.text = $"Scrap: {gameManager.GetScrap()}";
 
-        // Skapa nya knappar fÃ¶r vapnen
+        // Skapa nya knappar för vapnen
         foreach (var weapon in stockpileManager.Weapons)
         {
             GameObject button = Instantiate(buttonTemplate, content);
@@ -215,8 +215,8 @@ public class SkillInfo : ISkillInfo
 
     public void ShowSkillInfo(List<GameObject> menus)
     {
-        menus[4].SetActive(false); // StÃ¤ng skill tree
-        menus[skillMenuIndex].SetActive(true); // Ãppna relevant skill-info
+        menus[4].SetActive(false); // Stäng skill tree
+        menus[skillMenuIndex].SetActive(true); // Öppna relevant skill-info
         Debug.Log($"Ãppna skill {skillMenuIndex} info");
     }
 }
