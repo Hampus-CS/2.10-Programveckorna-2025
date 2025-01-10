@@ -20,6 +20,18 @@ public class CoverScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Collider[] colliders = Physics.OverlapBox(transform.position, collider.size / 2, Quaternion.identity);
+        troopsInCollider = 0;
+
+        foreach (Collider col in colliders)
+        {
+            if (col.gameObject.GetComponent<NavMeshAgent>())
+            {
+                troopsInCollider++;
+                occupiedBy = col.name;
+            }
+        }
+
         if (troopsInCollider == 0)
         {
             occupiedBy = "none";
