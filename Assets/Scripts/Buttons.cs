@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 public class Buttons : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class Buttons : MonoBehaviour
     [Header("Stockpile UI")]
     [SerializeField] private GameObject buttonTemplate; // Template for weapon buttons
     [SerializeField] private Transform content; // Scroll View content
-    [SerializeField] private Text scrapText; // Text for Scrap
+    [SerializeField] private TMP_Text scrapText; // Text for Scrap
     [SerializeField] private StockpileManager stockpileManager; // Link to stockpile manager
     [SerializeField] private GameManager gameManager; // Management of Scrap
     private List<GameObject> stockpileButtons = new();
@@ -28,14 +29,15 @@ public class Buttons : MonoBehaviour
         menus[2].SetActive(true); // start
         menus[3].SetActive(false); // settings
         menus[4].SetActive(false); // skill tree
+        menus[5].SetActive(false); // stock pile
 
         // Reg skills
-        skillInfoHandlers[1] = new SkillInfo(5); // Skill 1 Info (index 5 i menus)
-        skillInfoHandlers[2] = new SkillInfo(6); // Skill 2 Info (index 6 i menus)
-        skillInfoHandlers[3] = new SkillInfo(7); // Skill 3 Info (index 7 i menus)
-        skillInfoHandlers[4] = new SkillInfo(8); // Skill 4 Info (index 8 i menus)
-        skillInfoHandlers[5] = new SkillInfo(9); // Skill 5 Info (index 9 i menus)
-        skillInfoHandlers[6] = new SkillInfo(10); // Skill 6 Info (index 10 i menus)
+        skillInfoHandlers[1] = new SkillInfo(6); // Skill 1 Info
+        skillInfoHandlers[2] = new SkillInfo(7); // Skill 2 Info
+        skillInfoHandlers[3] = new SkillInfo(8); // Skill 3 Info
+        skillInfoHandlers[4] = new SkillInfo(9); // Skill 4 Info
+        skillInfoHandlers[5] = new SkillInfo(10); // Skill 5 Info
+        skillInfoHandlers[6] = new SkillInfo(11); // Skill 6 Info
 
         /*
          0 = game
@@ -43,8 +45,7 @@ public class Buttons : MonoBehaviour
          2 = start
          3 = settings
          4 = skill tree
-         5 = skill 1 info
-         6 = skill 2 info
+         5 = side panel 
         */
 
         UpdateStockpileUI();
@@ -67,6 +68,11 @@ public class Buttons : MonoBehaviour
                 Resume();
             }
         }
+    }
+
+    private void Awake()
+    {
+        UpdateStockpileUI();
     }
 
     public void Play()
@@ -151,14 +157,14 @@ public class Buttons : MonoBehaviour
     /// Stockpile UI
     /// </summary>
 
-    public void ShowStockpileMenu()
+    public void Stockpile()
     {
         Time.timeScale = 0;
         menus[0].SetActive(false); // Close Main menu
         menus[5].SetActive(true); // Open Weapon menu
         UpdateStockpileUI();
     }
-
+    
     public void UpdateStockpileUI()
     {
         // Remove old buttons
@@ -175,8 +181,11 @@ public class Buttons : MonoBehaviour
         foreach (var weapon in stockpileManager.Weapons)
         {
             GameObject button = Instantiate(buttonTemplate, content);
-            button.transform.Find("Text").GetComponent<Text>().text =
-                $"{weapon.Name} (x{(weapon.Quantity == -1 ? "and" : weapon.Quantity.ToString())})";
+            
+            //button.transform.Find("Text").GetComponent<TMP_Text>().text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "and" : weapon.Quantity.ToString())})";
+
+            TMP_Text buttonText = button.transform.Find("Text").GetComponent<TMP_Text>();
+            buttonText.text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "and" : weapon.Quantity.ToString())})";
 
             // Add click event
             button.GetComponent<Button>().onClick.AddListener(() =>
