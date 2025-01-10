@@ -1,8 +1,14 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     private TroopNavigation troopNavigation;
+    private List<GameObject> friendlyTroops = new List<GameObject>();
+
+    private bool hold = false;
+    private bool forward = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,15 +19,33 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        friendlyTroops.Clear();
+        GameObject[] findTroops = GameObject.FindGameObjectsWithTag("FriendlyTroop");
+        foreach (GameObject troop in findTroops)
+        {
+            friendlyTroops.Add(troop);
+            troopNavigation = troop.GetComponent<TroopNavigation>();
+
+            if (hold)
+            {
+                troopNavigation.holdPosition = true;
+            }
+            else if (forward)
+            {
+                troopNavigation.moveForwards = true;
+            }
+           
+        }
+
         if (Input.GetKey(KeyCode.W))
         {
-            troopNavigation.forwards = true;
-            troopNavigation.holdPosition = false;
+            forward = true;
+            hold = false;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            troopNavigation.forwards = false;
-            troopNavigation.holdPosition = true;
+            forward = false;
+            hold = true;
         }
     }
 }

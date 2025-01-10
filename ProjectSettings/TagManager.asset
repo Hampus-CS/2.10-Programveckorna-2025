@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Waypoint
+  - FriendlyTroop
   layers:
   - Default
   - TransparentFX
