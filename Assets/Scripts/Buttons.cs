@@ -175,8 +175,7 @@ public class Buttons : MonoBehaviour
         foreach (var weapon in stockpileManager.Weapons)
         {
             GameObject button = Instantiate(buttonTemplate, content);
-            button.transform.Find("Text").GetComponent<Text>().text =
-                $"{weapon.Name} (x{(weapon.Quantity == -1 ? "and" : weapon.Quantity.ToString())})";
+            button.transform.Find("Text").GetComponent<Text>().text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "and" : weapon.Quantity.ToString())})";
 
             // Add click event
             button.GetComponent<Button>().onClick.AddListener(() =>
