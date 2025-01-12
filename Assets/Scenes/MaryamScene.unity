@@ -1908,6 +1908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 0}
+  currency: 1000
   shopUIManager: {fileID: 464281059}
 --- !u!1 &1383775861
 GameObject:

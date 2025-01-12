@@ -6,7 +6,7 @@ public class GameManager1 : MonoBehaviour
 {
     public static GameManager1 Instance { get; private set; } //Will be used to check how many gamemanager instances there are
     public GameObject bulletPrefab;
-
+    public int currency = 1000; //currency for player
     private void Awake()
     { //makes sure theres only one instance of GameManager1
         if (Instance == null)
@@ -17,6 +17,15 @@ public class GameManager1 : MonoBehaviour
         {
             Debug.LogWarning("There are multiple GameManager1's");
         }
+    }
+    public void SpendCurrency(int amount)
+    {
+        if (currency >= amount) 
+        { currency -= amount; }
+    }
+    public void AddCurrency(int amount)
+    {
+        currency += amount;
     }
     public GameObject GetBulletPrefab()
     {

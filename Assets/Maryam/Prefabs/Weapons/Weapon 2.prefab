@@ -156,8 +156,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 9
-  range: 4
+  range: 3
   damageUpgradePoints: 2
   rangeUpgradePoints: 3
   bulletPrefab: {fileID: 1558594641397180924, guid: dc527375ca4d80e4d972e80a33f9ecba, type: 3}
   firePoint: {fileID: 4862908297635839840}
+  shootCoolDown: 0.9

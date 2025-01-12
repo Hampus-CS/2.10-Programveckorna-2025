@@ -15,6 +15,8 @@ public class Weapon : MonoBehaviour
     [Header("Weapon Settings")]
     [SerializeField] private GameObject bulletPrefab; //bullet prefab specifik for each weapon
     public Transform firePoint; //where bullets spawn
+    public float shootCoolDown = 1f; //cooldown for shooting
+    private float lastShot = 0; //when last shot was shot
 
     void Update()
     {
@@ -25,15 +27,18 @@ public class Weapon : MonoBehaviour
     }
     void Shoot()
     {
-        if (firePoint == null) //checks if weapon has firepoint
-        {
+        if(Time.time -lastShot>= shootCoolDown)
+        {  //check if cooldown passed
+
+         if (firePoint == null) //checks if weapon has firepoint
+         {
             Debug.LogWarning("FirePoint not assigned");
             return;
-        }
-        if(bulletPrefab == null) //checks if weapon has bulletprefab
-        {
+         }
+         if(bulletPrefab == null) //checks if weapon has bulletprefab
+         {
             Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
-        }
+         }
         
           //spawns the bullets
           GameObject bulletInstance = Instantiate(
@@ -50,6 +55,17 @@ public class Weapon : MonoBehaviour
             bulletScript.damage = damage; //bullets damage is equal to weapon damage
             bulletScript.range = range; //bullets range is equal to weapons range
             }
+            else
+            {
+                Debug.LogWarning("Bullet script is missing on the bullet prefab");
+            }
+
+            lastShot = Time.time;
+        }
+        else
+        {
+            Debug.LogWarning("COOLDOWN");
+        }
     }
     private Weapon GetWeaponFromImage(RectTransform image)
     {
