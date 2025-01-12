@@ -3,22 +3,18 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public GameManager1.Weapon weapon; //reference to the weapon class form gamemanager
+
+    [Header("Weapon Stats")]
+    [SerializeField]private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
+    [SerializeField] private int range = 5;// same as damage
+
+    [Header("Upgrae Points")] //to claridy what these ints are for
+    [SerializeField] private int damageUpgradePoints = 2; //the amount of points the weapons damage will increase with every update
+    [SerializeField] private int rangeUpgradePoints = 3; //amount of range "points" the weapon will increase with every update
+
+    [Header("Weapon Settings")]
+    [SerializeField] private GameObject bulletPrefab; //bullet prefab specifik for each weapon
     public Transform firePoint; //where bullets spawn
-
-    private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
-    private int range = 5;// same as damage
-   
-   
-
-    private void Start()
-    {
-        if(weapon != null)
-        {
-            damage = weapon.damage; //set damage from GameManager1
-            range = weapon.range;  //set range from GameManager1
-        }
-    }
 
     void Update()
     {
@@ -27,17 +23,21 @@ public class Weapon : MonoBehaviour
             Shoot();
         }
     }
-    public void Shoot()
+    void Shoot()
     {
-        if (weapon != null || weapon.bulletPrefab == null)
+        if (firePoint == null) //checks if weapon has firepoint
         {
-            Debug.LogWarning("weapon or bullet prefab is not assigned");
+            Debug.LogWarning("FirePoint not assigned");
             return;
+        }
+        if(bulletPrefab == null) //checks if weapon has bulletprefab
+        {
+            Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
         }
         
           //spawns the bullets
           GameObject bulletInstance = Instantiate(
-          weapon.bulletPrefab,
+          bulletPrefab,
           firePoint.position, 
           firePoint.rotation
           );
@@ -50,32 +50,38 @@ public class Weapon : MonoBehaviour
             bulletScript.damage = damage; //bullets damage is equal to weapon damage
             bulletScript.range = range; //bullets range is equal to weapons range
             }
-            else
-            {
-                Debug.LogWarning("Bullet prefab is not assigned");
-            }
-          
     }
-    public int GetDamage()//int to acces weapons damage
+    private Weapon GetWeaponFromImage(RectTransform image)
     {
-        return damage;
+        string imageTag = image.tag;//gets tag from current image and find weapon with same tag
+        GameObject weaponObject = GameObject.FindWithTag(imageTag);
+
+        if (weaponObject != null)
+        {
+            return weaponObject.GetComponent<Weapon>();
+        }
+        return null; //no weapon found
     }
-    public int GetRange()//int to acces weapons damage
-    {
-        return range;
-    }
-    public void UpgradeDamage(int amount) //void for uppgrading weapons damage in shop
+
+    public void UpgradeDamage() //void for uppgrading weapons damage in shop with a certain amount
     {
 
-        damage += amount;
-        Debug.Log("Weapons damage increased by " + amount + ". New damage: " + amount + damage);
+        damage += damageUpgradePoints;
+        Debug.Log("Weapons damage increased by " + damageUpgradePoints + ". New damage: " + damage);
     }
-    public void UpgradeRange(int amount)//void to uppgrade weapons range in shop
+    public void UpgradeRange()//void to uppgrade weapons range in shop with a certain amount
     {
 
-        range += amount;
-        Debug.Log("Weapons range increased by " + amount + ". New range: " + amount + range);
+        range += rangeUpgradePoints;
+        Debug.Log("Weapons range increased by " + rangeUpgradePoints+ ". New range: " + damage);
     }
+    //public getters for weapon stats
+    public int GetDamage() => damage; 
+    public int GetRange() => range;
+
+    public int GetDamageUpgradePoints() => damageUpgradePoints;
+    public int GetRangeUpgradePoints() => rangeUpgradePoints;
+
 }
 
 

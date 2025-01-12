@@ -4,46 +4,62 @@ using UnityEngine;
 
 public class GameManager1 : MonoBehaviour
 {
-    [System.Serializable]
-    public class Weapon
-    {
-        public GameObject bulletPrefab; // bulletprefab from weapon script
-        public int damage = 10;
-        public int range = 5;
+    public static GameManager1 Instance { get; private set; } //Will be used to check how many gamemanager instances there are
+    public GameObject bulletPrefab;
 
-        public Weapon(GameObject bulletPrefab, int damage, int range)
+    private void Awake()
+    { //makes sure theres only one instance of GameManager1
+        if (Instance == null)
         {
-            this.bulletPrefab = bulletPrefab;
-            this.damage = damage;
-            this.range = range;
-
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("There are multiple GameManager1's");
         }
     }
-    public Weapon[] weapons;
-
+    public GameObject GetBulletPrefab()
+    {
+        return bulletPrefab;
+    }
     public ShopUIManager shopUIManager;
-    public Weapon GetWeaponFromTag(RectTransform image)
-    {
-        string imageTag = image.tag; 
-        foreach(var weapon in weapons)
-        {
-            if (weapon.bulletPrefab != null && weapon.bulletPrefab.CompareTag(imageTag))
-            {
-                return weapon;
-            }
 
+    public Weapon GetWeaponFromImage(RectTransform image)
+    {
+        string imageTag = image.tag;//gets tag from current image and find weapon with same tag
+        GameObject weaponObject = GameObject.FindWithTag(imageTag);
+
+        if (weaponObject != null) 
+        {
+            return weaponObject.GetComponent<Weapon>();
         }
-        return null;
+        return null; //no weapon found
     }
-    public void UpgradeCurrentWeaponDamage(int amount)
+    public void UpgradeCurrentWeaponDamage()
     {
         RectTransform currentImage = shopUIManager.GetCurrentImage();
-        Weapon weapon = GetWeaponFromTag(currentImage);
+        Weapon weapon = GetWeaponFromImage(currentImage); 
 
         if (weapon != null)
         {
-            weapon.range += amount;
-            Debug.Log("Weapons range increase by " + amount + ". New range" + weapon.range);
+            weapon.UpgradeDamage(); 
+            
+        }
+        else
+        {
+            Debug.LogWarning("No weapon with same tag as this image");
+        }
+
+    }
+    public void UpgradeCurrentWeaponRange()
+    {
+        RectTransform currentImage = shopUIManager.GetCurrentImage();
+        Weapon weapon = GetWeaponFromImage(currentImage); //gets tag of current image
+
+        if (weapon != null)
+        {
+            weapon.UpgradeRange(); //calls method from weapon script
+            
         }
         else
         {

@@ -124,10 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebff88bb68194684dbe9cc6a37bd7c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon:
-    bulletPrefab: {fileID: 1558594641397180924, guid: dc527375ca4d80e4d972e80a33f9ecba, type: 3}
-    damage: 5
-    range: 10
+  damage: 6
+  range: 7
+  damageUpgradePoints: 4
+  rangeUpgradePoints: 2
+  bulletPrefab: {fileID: 1558594641397180924, guid: dc527375ca4d80e4d972e80a33f9ecba, type: 3}
   firePoint: {fileID: 5638402057406476693}
 --- !u!1 &5259874138404492303
 GameObject:

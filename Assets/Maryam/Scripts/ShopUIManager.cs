@@ -12,6 +12,7 @@ public class ShopUIManager : MonoBehaviour
     private Vector3[] initialPositions;
     private int currentIndex = 0; //tracks what image is being wieved so u cant go to far right/left
 
+
     public void Start()
     {
         //here the position of these images are saved
@@ -80,4 +81,24 @@ public class ShopUIManager : MonoBehaviour
         shopButton.SetActive(true); // Show shop buton when shop closed
         shopPanel.SetActive(false); //hide panel
     }
+    public void UpgradeCurrentWeaponDamage()
+    {
+        RectTransform currentImage = GetCurrentImage();
+        Weapon weapon = GameManager1.Instance.GetWeaponFromImage(currentImage);
+        if (weapon != null)
+        {
+            weapon.UpgradeDamage();
+
+        }
+    }
+    public void UpgradeCurrentWeaponRange()
+    {
+        RectTransform currentImage = GetCurrentImage();
+        Weapon weapon = GameManager1.Instance.GetWeaponFromImage(currentImage);
+        if (weapon != null)
+        {
+            weapon.UpgradeRange();
+        }
+    }
+
 }
