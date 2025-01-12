@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -5,24 +6,30 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions.Must;
 
+public enum TroopState
+{
+    MovingForward,
+    HoldingPosition,
+    SeekingCover,
+    InCombat
+}
+
 public class TroopNavigation : MonoBehaviour
 {
     private NavMeshAgent agent;
+    private TroopPersonalityScript personality;
     public List<GameObject> waypoints = new List<GameObject>();
-    private BoxCollider collider;
 
     public bool inCombat = false;
     public bool holdPosition = false;
-    public bool moveForwards = true;
-    public bool AiControll = false;
+    public bool isAtCover = false;
+    public bool canMove = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        collider = GetComponent<BoxCollider>();
-
         coverScript = FindAnyObjectByType<CoverScript>();
-
+        personality = GetComponent<TroopPersonalityScript>();
         agent = GetComponent<NavMeshAgent>();
         agent.isStopped = true;
         agent.ResetPath();
@@ -50,73 +57,65 @@ public class TroopNavigation : MonoBehaviour
         agent.isStopped = true;
     }
 
-    void Update()
-    {
-        if (holdPosition == true)
-        {
-            HoldPosition();
-        }
-        else if (moveForwards == true)
-        {
-            MoveForwards();
-        }
-    }
 
     private CoverScript coverScript;
     public void MoveForwards()
     {
-        if (AiControll == false)
+        if (!holdPosition && canMove)
         {
-            UpdateWaypoints();
-            closestWaypointInFront = null;
-            closestDistance = Mathf.Infinity;
-
-            // Get the troop's forward direction
-            Vector3 forwardDirection = Vector3.forward;
-
-            foreach (GameObject waypoint in waypoints)
+            StartCoroutine(TimerBetweenNavigation());
             {
-                coverScript = waypoint.GetComponent<CoverScript>();
+                UpdateWaypoints();
+                closestWaypointInFront = null;
+                closestDistance = Mathf.Infinity;
 
-                // Skip waypoints that are already reached or occupied
-                if (Vector3.Distance(transform.position, waypoint.transform.position) < 1f || (coverScript != null && (coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)))
+                // Get the troop's forward direction
+                Vector3 forwardDirection = Vector3.forward;
+
+                foreach (GameObject waypoint in waypoints)
                 {
-                    continue;
-                }
+                    coverScript = waypoint.GetComponent<CoverScript>();
 
-                Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
-
-                // Ensure the waypoint is strictly in front of the troop
-                float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
-                if (dotProduct > 0) // In front of the troop
-                {
-                    float distance = Vector3.Distance(transform.position, waypoint.transform.position);
-                    if (distance < closestDistance)
+                    // Skip waypoints that are already reached or occupied
+                    if (Vector3.Distance(transform.position, waypoint.transform.position) < 1f || (coverScript != null && (coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)))
                     {
-                        closestDistance = distance;
-                        closestWaypointInFront = waypoint;
+                        continue;
+                    }
+
+                    Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
+
+                    // Ensure the waypoint is strictly in front of the troop
+                    float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
+                    if (dotProduct > 0) // In front of the troop
+                    {
+                        float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+                        if (distance < closestDistance)
+                        {
+                            closestDistance = distance;
+                            closestWaypointInFront = waypoint;
+                        }
                     }
                 }
-            }
 
-            // Move to the closest waypoint in front
-            if (closestWaypointInFront != null)
-            {
-                agent.isStopped = false;
-                agent.SetDestination(closestWaypointInFront.transform.position);
-            }
-            else
-            {
-                // Stop the agent if no valid waypoint is found
-                agent.isStopped = true;
+                // Move to the closest waypoint in front
+                if (closestWaypointInFront != null)
+                {
+                    agent.isStopped = false;
+                    agent.SetDestination(closestWaypointInFront.transform.position);
+                }
+                else
+                {
+                    // Stop the agent if no valid waypoint is found
+                    agent.isStopped = true;
+                }
             }
         }
+
     }
 
-    private void HoldPosition()
+    public void HoldPosition()
     {
-        if (AiControll == false)
-        {
+            StartCoroutine(TimerBetweenNavigation());
             UpdateWaypoints();
             Vector3 forwardDirection = Vector3.forward;
 
@@ -151,6 +150,7 @@ public class TroopNavigation : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(forwardDirection);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
 
+                isAtCover = true;
                 agent.isStopped = true;
                 agent.ResetPath();
                 return;
@@ -159,6 +159,7 @@ public class TroopNavigation : MonoBehaviour
             // If a closest waypoint is found, move to it
             if (closestWaypointInFront != null)
             {
+                isAtCover = false;
                 agent.isStopped = false;
                 agent.SetDestination(closestWaypointInFront.transform.position);
 
@@ -172,7 +173,6 @@ public class TroopNavigation : MonoBehaviour
                 // Stop the agent if no valid waypoint is found
                 agent.isStopped = true;
             }
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -182,96 +182,171 @@ public class TroopNavigation : MonoBehaviour
 
     public void RunToNearestCover()
     {
-        UpdateWaypoints();
-        Vector3 forwardDirection = Vector3.forward;
-
-        Debug.Log("running to nearst");
-
-        closestWaypointInFront = null;
-        closestDistance = Mathf.Infinity;
-
-        foreach (GameObject waypoint in waypoints)
+        if (!holdPosition)
         {
-            coverScript = waypoint.GetComponent<CoverScript>();
-            float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+            StartCoroutine(TimerBetweenNavigation());
+            UpdateWaypoints();
+            Vector3 forwardDirection = Vector3.forward;
 
-            if (coverScript != null)
-                if (coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
-                    continue;
+            Debug.Log("running to nearst");
 
-            if (distance < closestDistance)
+            closestWaypointInFront = null;
+            closestDistance = Mathf.Infinity;
+
+            foreach (GameObject waypoint in waypoints)
             {
-                closestDistance = distance;
-                closestWaypointInFront = waypoint;
-            }
-        }
-
-        float distanceToWaypoint = Vector3.Distance(transform.position, closestWaypointInFront.transform.position);
-
-        if (distanceToWaypoint <= agent.stoppingDistance)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(forwardDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
-
-            agent.isStopped = true;
-            agent.ResetPath();
-            return;
-        }
-
-        if (closestWaypointInFront != null)
-        {
-            agent.isStopped = false;
-            agent.SetDestination(closestWaypointInFront.transform.position);
-
-            Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
-        }
-        else
-        {
-            agent.isStopped = true;
-        }
-    }
-
-    public void RunToBackToCover()
-    {
-        UpdateWaypoints();
-        closestWaypointInFront = null;
-        closestDistance = Mathf.Infinity;
-
-        Debug.Log("running back");
-
-        Vector3 forwardDirection = Vector3.forward;
-
-        foreach (GameObject waypoint in waypoints)
-        {
-            coverScript = waypoint.GetComponent<CoverScript>();
-            Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
-
-            float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
-            if (dotProduct < 0) 
-            {
+                coverScript = waypoint.GetComponent<CoverScript>();
                 float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+
+                if (coverScript != null)
+                    if (coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
+                        continue;
+
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
                     closestWaypointInFront = waypoint;
                 }
             }
-        }
 
-        if (closestWaypointInFront != null)
-        {
-            agent.isStopped = false;
-            agent.SetDestination(closestWaypointInFront.transform.position);
+            float distanceToWaypoint = Vector3.Distance(transform.position, closestWaypointInFront.transform.position);
 
-            Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            if (distanceToWaypoint <= agent.stoppingDistance)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(forwardDirection);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+
+                isAtCover = true;
+                agent.isStopped = true;
+                agent.ResetPath();
+                return;
+            }
+
+            if (closestWaypointInFront != null)
+            {
+                isAtCover = false;
+                agent.isStopped = false;
+                agent.SetDestination(closestWaypointInFront.transform.position);
+
+                Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
         }
-        else
+}
+
+    public void RunToBackToCover()
+    {
+        if (!holdPosition)
         {
-            agent.isStopped = true;
+            StartCoroutine(TimerBetweenNavigation());
+            UpdateWaypoints();
+            closestWaypointInFront = null;
+            closestDistance = Mathf.Infinity;
+
+            Debug.Log("running back");
+
+            Vector3 forwardDirection = Vector3.forward;
+
+            foreach (GameObject waypoint in waypoints)
+            {
+                coverScript = waypoint.GetComponent<CoverScript>();
+                Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
+
+                if (coverScript != null)
+                    if (coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
+                        continue;
+
+                float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
+                if (dotProduct < 0)
+                {
+                    float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestWaypointInFront = waypoint;
+                    }
+                }
+            }
+
+            if (closestWaypointInFront != null)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(closestWaypointInFront.transform.position);
+
+                Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
         }
+    }
+
+    public void RunToEnemy(Transform enemy)
+    {
+        if (!holdPosition && canMove)
+        {
+            StartCoroutine(TimerBetweenNavigation());
+            UpdateWaypoints();
+            closestWaypointInFront = null;
+            closestDistance = Mathf.Infinity;
+
+            Debug.Log("running to enemy");
+
+            Vector3 forwardDirection = Vector3.forward;
+
+            foreach (GameObject waypoint in waypoints)
+            {
+                coverScript = waypoint.GetComponent<CoverScript>();
+                Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
+
+                if (coverScript != null)
+                    if (coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
+                        continue;
+
+                float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
+
+                if (dotProduct < 0)
+                {
+                    float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+                    if (distance <= personality.range)
+                    {
+                        if (distance < closestDistance)
+                        {
+                            closestDistance = distance;
+                            closestWaypointInFront = waypoint;
+                        }
+                    }
+                }
+            }
+
+            if (closestWaypointInFront != null)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(closestWaypointInFront.transform.position);
+
+                Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
+        }   
+    }
+
+    private IEnumerator TimerBetweenNavigation()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(5f);
+        canMove = true;
     }
 }
