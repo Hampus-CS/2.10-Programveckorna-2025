@@ -106,7 +106,6 @@ public class Settings : MonoBehaviour
     public void SetMiscVolume(float volume)
     {
         miscVolume = Mathf.Clamp(volume, 0f, 1f);
-    }
 
     public void SaveSettings()
     {
@@ -143,5 +142,4 @@ public class Settings : MonoBehaviour
         Debug.Log($"Settings Applied: {resolutionWidth}x{resolutionHeight}, Fullscreen: {isFullscreen}, MasterVolume: {masterVolume}");
 
     }
-    
 }
