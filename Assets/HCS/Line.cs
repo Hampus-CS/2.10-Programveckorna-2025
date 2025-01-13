@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class Line : MonoBehaviour
 {
@@ -21,7 +23,15 @@ public class Line : MonoBehaviour
         {
             EnemySoldiers.Add(soldier);
         }
-        UpdateLineState(); // Uppdatera endast vid ändringar
+
+        Debug.Log($"Soldier {soldier.name} registered on line {name}. Player soldiers: {PlayerSoldiers.Count}, Enemy soldiers: {EnemySoldiers.Count}");
+        UpdateLineState(); // Uppdatera linjens status
+
+        // Kontrollera om linjen nu är contested
+        if (PlayerSoldiers.Count > 0 && EnemySoldiers.Count > 0)
+        {
+            Debug.Log($"Line {name} is now contested.");
+        }
     }
 
     public void RemoveSoldier(GameObject soldier, bool isPlayer)
@@ -52,16 +62,25 @@ public class Line : MonoBehaviour
             CurrentState = LineState.Neutral;
     }
 
+    public bool HasFreeCapacity()
+    {
+        int occupiedSlots = PlayerSoldiers.Count + EnemySoldiers.Count;
+        return occupiedSlots < Slots.Length;
+    }
+
     public Transform GetFreeSlot()
     {
-        foreach (var slot in Slots)
+        foreach (var slotTransform in Slots)
         {
-            if (slot.childCount == 0) // Check if the slot is unoccupied
+            Slot slot = slotTransform.GetComponent<Slot>();
+            if (slot != null && slot.IsFree())
             {
-                return slot;
+                Debug.Log($"Free slot found at {slotTransform.position}");
+                return slotTransform;
             }
         }
-        return null; // No free slot available
+        Debug.LogWarning("No free slot found!");
+        return null;
     }
 
     public bool CanPushForward(bool isPlayer)
@@ -73,6 +92,18 @@ public class Line : MonoBehaviour
         else
         {
             return CurrentState == LineState.EnemyOwned || CurrentState == LineState.Contested;
+        }
+    }
+
+    public bool HasMinimumSoldiers(int minimumSoldiers, bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            return PlayerSoldiers.Count >= minimumSoldiers;
+        }
+        else
+        {
+            return EnemySoldiers.Count >= minimumSoldiers;
         }
     }
 

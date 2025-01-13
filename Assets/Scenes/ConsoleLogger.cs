@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Security.Permissions;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class ConsoleLogger : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class ConsoleLogger : MonoBehaviour
     {
         // Set the file path for the log
         logFilePath = Path.Combine(Application.persistentDataPath, "ConsoleLog.txt");
+
+        Debug.Log(logFilePath);
 
         // Clear any existing log file
         File.WriteAllText(logFilePath, string.Empty);

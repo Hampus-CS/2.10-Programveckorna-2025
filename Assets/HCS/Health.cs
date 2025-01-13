@@ -29,10 +29,16 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        // Ta bort soldaten från linjen vid död
         if (CurrentLine != null)
         {
             CurrentLine.RemoveSoldier(gameObject, IsPlayer);
+        }
+
+        // Minska räkningen av soldater
+        var spawner = FindObjectOfType<SoldierSpawner>();
+        if (spawner != null)
+        {
+            spawner.DecreaseSoldierCount();
         }
 
         // Förstör gameobject
