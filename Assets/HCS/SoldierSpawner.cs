@@ -22,12 +22,12 @@ public class SoldierSpawner : MonoBehaviour
 
     private void SpawnSoldiers()
     {
-        // Spawn a player soldier
         GameObject playerSoldier = Instantiate(playerSoldierPrefab, friendlySpawnPoint.position, Quaternion.identity);
-        playerSoldier.tag = "FriendlyTroop"; // Ensure correct tag is applied
+        playerSoldier.tag = "FriendlyTroop";
+        playerSoldier.GetComponent<BaseSoldier>().SetPlayerStatus(true);
 
-        // Spawn an enemy soldier
         GameObject enemySoldier = Instantiate(enemySoldierPrefab, hostileSpawnPoint.position, Quaternion.identity);
-        enemySoldier.tag = "HostileTroop"; // Ensure correct tag is applied
+        enemySoldier.tag = "HostileTroop";
+        enemySoldier.GetComponent<BaseSoldier>().SetPlayerStatus(false);
     }
 }

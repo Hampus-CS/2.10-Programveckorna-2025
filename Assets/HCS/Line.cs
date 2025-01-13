@@ -21,7 +21,7 @@ public class Line : MonoBehaviour
         {
             EnemySoldiers.Add(soldier);
         }
-        UpdateLineState();
+        UpdateLineState(); // Uppdatera endast vid ändringar
     }
 
     public void RemoveSoldier(GameObject soldier, bool isPlayer)
@@ -34,6 +34,7 @@ public class Line : MonoBehaviour
         {
             EnemySoldiers.Remove(soldier);
         }
+        UpdateLineState(); // Uppdatera endast vid ändringar
     }
 
     private void UpdateLineState()
@@ -61,6 +62,18 @@ public class Line : MonoBehaviour
             }
         }
         return null; // No free slot available
+    }
+
+    public bool CanPushForward(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            return CurrentState == LineState.PlayerOwned || CurrentState == LineState.Contested;
+        }
+        else
+        {
+            return CurrentState == LineState.EnemyOwned || CurrentState == LineState.Contested;
+        }
     }
 
     private void Update()

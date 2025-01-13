@@ -7,6 +7,11 @@ public class Health : MonoBehaviour
 
     public bool IsAlive => currentHealth > 0;
 
+    // Referens till den linje soldaten är registrerad i
+    public Line CurrentLine { get; set; }
+
+    public bool IsPlayer { get; set; } // Anger om det är en spelarsoldat eller fiendesoldat
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -15,6 +20,7 @@ public class Health : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+
         if (currentHealth <= 0)
         {
             Die();
@@ -23,7 +29,13 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        // Destroy the soldier object on death
+        // Ta bort soldaten från linjen vid död
+        if (CurrentLine != null)
+        {
+            CurrentLine.RemoveSoldier(gameObject, IsPlayer);
+        }
+
+        // Förstör gameobject
         Destroy(gameObject);
     }
 }
