@@ -8,9 +8,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int manPower;
     [SerializeField] private int scrap = 1000;
 
+    public static GameManager Instance { get; private set; }
+
     private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,7 +47,7 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    public int GetScrap() => scrap; // Getter om du vill visa scrap i UI, borde fungera, har inte testat! Halft hjärndöd när jag la till detta. ;)
+    public int GetScrap() => scrap; // Getter om du vill visa scrap i UI, borde fungera, har inte testat! Halft hjÃ¤rndÃ¶d nÃ¤r jag la till detta. ;)
 
 
 }
