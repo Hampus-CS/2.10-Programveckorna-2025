@@ -30,14 +30,18 @@ public class Buttons : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 0;
+        
+        // Deactivating all panels at the start of the game
+        foreach (GameObject menu in menus)
+        {
+            if (menu != null)
+            {
+                menu.SetActive(false);
+                print($"avaktivera {menu.name}");
+            }
+        }
 
-        // Important Menu settings
-        menus[0].SetActive(false); // game
-        menus[1].SetActive(false); // pause
-        menus[2].SetActive(true); // start
-        menus[3].SetActive(false); // settings
-        menus[4].SetActive(false); // skill tree
-        menus[5].SetActive(false); // SidePanel
+        menus[2].SetActive(true);
 
         button[0].gameObject.SetActive(true);
         button[1].gameObject.SetActive(false);
@@ -95,11 +99,11 @@ public class Buttons : MonoBehaviour
 
     public void Play()
     {
+        Time.timeScale = 1;
+
         menus[2].SetActive(false);
         menus[0].SetActive(true);
 
-        Time.timeScale = 1;
-        print("TimeScale " + Time.timeScale);
     }
 
     public void Settings()
@@ -108,7 +112,7 @@ public class Buttons : MonoBehaviour
         menus[3].SetActive(true);
     }
 
-    public void SettingsDone()
+    public void CloseSettings()
     {
         menus[3].SetActive(false);
         menus[2].SetActive(true);
@@ -129,7 +133,6 @@ public class Buttons : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0;
-        print("TimeScale " + Time.timeScale);
 
         menus[0].SetActive(false);
         menus[1].SetActive(true);
@@ -137,11 +140,10 @@ public class Buttons : MonoBehaviour
 
     public void Resume()
     {
+        Time.timeScale = 1;
+        
         menus[1].SetActive(false);
         menus[0].SetActive(true);
-
-        Time.timeScale = 1;
-        print("TimeScale " + Time.timeScale);
     }
 
     public void Quit()
@@ -171,12 +173,6 @@ public class Buttons : MonoBehaviour
         Time.timeScale = 0;
         menus[0].SetActive(false); // Close main menu
         menus[4].SetActive(true);  // Open skill tree
-        Debug.Log("Open tree");
-    }
-
-    public void BuySkill()
-    {
-
     }
 
     public void SkillInfo(int skillId)
@@ -192,7 +188,6 @@ public class Buttons : MonoBehaviour
     {
         menus[6].SetActive(false); // Close active skill-info menu
         menus[4].SetActive(true);  // Open skill tree
-        Debug.Log("Open skill tree");
     }
 
     private void UnlockSkillByIndex(int skillIndex)
