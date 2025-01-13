@@ -11,7 +11,7 @@ public class ShopUIManager : MonoBehaviour
     public float moveDuration = 0.5f; //how long it will take the images
     private Vector3[] initialPositions;
     private int currentIndex = 0; //tracks what image is being wieved so u cant go to far right/left
-
+    public int weaponCost = 20;
 
     public void Start()
     {
@@ -22,6 +22,12 @@ public class ShopUIManager : MonoBehaviour
             initialPositions[i] = images[i].anchoredPosition;
         }
     }
+   
+    public void BuyWeaponButton(string weaponTag)
+    {
+        GameManager1.Instance.BuyWeapon(weaponTag, weaponCost);
+    }
+    
     public void OpenShop() {
         shopButton.SetActive(false); //Hide shop button when shop is open
         shopPanel.SetActive(true); //SHow pannel when shop is open
@@ -43,6 +49,7 @@ public class ShopUIManager : MonoBehaviour
            
         }
     }
+  
     public void MoveLeft()//if this void is called the images will move left
     {
         if (currentIndex <= 0)//cant scroll to far left
@@ -72,7 +79,7 @@ public class ShopUIManager : MonoBehaviour
         }
         image.anchoredPosition = targetposition;
     }
-    public RectTransform GetCurrentImage()//here the current image on screen will be located to uppgrade specifik weapons in the GameManager1 script
+    public RectTransform GetCurrentImage()//here the current image on screen will be located to uppgrade specific weapons in the GameManager1 script
     {
         return images[currentIndex];
     }
