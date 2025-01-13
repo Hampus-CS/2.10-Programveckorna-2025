@@ -17,7 +17,7 @@ public class StockpileManager : MonoBehaviour
 
         UpdateUI();
     }
-
+    
     public void BuyWeapon(string weaponName, int cost)
     {
         if (gameManager.TrySpendScrap(cost))
@@ -34,7 +34,7 @@ public class StockpileManager : MonoBehaviour
             Debug.Log("Not enough scrap!");
         }
     }
-
+    
     public void UseWeapon(string weaponName)
     {
         var weapon = Weapons.FirstOrDefault(weapon => weapon.Name == weaponName);
