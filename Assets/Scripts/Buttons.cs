@@ -37,7 +37,6 @@ public class Buttons : MonoBehaviour
             if (menu != null)
             {
                 menu.SetActive(false);
-                print($"avaktivera {menu.name}");
             }
         }
 
@@ -53,6 +52,13 @@ public class Buttons : MonoBehaviour
         skillInfoHandlers[4] = new SkillInfo(9); // Skill 4 Info 
         skillInfoHandlers[5] = new SkillInfo(10); // Skill 5 Info
         skillInfoHandlers[6] = new SkillInfo(11); // Skill 6 Info
+        skillInfoHandlers[7] = new SkillInfo(12); // Skill 7 Info
+        skillInfoHandlers[8] = new SkillInfo(13); // Skill 8 Info
+        skillInfoHandlers[9] = new SkillInfo(14); // Skill 9 Info
+        skillInfoHandlers[10] = new SkillInfo(15); // Skill 10 Info
+        skillInfoHandlers[11] = new SkillInfo(16); // Skill 11 Info
+        skillInfoHandlers[12] = new SkillInfo(17); // Skill 12 Info
+        skillInfoHandlers[13] = new SkillInfo(18); // Skill 13 Info
 
         for (int i = 0; i < skillButtonMappings.Count; i++)
         {
@@ -279,6 +285,5 @@ public class SkillInfo : ISkillInfo
     public void ShowSkillInfo(List<GameObject> menus)
     {
         menus[skillMenuIndex].SetActive(true); // Open relevent skill-info
-        Debug.Log($"Open skill {skillMenuIndex} info");
     }
 }
