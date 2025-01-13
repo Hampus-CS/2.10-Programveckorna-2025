@@ -141,5 +141,4 @@ public class Settings : MonoBehaviour
     {
         miscVolume = Mathf.Clamp(volume, 0f, 1f);
     }
-
 }
