@@ -1,23 +1,20 @@
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem.iOS;
+using UnityEngine;
 
 public class CoverScript : MonoBehaviour
 {
     public string occupiedBy = "none";
     private int troopsInCollider = 0;
+    private float presenceTime = 0f;
+    private float requiredPresenceTime = 1f; // Time needed to count as occupied
 
     private BoxCollider collider;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         collider = GetComponent<BoxCollider>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position, collider.size / 2, Quaternion.identity);
@@ -28,30 +25,45 @@ public class CoverScript : MonoBehaviour
             if (col.gameObject.GetComponent<NavMeshAgent>())
             {
                 troopsInCollider++;
-                occupiedBy = col.name;
+                if (occupiedBy == "none" || occupiedBy == col.name)
+                {
+                    presenceTime += Time.deltaTime;
+
+                    if (presenceTime >= requiredPresenceTime)
+                    {
+                        occupiedBy = col.name; // Mark as occupied
+                    }
+                }
             }
         }
 
         if (troopsInCollider == 0)
         {
-            occupiedBy = "none";
+            presenceTime = 0f; // Reset timer
+            occupiedBy = "none"; // No troop present
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<NavMeshAgent>() && troopsInCollider == 0)
+        if (other.CompareTag("Troop"))
         {
-            Debug.Log("TRIGGERS");
             troopsInCollider++;
-            occupiedBy = other.name;
+            occupiedBy = other.gameObject.tag; // Adjust based on troop ownership logic
+            Debug.Log($"{other.name} entered {gameObject.name}, now occupied by {occupiedBy}");
         }
     }
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent <NavMeshAgent>())
+        if (other.CompareTag("Troop"))
         {
             troopsInCollider--;
+            if (troopsInCollider <= 0)
+            {
+                occupiedBy = "none";
+            }
+            Debug.Log($"{other.name} exited {gameObject.name}, now occupied by {occupiedBy}");
         }
     }
 }
