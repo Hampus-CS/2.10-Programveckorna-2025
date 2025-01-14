@@ -23,9 +23,22 @@ public class ShopUIManager : MonoBehaviour
         }
     }
    
-    public void BuyWeaponButton(string weaponTag)
+    public void BuyWeaponButton() //the button used to by weapons, checks what image is selected for the moment
     {
-        GameManager1.Instance.BuyWeapon(weaponTag, weaponCost);
+        RectTransform currentImage = GetCurrentImage();
+        Debug.Log($"Current image: {currentImage.name}");
+
+        if(currentImage == null)
+        {
+            Debug.LogWarning("No weapon image selected rn");
+            return;
+        }
+        Weapon weapon = GameManager1.Instance.GetWeaponFromImage(currentImage);
+        if (weapon == null) {
+            Debug.LogWarning("No weapon connected to current image");
+            return;
+        }
+        GameManager1.Instance.BuyWeapon(weapon.tag, weaponCost); //if current image has tag the BuyWeapon void is called from gamemanager1
     }
     
     public void OpenShop() {
@@ -33,6 +46,8 @@ public class ShopUIManager : MonoBehaviour
         shopPanel.SetActive(true); //SHow pannel when shop is open
     
     }
+
+   
 
     public void MoveRight()//if this void is called the images will move right
     {

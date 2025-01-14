@@ -2,15 +2,18 @@ using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 
 
 public class GameManager1 : MonoBehaviour
 {
-    public static GameManager1 Instance { get; private set; } //Will be used to check how many gamemanager instances there are
-    public GameObject bulletPrefab;
+    public static GameManager1 Instance; //Will be used to check how many gamemanager instances there are
+    
     public int currency = 1000; //currency for player
     public List<Weapon> purchasedWeapons = new List<Weapon>();//list of purchased weapon
+    public List<WeaponPrefabInfo> weaponPrefabs;//list of weapon prefabs
+    public UIManager uiManager;
 
     private void Awake()
     { //makes sure theres only one instance of GameManager1
@@ -23,40 +26,45 @@ public class GameManager1 : MonoBehaviour
             Debug.LogWarning("There are multiple GameManager1's");
         }
     }
+    private void Start()
+    {
+        uiManager.UpdateCurrency(currency); //wowwww
+    }
+
+    [System.Serializable]
     public class WeaponPrefabInfo
     {
         public string tag;
         public GameObject weaponPrefab;
     }
-    public List<WeaponPrefabInfo> weaponPrefabs;
+    
 
-    public void BuyWeapon(string weaponTag, int cost)
+    public void BuyWeapon(string tag, int cost)
     {
         if (currency >= cost)
         {
-            WeaponPrefabInfo weaponInfo = weaponPrefabs.Find(w => w.tag == weaponTag);
-
-            if(weaponInfo== null || weaponInfo.weaponPrefab == null)
+            foreach (var weaponInfo in weaponPrefabs)
             {
-                Debug.LogWarning("No weapon prefab found with tag {weaponTag");
-                return;
-               
-            }
-            currency -= cost;
-            //instantiate Prefab
-            GameObject newWeaponObject = Instantiate(weaponInfo.weaponPrefab);
 
-            Weapon newWeapon = newWeaponObject.GetComponent<Weapon>();
-            if(newWeapon != null)
-            {
-                purchasedWeapons.Add(newWeapon);
-                Debug.Log($"weapon purchased!");
-            }
-            else
-            {
-                Debug.LogWarning("purchased weapon dont have weapon component");
+                if (weaponInfo.tag == tag)
+                {
+                    GameObject newWeapon = Instantiate(weaponInfo.weaponPrefab);
+                    Weapon weaponComponent = newWeapon.GetComponent<Weapon>();
 
+                    if(weaponComponent != null)
+                    {
+                        purchasedWeapons.Add(weaponComponent);
+
+                        Debug.Log($" Bought weapon; {weaponComponent.GetUniqueName()}");
+
+                        currency -= cost;
+                        uiManager.UpdateCurrency(currency);
+                       
+                    }
+                    return;
+                } 
             }
+            Debug.LogWarning($"No weapon prefab found with the tag {tag}");
         }
         else
         {
@@ -81,22 +89,33 @@ public class GameManager1 : MonoBehaviour
     {
         currency += amount;
     }
-    public GameObject GetBulletPrefab()
-    {
-        return bulletPrefab;
-    }
+   
     public ShopUIManager shopUIManager;
 
     public Weapon GetWeaponFromImage(RectTransform image)
     {
-        string imageTag = image.tag;//gets tag from current image and find weapon with same tag
-        GameObject weaponObject = GameObject.FindWithTag(imageTag);
-
-        if (weaponObject != null) 
+        if (image == null)
         {
-            return weaponObject.GetComponent<Weapon>();
+            Debug.LogWarning("Image is null.");
+            return null;
         }
-        return null; //no weapon found
+
+        // Check if the image's tag matches any weapon prefab
+        string imageTag = image.tag; // Ensure your images have proper tags
+        foreach (var weaponInfo in weaponPrefabs)
+        {
+            if (weaponInfo.tag == imageTag)
+            {
+                GameObject weaponPrefab = weaponInfo.weaponPrefab;
+                if (weaponPrefab != null)
+                {
+                    return weaponPrefab.GetComponent<Weapon>();
+                }
+            }
+        }
+
+        Debug.LogWarning($"No weapon prefab associated with the image tag: {imageTag}");
+        return null;
     }
     public void UpgradeCurrentWeaponDamage()
     {

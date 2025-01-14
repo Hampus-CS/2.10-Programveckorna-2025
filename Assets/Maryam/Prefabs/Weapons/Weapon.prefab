@@ -131,6 +131,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1558594641397180924, guid: dc527375ca4d80e4d972e80a33f9ecba, type: 3}
   firePoint: {fileID: 5638402057406476693}
   shootCoolDown: 1.2
+  UpgradeDamageCost: 8
+  UpgradeRangeCost: 6
+  costIncreaseFactor: 2
 --- !u!1 &5259874138404492303
 GameObject:
   m_ObjectHideFlags: 0

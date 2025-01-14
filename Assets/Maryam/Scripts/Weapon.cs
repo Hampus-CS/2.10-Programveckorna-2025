@@ -1,6 +1,7 @@
 using System;
 using UnityEditor.Build;
 using UnityEngine;
+using TMPro;
 
 public class Weapon : MonoBehaviour
 {
@@ -20,13 +21,26 @@ public class Weapon : MonoBehaviour
     private float lastShot = 0; //when last shot was shot
     public  int UpgradeDamageCost = 8;
     public int UpgradeRangeCost = 6;
-    public int costIncreaseFactor = 2;
+    public int costIncreaseFactor = 2; //how much the cost of items will increase
+    private static int serialNumberCounter = 1; //Static to make sure each new weapon will have a number
+    private string uniqueName; //stores the name/serial for weapons
 
-
-
-    void Update()
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        //give each weapon a unique serial number and update the weapons name
+        uniqueName = $"{name.Replace("(Clone)", "").Trim()} #{serialNumberCounter:D4}"; //replaces Clone with a serial number in each weapon thats bought name
+        serialNumberCounter++;
+
+     gameObject.name = uniqueName; //make the gameobjects name the same as its name on the list
+    }
+    public string GetUniqueName()
+    {
+        return uniqueName; //for the debug to work in GM1
+    }
+
+    void Update() 
+    {
+        if (Input.GetKeyDown(KeyCode.Space))//just for testing weapons REMOVE WHEN IMPLEMENTED
         {
             Shoot();
         }
@@ -96,36 +110,46 @@ public class Weapon : MonoBehaviour
         return null; //no weapon found
     }
 
-    public void UpgradeDamage() //void for uppgrading weapons damage in shop with a certain amount
+    public void UpgradeDamage()
     {
-        if (GameManager1.Instance.SpendCurrency(UpgradeDamageCost))//Check if player has enough currency
+        if (GameManager1.Instance.currency >= UpgradeDamageCost)
         {
-            damage += damageUpgradePoints; //inceases damage
+            GameManager1.Instance.currency -= UpgradeDamageCost;
+            damage += damageUpgradePoints;
+            UpgradeDamageCost += costIncreaseFactor; // Increase the cost for the next upgrade
 
-            UpgradeDamageCost *= costIncreaseFactor; //increase upgrade cost
-            Debug.Log("Weapons damage increased by " + damageUpgradePoints + ". New damage: " + damage);
+            // Update UI
+            GameManager1.Instance.uiManager.UpdateCurrency(GameManager1.Instance.currency);
+            GameManager1.Instance.uiManager.UpdateDamageUpgrade(UpgradeDamageCost);
+
+            Debug.Log($"Upgraded damage. New damage: {damage}, New upgrade cost: {UpgradeDamageCost}");
         }
         else
         {
-            Debug.LogWarning("Not eanough currency to upgrade");
+            Debug.LogWarning("Not enough currency to upgrade damage.");
         }
     }
-    public void UpgradeRange() //void for uppgrading weapons damage in shop with a certain amount
+    public void UpgradeRange()
     {
-        if (GameManager1.Instance.SpendCurrency(UpgradeRangeCost))//Check if player has enough currency
+        if (GameManager1.Instance.currency >= UpgradeRangeCost)
         {
+            GameManager1.Instance.currency -= UpgradeRangeCost;
             range += rangeUpgradePoints;
+            UpgradeRangeCost += costIncreaseFactor; // Increase the cost for the next upgrade
 
-            UpgradeDamageCost *= costIncreaseFactor;
-            Debug.Log("Weapons range increased by " + rangeUpgradePoints + ". New range: " + range);
+            // Update UI
+            GameManager1.Instance.uiManager.UpdateCurrency(GameManager1.Instance.currency);
+            GameManager1.Instance.uiManager.UpdateRangeUpgrade(UpgradeRangeCost);
+
+            Debug.Log($"Upgraded range. New range: {range}, New upgrade cost: {UpgradeRangeCost}");
         }
         else
         {
-            Debug.LogWarning("Not eanough currency to upgrade");
+            Debug.LogWarning("Not enough currency to upgrade range.");
         }
     }
-    
-    
+
+
     //public getters for weapon stats
     public int GetDamage() => damage; 
     public int GetRange() => range;
