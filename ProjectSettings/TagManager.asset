@@ -4,14 +4,15 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Weapon 1
-  - Weapon 2
-  - Weapon 3
+  - Waypoint
+  - FriendlyTroop
+  - EnemyTroop
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - enemyLayer
   - Water
   - UI
   - 
