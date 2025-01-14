@@ -1,17 +1,27 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class Line : MonoBehaviour
 {
-    public int TotalSlots = 10;
+    public int TotalSlots = 5;
     public Transform[] Slots;
     public List<GameObject> PlayerSoldiers = new List<GameObject>();
     public List<GameObject> EnemySoldiers = new List<GameObject>();
 
     public enum LineState { PlayerOwned, EnemyOwned, Contested, Neutral }
     public LineState CurrentState;
+
+    private void Awake()
+    {
+        if (Slots.Length != TotalSlots)
+        {
+            Debug.LogWarning($"Mismatch between TotalSlots ({TotalSlots}) and actual slot count ({Slots.Length}) on line {name}. Adjusting TotalSlots.");
+            TotalSlots = Slots.Length;
+        }
+    }
 
     public void RegisterSoldier(GameObject soldier, bool isPlayer)
     {
@@ -44,6 +54,8 @@ public class Line : MonoBehaviour
         {
             EnemySoldiers.Remove(soldier);
         }
+
+        Debug.Log($"Soldier {soldier.name} removed from line {name}. Player soldiers: {PlayerSoldiers.Count}, Enemy soldiers: {EnemySoldiers.Count}");
         UpdateLineState(); // Uppdatera endast vid ändringar
     }
 
@@ -60,12 +72,27 @@ public class Line : MonoBehaviour
             CurrentState = LineState.Contested;
         else
             CurrentState = LineState.Neutral;
+
+        Debug.Log($"Line {name} updated state to {CurrentState}. Player count: {playerCount}, Enemy count: {enemyCount}");
+    }
+
+    public bool HasEmptySlots()
+    {
+        return Slots.Any(slot => slot.OccupyingSoldier == null);
     }
 
     public bool HasFreeCapacity()
     {
-        int occupiedSlots = PlayerSoldiers.Count + EnemySoldiers.Count;
-        return occupiedSlots < Slots.Length;
+        return Slots.Any(slotTransform =>
+        {
+            var slot = slotTransform.GetComponent<Slot>();
+            return slot != null && slot.OccupyingSoldier == null;
+        });
+    }
+
+    public bool IsSufficientlyFilled(bool isPlayer, int requiredCount)
+    {
+        return isPlayer ? PlayerSoldiers.Count >= requiredCount : EnemySoldiers.Count >= requiredCount;
     }
 
     public Transform GetFreeSlot()
@@ -105,6 +132,24 @@ public class Line : MonoBehaviour
         {
             return EnemySoldiers.Count >= minimumSoldiers;
         }
+    }
+
+    public void DeregisterSlot(Slot slot)
+    {
+        if (slot.OccupyingSoldier != null)
+        {
+            Debug.Log($"{slot.OccupyingSoldier.name} left slot at {slot.transform.position}");
+            slot.OccupyingSoldier = null;
+        }
+    }
+
+    public bool IsContested()
+    {
+        int playerCount = PlayerSoldiers.Count;
+        int enemyCount = EnemySoldiers.Count;
+
+        // Linjen är contested om båda sidor har minst en soldat
+        return playerCount > 0 && enemyCount > 0;
     }
 
     private void Update()

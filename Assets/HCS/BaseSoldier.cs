@@ -12,7 +12,14 @@ public abstract class BaseSoldier : MonoBehaviour
 
     public Line CurrentTargetLine => currentTargetLine;
 
+    private Transform currentTargetSlot;
+
     public bool IsPlayer { get; private set; }
+
+    protected float attackRange = 2f;
+    protected float attackDamage = 20f;
+    protected float attackCooldown = 1.5f;
+    protected float attackTimer;
 
     protected virtual void Start()
     {
@@ -31,39 +38,45 @@ public abstract class BaseSoldier : MonoBehaviour
             return;
         }
 
-        // Temporärt test för manuell rörelse
-        if (Input.GetKeyDown(KeyCode.T)) // Tryck 'T' för att aktivera manuell rörelse
-        {
-            Debug.Log("Manual movement triggered!");
+        attackTimer += Time.deltaTime;
 
-            // Hämta alla soldater i scenen och flytta dem manuellt
-            var soldiers = FindObjectsOfType<BaseSoldier>();
-            foreach (var soldier in soldiers)
+        // Attack enemies if cooldown is reached
+        if (attackTimer >= attackCooldown)
+        {
+            EngageLine();
+            attackTimer = 0;
+        }
+
+        if (currentTargetSlot != null)
+        {
+            Slot slotScript = currentTargetSlot.GetComponent<Slot>();
+            if (slotScript != null && slotScript.OccupyingSoldier != gameObject)
             {
-                soldier.MoveForwardTest();
+                Debug.LogWarning($"{gameObject.name} lost its slot or was pushed out. Redirecting.");
+                FindNewTargetSlotOrLine();
             }
         }
 
-        if (currentTargetLine != null && !agent.pathPending && agent.remainingDistance < 0.5f)
+        // Ensure soldiers stay in their assigned slots unless conditions for moving are met
+        if (currentTargetSlot != null)
         {
-            EngageLine();
+            Slot slotScript = currentTargetSlot.GetComponent<Slot>();
+            if (slotScript != null && slotScript.OccupyingSoldier == gameObject)
+            {
+                // Stay at slot if line is not ready for progression
+                if (!currentTargetLine.IsSufficientlyFilled(IsPlayer, 5)) // Example: 5 soldiers required
+                {
+                    agent.SetDestination(currentTargetSlot.transform.position);
+                    return;
+                }
+            }
         }
-    }
 
-    // Temporärt test för manuell rörelse
-    public void MoveForwardTest()
-    {
-        if (!agent.isOnNavMesh)
+        // Continue to next line if all conditions are met
+        if (currentTargetLine.IsSufficientlyFilled(IsPlayer, 5))
         {
-            Debug.LogError($"{gameObject.name} is not on a NavMesh!");
-            return;
+            FindNextLine();
         }
-
-        // Flytta manuellt framåt
-        Vector3 forwardPosition = transform.position + transform.forward * 5f;
-        agent.SetDestination(forwardPosition);
-
-        Debug.Log($"{gameObject.name} manually moving to {forwardPosition}");
     }
 
     protected void FindNextLine()
@@ -89,35 +102,44 @@ public abstract class BaseSoldier : MonoBehaviour
         Debug.LogWarning($"{gameObject.name} could not find a valid target line!");
     }
 
-    protected void MoveToLine(Line line)
+    public void FindNewTargetSlotOrLine()
     {
-        if (!line.HasFreeCapacity())
+        // Försök hitta en ledig slot på samma linje
+        if (currentTargetLine != null)
         {
-            Debug.LogWarning($"{gameObject.name} cannot move to line {line.name} because it's full.");
-            return;
+            Transform newSlot = currentTargetLine.GetFreeSlot();
+            if (newSlot != null)
+            {
+                Debug.Log($"{gameObject.name} redirecting to a new slot at {newSlot.position}");
+                MoveToSlot(newSlot);
+                return;
+            }
         }
 
+        // Om ingen ledig slot finns, gå till nästa linje
+        FindNextLine();
+    }
+
+    protected void MoveToLine(Line line)
+    {
         Transform slot = line.GetFreeSlot();
         if (slot != null)
         {
             Debug.Log($"{gameObject.name} moving to slot at {slot.position}");
             agent.SetDestination(slot.position);
-
-            line.RegisterSoldier(gameObject, IsPlayer);
-
-            Health health = GetComponent<Health>();
-            if (health != null)
-            {
-                health.CurrentLine = line;
-                health.IsPlayer = IsPlayer;
-            }
-
-            StartCoroutine(SetParentWhenArrived(slot));
         }
         else
         {
-            Debug.LogWarning($"{gameObject.name} could not find a free slot in line {line.name}");
+            Debug.LogWarning($"{gameObject.name} could not find a free slot in line {line.name}, searching next line.");
+            FindNextLine(); // Hitta nästa linje om ingen slot är ledig
         }
+    }
+
+    private void MoveToSlot(Transform slot)
+    {
+        currentTargetSlot = slot; // Uppdatera målslotten
+        agent.SetDestination(slot.position); // Ställ in destinationen
+        Debug.Log($"{gameObject.name} is now moving to new slot at {slot.position}");
     }
 
     private IEnumerator SetParentWhenArrived(Transform slot)
@@ -127,18 +149,26 @@ public abstract class BaseSoldier : MonoBehaviour
             yield return null; // Vänta tills soldaten når slotten
         }
 
-        // Kontrollera om slotten fortfarande är ledig
         Slot slotScript = slot.GetComponent<Slot>();
         if (slotScript != null && slotScript.IsFree())
         {
             slotScript.AssignSoldier(gameObject); // Registrera soldaten i slotten
-            transform.SetParent(slot); // Sätt som barn till slotten
+            transform.SetParent(slot); // Gör soldaten till barn av slotten
             Debug.Log($"{gameObject.name} has claimed the slot at {slot.position}");
         }
         else
         {
             Debug.LogWarning($"{gameObject.name} could not claim the slot at {slot.position} because it's no longer free.");
+            FindNextLine(); // Om slotten är upptagen, försök hitta nästa linje
         }
+    }
+
+    protected bool IsEnemy(GameObject target)
+    {
+        var targetHealth = target.GetComponent<Health>();
+        if (targetHealth == null) return false;
+
+        return (IsPlayer && !targetHealth.IsPlayer) || (!IsPlayer && targetHealth.IsPlayer);
     }
 
     public void SetPlayerStatus(bool isPlayer)

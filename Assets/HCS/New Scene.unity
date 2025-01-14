@@ -674,7 +674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 10
+  TotalSlots: 5
   Slots:
   - {fileID: 1388061981}
   - {fileID: 1481471195}
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 10
+  TotalSlots: 5
   Slots:
   - {fileID: 715669349}
   - {fileID: 801905599}
@@ -1254,7 +1254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 10
+  TotalSlots: 5
   Slots:
   - {fileID: 355266730}
   - {fileID: 1026096997}
@@ -1511,7 +1511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 10
+  TotalSlots: 5
   Slots:
   - {fileID: 1572356077}
   - {fileID: 1215164574}
@@ -1768,7 +1768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 10
+  TotalSlots: 5
   Slots:
   - {fileID: 1043264039}
   - {fileID: 1692356677}
@@ -2212,7 +2212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 10
+  TotalSlots: 5
   Slots:
   - {fileID: 580877233}
   - {fileID: 838793240}
@@ -2606,7 +2606,8 @@ MonoBehaviour:
   friendlySpawnPoint: {fileID: 234227949}
   hostileSpawnPoint: {fileID: 288971684}
   maxSoldiers: 50
-  spawnInterval: 3
+  playerSpawnInterval: 5
+  enemySpawnInterval: 5
 --- !u!4 &1957076705
 Transform:
   m_ObjectHideFlags: 0

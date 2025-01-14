@@ -23,8 +23,8 @@ public class Slot : MonoBehaviour
     {
         if (OccupyingSoldier == soldier)
         {
-            Debug.Log($"{soldier.name} released from slot at {transform.position}");
             OccupyingSoldier = null;
+            Debug.Log($"{soldier.name} released from slot at {transform.position}");
         }
     }
 
@@ -33,12 +33,20 @@ public class Slot : MonoBehaviour
         if (OccupyingSoldier == null && (other.CompareTag("FriendlyTroop") || other.CompareTag("HostileTroop")))
         {
             AssignSoldier(other.gameObject);
-
-            // Registrera soldaten till linjen
             var baseSoldier = other.GetComponent<BaseSoldier>();
             if (baseSoldier != null && baseSoldier.CurrentTargetLine != null)
             {
                 baseSoldier.CurrentTargetLine.RegisterSoldier(other.gameObject, baseSoldier.IsPlayer);
+            }
+        }
+        else if (OccupyingSoldier != null)
+        {
+            Debug.LogWarning($"{other.name} tried to occupy an already occupied slot at {transform.position}");
+            // Signalera till soldaten att omdirigera
+            var baseSoldier = other.GetComponent<BaseSoldier>();
+            if (baseSoldier != null)
+            {
+                baseSoldier.FindNewTargetSlotOrLine();
             }
         }
     }
@@ -49,7 +57,6 @@ public class Slot : MonoBehaviour
         {
             ReleaseSoldier(other.gameObject);
 
-            // Avregistrera soldaten från linjen
             var baseSoldier = other.GetComponent<BaseSoldier>();
             if (baseSoldier != null && baseSoldier.CurrentTargetLine != null)
             {
@@ -58,9 +65,17 @@ public class Slot : MonoBehaviour
         }
     }
 
+    public void VacateSlot()
+    {
+        if (OccupyingSoldier != null)
+        {
+            Debug.Log($"{OccupyingSoldier.name} vacated slot at {transform.position}");
+            OccupyingSoldier = null;
+        }
+    }
+
     public bool IsFree()
     {
         return OccupyingSoldier == null; // Returnera om slotten är ledig
     }
-
 }

@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 2243143271583494250}
   - component: {fileID: 849802648975057023}
   - component: {fileID: -606316333458418902}
-  - component: {fileID: -8902685463167838172}
   m_Layer: 0
   m_Name: EnemySoldier
   m_TagString: HostileTroop
@@ -71,6 +70,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: d9a6bb32f0379774789e09abc176f8db, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -189,18 +189,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
---- !u!114 &-8902685463167838172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3087335521371444203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55b5085763e74144587613388fe6bc77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackRange: 2
-  attackDamage: 20
-  attackCooldown: 1.5
