@@ -4,7 +4,7 @@ using Debug = UnityEngine.Debug;
 
 public class Slot : MonoBehaviour
 {
-    public GameObject OccupyingSoldier { get; private set; } // Soldaten som tar upp slotten
+    public GameObject OccupyingSoldier { get; set; } // Soldaten som tar upp slotten
 
     public void AssignSoldier(GameObject soldier)
     {

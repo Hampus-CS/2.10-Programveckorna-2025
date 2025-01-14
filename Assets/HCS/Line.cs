@@ -78,8 +78,13 @@ public class Line : MonoBehaviour
 
     public bool HasEmptySlots()
     {
-        return Slots.Any(slot => slot.OccupyingSoldier == null);
+        return Slots.Any(slotTransform =>
+        {
+            var slot = slotTransform.GetComponent<Slot>();
+            return slot != null && slot.OccupyingSoldier == null;
+        });
     }
+
 
     public bool HasFreeCapacity()
     {
@@ -136,7 +141,7 @@ public class Line : MonoBehaviour
 
     public void DeregisterSlot(Slot slot)
     {
-        if (slot.OccupyingSoldier != null)
+        if (slot != null && slot.OccupyingSoldier != null)
         {
             Debug.Log($"{slot.OccupyingSoldier.name} left slot at {slot.transform.position}");
             slot.OccupyingSoldier = null;
