@@ -252,7 +252,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 269698474}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -261,7 +261,7 @@ RectTransform:
   - {fileID: 1476298620}
   - {fileID: 740213697}
   - {fileID: 932539561}
-  m_Father: {fileID: 1467609007}
+  m_Father: {fileID: 997963870}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1541,7 +1541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &997963870
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1561,6 +1561,7 @@ RectTransform:
   - {fileID: 1029647968}
   - {fileID: 516043939}
   - {fileID: 1383775862}
+  - {fileID: 269698475}
   m_Father: {fileID: 1467609007}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2292,7 +2293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae5d5a56336160428461d50ba6cc091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 0}
   currency: 1000
   purchasedWeapons: []
   weaponPrefabs:
@@ -2608,7 +2608,6 @@ RectTransform:
   m_Children:
   - {fileID: 1325375686}
   - {fileID: 997963870}
-  - {fileID: 269698475}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

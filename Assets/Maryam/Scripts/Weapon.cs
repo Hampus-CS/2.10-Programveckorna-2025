@@ -24,6 +24,10 @@ public class Weapon : MonoBehaviour
     public int costIncreaseFactor = 2; //how much the cost of items will increase
     private static int serialNumberCounter = 1; //Static to make sure each new weapon will have a number
     private string uniqueName; //stores the name/serial for weapons
+    public float ReloadDuration = 3f; //reload duration
+    public int AmmoCap = 10;
+    public int  CurrentAmmo;
+    public float ReloadTime = 0;
 
     private void Awake()
     {
@@ -32,6 +36,8 @@ public class Weapon : MonoBehaviour
         serialNumberCounter++;
 
      gameObject.name = uniqueName; //make the gameobjects name the same as its name on the list
+
+        CurrentAmmo = AmmoCap;
     }
     public string GetUniqueName()
     {
@@ -47,47 +53,78 @@ public class Weapon : MonoBehaviour
     }
     void Shoot()
     {
-        if(Time.time -lastShot>= shootCoolDown)
-        {  //check if cooldown passed
+        if (CurrentAmmo >= 0)
+        {
+            if (Time.time - lastShot >= shootCoolDown)
+            {  //check if cooldown passed
 
-         if (firePoint == null) //checks if weapon has firepoint
-         {
-            Debug.LogWarning("FirePoint not assigned");
-            return;
-         }
-         if(bulletPrefab == null) //checks if weapon has bulletprefab
-         {
-            Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
-         }
-        
-          //spawns the bullets
-          GameObject bulletInstance = Instantiate(
-          bulletPrefab,
-          firePoint.position, 
-          firePoint.rotation
-          );
+                if (firePoint == null) //checks if weapon has firepoint
+                {
+                    Debug.LogWarning("FirePoint not assigned");
+                    return;
+                }
+                if (bulletPrefab == null) //checks if weapon has bulletprefab
+                {
+                    Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
+                }
 
-            // here bullets damaga and range get decided
-            Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
+                //spawns the bullets
+                GameObject bulletInstance = Instantiate(
+                bulletPrefab,
+                firePoint.position,
+                firePoint.rotation
+                );
 
-            if (bulletScript != null)
-            { 
-            bulletScript.damage = damage; //bullets damage is equal to weapon damage
-            bulletScript.range = range; //bullets range is equal to weapons range
+                // here bullets damaga and range get decided
+                Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
+
+                if (bulletScript != null)
+                {
+                    bulletScript.damage = damage; //bullets damage is equal to weapon damage
+                    bulletScript.range = range; //bullets range is equal to weapons range
+                }
+                else
+                {
+                    Debug.LogWarning("Bullet script is missing on the bullet prefab");
+                }
+
+                lastShot = Time.time;
+                CurrentAmmo -= 1;
             }
             else
             {
-                Debug.LogWarning("Bullet script is missing on the bullet prefab");
+                Debug.LogWarning("COOLDOWN");
             }
-
-            lastShot = Time.time;
         }
         else
         {
-            Debug.LogWarning("COOLDOWN");
+            Debug.Log("Outa ammo, Reloading");
+            StartReload(3f);
+
         }
     }
-   public Weapon CreateCopy()
+    private bool isReloading = false;
+    public void StartReload(float reloadDuration)
+    {
+        if (isReloading) return; //prevents multiple reloads
+        isReloading = true;
+        ReloadTime = reloadDuration;
+    }
+    private void FixedUpdate()
+    {
+        if (!isReloading) return;
+        ReloadTime -= Time.fixedDeltaTime;
+
+        if(ReloadTime <= 0)
+        {
+            ReloadTime = 0;
+            CurrentAmmo = AmmoCap;
+            isReloading = false;
+
+        }
+    }
+
+    public Weapon CreateCopy()
     {
         Weapon newWeapon = new Weapon
         {

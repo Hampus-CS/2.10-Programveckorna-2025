@@ -181,6 +181,13 @@ public class Buttons : MonoBehaviour
         menus[4].SetActive(true);  // Open skill tree
     }
 
+    public void CloseSkillTree()
+    {
+        Time.timeScale = 1;
+        menus[4].SetActive(false);
+        menus[0].SetActive(true);
+    }
+
     public void SkillInfo(int skillId)
     {
         if (skillInfoHandlers.TryGetValue(skillId, out ISkillInfo skillInfo))
@@ -192,10 +199,26 @@ public class Buttons : MonoBehaviour
 
     public void CloseSkillInfo()
     {
+        // Iterate through all menus and deactivate skill-info menus
+        for (int i = 6; i < menus.Count; i++)
+        {
+            if (menus[i] != null && menus[i].activeSelf)
+            {
+                menus[i].SetActive(false); // Close any active skill-info menu
+            }
+        }
+
+        // Open skill tree menu
+        menus[4].SetActive(true);
+    }
+
+    /*
+    public void CloseSkillInfo()
+    {
         menus[6].SetActive(false); // Close active skill-info menu
         menus[4].SetActive(true);  // Open skill tree
     }
-
+    */
     public void UnlockSkillByIndex(int skillIndex)
     {
         if (skillIndex > 0 && skillIndex <= skillButtonMappings.Count)
