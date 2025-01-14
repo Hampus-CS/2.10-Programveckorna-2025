@@ -59,6 +59,7 @@ public class GameManager1 : MonoBehaviour
 
                         currency -= cost;
                         uiManager.UpdateCurrency(currency);
+                      
                        
                     }
                     return;
