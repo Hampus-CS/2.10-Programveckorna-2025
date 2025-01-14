@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public struct PriorityAction
 {
@@ -18,11 +19,13 @@ public class TroopAI : MonoBehaviour
     private TroopNavigation troopNavigation;
     private TroopPersonalityScript personalityScript;
     private RangeColliderScript rangeColliderScript;
+    private Weapon weapon;
 
     private bool enemyInRange = false;
 
     void Start()
     {
+        weapon = GetComponent<Weapon>();
         rangeColliderScript = FindAnyObjectByType<RangeColliderScript>();
         troopNavigation = GetComponent<TroopNavigation>();
         personalityScript = GetComponent<TroopPersonalityScript>();
@@ -68,7 +71,10 @@ public class TroopAI : MonoBehaviour
             actions.Add(new PriorityAction(2, Shoot));
         }
 
-        actions.Add(new PriorityAction(1, MoveForward));
+        if (!troopNavigation.holdPosition)
+        {
+            actions.Add(new PriorityAction(1, MoveForward));
+        }
 
         if (troopNavigation.holdPosition)
         {
@@ -100,7 +106,8 @@ public class TroopAI : MonoBehaviour
 
     private void Shoot()
     {
-        
+        troopNavigation.RotateToEnemy(rangeColliderScript.triggers[0]);
+        weapon.Shoot();
     }
 
     private void MoveForward()
