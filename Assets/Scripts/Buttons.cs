@@ -183,6 +183,7 @@ public class Buttons : MonoBehaviour
 
     public void CloseSkillTree()
     {
+        Time.timeScale = 1;
         menus[4].SetActive(false);
         menus[0].SetActive(true);
     }
