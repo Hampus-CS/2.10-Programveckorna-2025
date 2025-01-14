@@ -8,19 +8,19 @@ public class SkillManager : MonoBehaviour
     void Start()
     {
         // Initialize skills
-        AddSkill(new WeapondSmith(/*pris på skill*/));
-        AddSkill(new LongerBarrels(/*pris på skill*/));
-        AddSkill(new HigherQualityAmmunition(/*pris på skill*/));
-        AddSkill(new StandardisedProduction(/*pris på skill*/));
-        AddSkill(new RapidFire(/*pris på skill*/));
-        AddSkill(new LargerAmmunitionCapacity(/*pris på skill*/));
-        AddSkill(new MedicalSupport(/*pris på skill*/));
-        AddSkill(new MeditationExercises(/*pris på skill*/));
-        AddSkill(new IceDubbs(/*pris på skill*/));
-        AddSkill(new DisciplineTraining(/*pris på skill*/));
-        AddSkill(new Birdwatching(/*pris på skill*/));
-        AddSkill(new HeavierArmor(/*pris på skill*/));
-        AddSkill(new BedsForScrap(/*pris på skill*/));
+        AddSkill(new WeapondSmith(50));
+        AddSkill(new LongerBarrels(50));
+        AddSkill(new HigherQualityAmmunition(50));
+        AddSkill(new StandardisedProduction(50));
+        AddSkill(new RapidFire(50));
+        AddSkill(new LargerAmmunitionCapacity(50));
+        AddSkill(new MedicalSupport(50));
+        AddSkill(new MeditationExercises(50));
+        AddSkill(new IceDubbs(50));
+        AddSkill(new DisciplineTraining(50));
+        AddSkill(new Birdwatching(50));
+        AddSkill(new HeavierArmor(50));
+        AddSkill(new BedsForScrap(50));
 
         // Example usage
         /*
@@ -43,7 +43,7 @@ public class SkillManager : MonoBehaviour
             Debug.LogWarning($"Skill '{skill.Name}' already exists.");
         }
     }
-    public void UnlockSkill(string skillName)
+    public void Unlock(string skillName)
     {
         if (skills.TryGetValue(skillName, out ISkill skill))
         {
@@ -119,7 +119,7 @@ public abstract class BaseSkill : ISkill
         IsUnlocked = false;
     }
 
-    public void Unlock()
+    public void UnlockSkill()
     {
         IsUnlocked = true;
         Debug.Log($"Skill '{Name}' unlocked.");
@@ -137,6 +137,12 @@ public abstract class BaseSkill : ISkill
         }
     }
     protected abstract void Execute();
+
+    public void Unlock()
+    {
+        IsUnlocked = true;
+        Debug.Log($"Skill '{Name}' has been unlocked.");
+    }
 }
 
 public class WeapondSmith : BaseSkill

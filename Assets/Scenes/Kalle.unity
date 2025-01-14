@@ -478,12 +478,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 7
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2176,8 +2176,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3643,9 +3643,31 @@ MonoBehaviour:
   skillManager: {fileID: 742679989}
   skillButtonMappings:
   - button: {fileID: 303793389}
-    skillName: test skill1
+    skillName: WeapondSmith
   - button: {fileID: 1367475022}
-    skillName: test skill2
+    skillName: LongerBarrels
+  - button: {fileID: 2105957979}
+    skillName: HigherQualityAmmunition
+  - button: {fileID: 645870351}
+    skillName: StandardisedProduction
+  - button: {fileID: 1881135121}
+    skillName: RapidFire
+  - button: {fileID: 1561657997}
+    skillName: LargerAmmunitionCapacity
+  - button: {fileID: 1400390593}
+    skillName: MedicalSupport
+  - button: {fileID: 98144622}
+    skillName: MeditationExercises
+  - button: {fileID: 1862549100}
+    skillName: IceDubbs
+  - button: {fileID: 1862549100}
+    skillName: IceDubbs
+  - button: {fileID: 1590024014}
+    skillName: Birdwatching
+  - button: {fileID: 1590024014}
+    skillName: Birdwatching
+  - button: {fileID: 530589032}
+    skillName: BedsForScrap
   buttonTemplate: {fileID: 446812489}
   content: {fileID: 321899993}
   scrapText: {fileID: 1679488848}
@@ -4556,12 +4578,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 12
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5504,12 +5526,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -6040,12 +6062,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 9
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -8699,12 +8721,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 11
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -9731,15 +9753,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Opening the old weapon smith will allow us to craft new rifles and pistols
-    of the highest quality.
-
-
-    Effect:
-
-    + Unlocks weapon
-
-    crafting system'
+  m_text: "Opening the old weapon smith will allow us to craft new rifles and pistols
+    of the highest quality.\n\nEffect:\n+ Unlocks weapon\n   crafting system"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12681,12 +12696,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -13015,12 +13030,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 6
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -14570,12 +14585,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -15051,12 +15066,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 10
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -15522,7 +15537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1621880911
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17243,12 +17258,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 8
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -17645,12 +17660,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -19563,12 +19578,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383198732}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: BuySkill
-        m_Mode: 1
+        m_MethodName: UnlockSkillByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

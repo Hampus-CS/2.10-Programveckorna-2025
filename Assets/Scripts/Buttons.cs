@@ -30,7 +30,7 @@ public class Buttons : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 0;
-        
+
         // Deactivating all panels at the start of the game
         foreach (GameObject menu in menus)
         {
@@ -147,7 +147,7 @@ public class Buttons : MonoBehaviour
     public void Resume()
     {
         Time.timeScale = 1;
-        
+
         menus[1].SetActive(false);
         menus[0].SetActive(true);
     }
@@ -196,14 +196,14 @@ public class Buttons : MonoBehaviour
         menus[4].SetActive(true);  // Open skill tree
     }
 
-    private void UnlockSkillByIndex(int skillIndex)
+    public void UnlockSkillByIndex(int skillIndex)
     {
         if (skillIndex > 0 && skillIndex <= skillButtonMappings.Count)
         {
             var skillName = skillButtonMappings[skillIndex - 1].skillName;
             if (skillManager != null)
             {
-                skillManager.UnlockSkill(skillName);
+                skillManager.Unlock(skillName);
                 print($"Unlocked {skillName}");
             }
             else
