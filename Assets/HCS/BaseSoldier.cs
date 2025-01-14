@@ -27,7 +27,7 @@ public abstract class BaseSoldier : MonoBehaviour
         FindNextLine();
 
         // Sätt ett temporärt fast mål för att testa om agenten rör sig
-        //agent.SetDestination(new Vector3(5, 0, 5));
+        // agent.SetDestination(new Vector3(5, 0, 5));
     }
 
     protected virtual void Update()

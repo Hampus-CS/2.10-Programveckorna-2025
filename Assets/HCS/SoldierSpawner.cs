@@ -48,7 +48,7 @@ public class SoldierSpawner : MonoBehaviour
         playerSoldier.tag = "FriendlyTroop";
         playerSoldier.GetComponent<BaseSoldier>().SetPlayerStatus(true);
         currentSoldiers++;
-        Debug.Log($"Player soldier spawned at {friendlySpawnPoint.position}. Current soldiers: {currentSoldiers}");
+        //Debug.Log($"Player soldier spawned at {friendlySpawnPoint.position}. Current soldiers: {currentSoldiers}");
     }
 
     private void SpawnEnemySoldier()
@@ -63,7 +63,7 @@ public class SoldierSpawner : MonoBehaviour
         enemySoldier.tag = "HostileTroop";
         enemySoldier.GetComponent<BaseSoldier>().SetPlayerStatus(false);
         currentSoldiers++;
-        Debug.Log($"Enemy soldier spawned at {hostileSpawnPoint.position}. Current soldiers: {currentSoldiers}");
+        //Debug.Log($"Enemy soldier spawned at {hostileSpawnPoint.position}. Current soldiers: {currentSoldiers}");
     }
 
     public void DecreaseSoldierCount()
