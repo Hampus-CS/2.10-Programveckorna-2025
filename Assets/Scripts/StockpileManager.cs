@@ -31,7 +31,7 @@ public class StockpileManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not enough scrap!");
+            // visuall imput: för lite pengar
         }
     }
     
@@ -43,12 +43,11 @@ public class StockpileManager : MonoBehaviour
             if (weapon.Quantity > 0 || weapon.Quantity == -1) // Kontrollera att vapnet inte är slut
             {
                 if (weapon.Quantity > 0) weapon.Quantity--;
-                Debug.Log($"Used {weaponName}. Remaining: {weapon.Quantity}");
                 UpdateUI();
             }
             else
             {
-                Debug.Log("Out of stock!");
+                // visuall imput: out of stock
             }
         }
     }
@@ -61,7 +60,7 @@ public class StockpileManager : MonoBehaviour
         // Uppdatera UI med vapnen (implementera ditt UI här)
         foreach (var weapon in Weapons)
         {
-            Debug.Log($"{weapon.Name} - Tier: {weapon.Tier}, Quantity: {(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())}");
+            
         }
     }
 }
