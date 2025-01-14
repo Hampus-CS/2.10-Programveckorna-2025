@@ -40,10 +40,8 @@ public class GameManager : MonoBehaviour
         if (scrap >= amount)
         {
             scrap -= amount;
-            Debug.Log($"Scrap spent: {amount}. Remaining scrap: {scrap}");
             return true;
         }
-        Debug.Log("Not enough scrap.");
         return false;
     }
 

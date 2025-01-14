@@ -8,15 +8,27 @@ public class SkillManager : MonoBehaviour
     void Start()
     {
         // Initialize skills
-        AddSkill(new DoubleJumpSkill(50));
-        AddSkill(new DashSkill(30));
-        AddSkill(new ShieldSkill(40));
+        AddSkill(new WeapondSmith(50));
+        AddSkill(new LongerBarrels(50));
+        AddSkill(new HigherQualityAmmunition(50));
+        AddSkill(new StandardisedProduction(50));
+        AddSkill(new RapidFire(50));
+        AddSkill(new LargerAmmunitionCapacity(50));
+        AddSkill(new MedicalSupport(50));
+        AddSkill(new MeditationExercises(50));
+        AddSkill(new IceDubbs(50));
+        AddSkill(new DisciplineTraining(50));
+        AddSkill(new Birdwatching(50));
+        AddSkill(new HeavierArmor(50));
+        AddSkill(new BedsForScrap(50));
 
         // Example usage
-        UnlockSkill("Double Jump");
-        UseSkill("Double Jump");
-        UseSkill("Dash"); // Locked skill
+        /*
+        UnlockSkill("WeapondSmith");
+        UseSkill("WeapondSmith");
+        UseSkill("WeapondSmith"); // Locked skill
         DisplaySkills();
+        */
     }
 
     public void AddSkill(ISkill skill)
@@ -31,7 +43,7 @@ public class SkillManager : MonoBehaviour
             Debug.LogWarning($"Skill '{skill.Name}' already exists.");
         }
     }
-    public void UnlockSkill(string skillName)
+    public void Unlock(string skillName)
     {
         if (skills.TryGetValue(skillName, out ISkill skill))
         {
@@ -107,7 +119,7 @@ public abstract class BaseSkill : ISkill
         IsUnlocked = false;
     }
 
-    public void Unlock()
+    public void UnlockSkill()
     {
         IsUnlocked = true;
         Debug.Log($"Skill '{Name}' unlocked.");
@@ -125,22 +137,17 @@ public abstract class BaseSkill : ISkill
         }
     }
     protected abstract void Execute();
-}
 
-// Specific skill implementations
-public class DoubleJumpSkill : BaseSkill
-{
-    public DoubleJumpSkill(int cost) : base("Double Jump", cost) { }
-    
-    protected override void Execute()
+    public void Unlock()
     {
-        // Implement double jump logic here
+        IsUnlocked = true;
+        Debug.Log($"Skill '{Name}' has been unlocked.");
     }
 }
 
-public class DashSkill : BaseSkill
+public class WeapondSmith : BaseSkill
 {
-    public DashSkill(int cost) : base("Dash", cost) { }
+    public WeapondSmith(int cost) : base("WeapondSmith", cost) { }
 
     protected override void Execute()
     {
@@ -148,12 +155,122 @@ public class DashSkill : BaseSkill
     }
 }
 
-public class ShieldSkill : BaseSkill
+public class LongerBarrels : BaseSkill
 {
-    public ShieldSkill(int cost) : base("Shield", cost) { }
+    public LongerBarrels(int cost) : base("LongerBarrels", cost) { }
 
     protected override void Execute()
     {
-        // Implement shield logic here
+        // Implement dash logic here
+    }
+}
+
+public class HigherQualityAmmunition : BaseSkill
+{
+    public HigherQualityAmmunition(int cost) : base("HigherQualityAmmunition", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class StandardisedProduction : BaseSkill
+{
+    public StandardisedProduction(int cost) : base("StandardisedProduction", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class RapidFire : BaseSkill
+{
+    public RapidFire(int cost) : base("RapidFire", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class LargerAmmunitionCapacity : BaseSkill
+{
+    public LargerAmmunitionCapacity(int cost) : base("LargerAmmunitionCapacity", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class MedicalSupport : BaseSkill
+{
+    public MedicalSupport(int cost) : base("MedicalSupport", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class MeditationExercises : BaseSkill
+{
+    public MeditationExercises(int cost) : base("MeditationExercises", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class IceDubbs : BaseSkill
+{
+    public IceDubbs(int cost) : base("IceDubbs", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class DisciplineTraining : BaseSkill
+{
+    public DisciplineTraining(int cost) : base("DisciplineTraining", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class Birdwatching : BaseSkill
+{
+    public Birdwatching(int cost) : base("Birdwatching", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class HeavierArmor : BaseSkill
+{
+    public HeavierArmor(int cost) : base("HeavierArmor", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+
+public class BedsForScrap : BaseSkill
+{
+    public BedsForScrap(int cost) : base("BedsForScrap", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
     }
 }
