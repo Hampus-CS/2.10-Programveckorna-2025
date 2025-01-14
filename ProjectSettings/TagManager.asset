@@ -6,13 +6,13 @@ TagManager:
   tags:
   - Waypoint
   - FriendlyTroop
-  - Line
-  - HostileTroop
+  - EnemyTroop
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - enemyLayer
   - Water
   - UI
   - 
