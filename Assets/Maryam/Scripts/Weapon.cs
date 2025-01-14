@@ -24,9 +24,10 @@ public class Weapon : MonoBehaviour
     public int costIncreaseFactor = 2; //how much the cost of items will increase
     private static int serialNumberCounter = 1; //Static to make sure each new weapon will have a number
     private string uniqueName; //stores the name/serial for weapons
-    public float ReloadTime = 3f; //reload duration
+    public float ReloadDuration = 3f; //reload duration
     public int AmmoCap = 10;
     public int  CurrentAmmo;
+    public float ReloadTime = 0;
 
     private void Awake()
     {
@@ -98,23 +99,32 @@ public class Weapon : MonoBehaviour
         else
         {
             Debug.Log("Outa ammo, Reloading");
-            Reload();
+            StartReload(3f);
 
         }
     }
-    public void Reload() //if reload time has passed reload happens
+    private bool isReloading = false;
+    public void StartReload(float reloadDuration)
     {
-        ReloadTime -= Time.deltaTime;
-        if(ReloadTime == 0)
+        if (isReloading) return; //prevents multiple reloads
+        isReloading = true;
+        ReloadTime = reloadDuration;
+    }
+    private void FixedUpdate()
+    {
+        if (!isReloading) return;
+        ReloadTime -= Time.fixedDeltaTime;
+
+        if(ReloadTime <= 0)
         {
+            ReloadTime = 0;
             CurrentAmmo = AmmoCap;
+            isReloading = false;
 
         }
-        
-
     }
-    
-   public Weapon CreateCopy()
+
+    public Weapon CreateCopy()
     {
         Weapon newWeapon = new Weapon
         {
