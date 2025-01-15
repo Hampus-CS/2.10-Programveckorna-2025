@@ -4,8 +4,8 @@ using Debug = UnityEngine.Debug;
 
 public class SoldierSpawner : MonoBehaviour
 {
-    public GameObject playerSoldierPrefab; // Prefab named PlayerSoldier
-    public GameObject enemySoldierPrefab;  // Prefab named EnemySoldier
+    // public GameObject playerSoldierPrefab; // Prefab named PlayerSoldier
+    // public GameObject enemySoldierPrefab;  // Prefab named EnemySoldier
     public Transform friendlySpawnPoint;  // Spawn point for FriendlyTroop
     public Transform hostileSpawnPoint;   // Spawn point for HostileTroop
 
@@ -18,6 +18,9 @@ public class SoldierSpawner : MonoBehaviour
     private float playerSpawnTimer;
     private float enemySpawnTimer;
 
+    public GameObject[] friendlyTroopPrefabs;
+    public RuntimeAnimatorController[] friendlyTroopControllers;
+
     private void Update()
     {
         playerSpawnTimer += Time.deltaTime;
@@ -28,12 +31,13 @@ public class SoldierSpawner : MonoBehaviour
             SpawnPlayerSoldier();
             playerSpawnTimer = 0;
         }
-
+        /*
         if (enemySpawnTimer >= enemySpawnInterval)
         {
             SpawnEnemySoldier();
             enemySpawnTimer = 0;
         }
+        */
     }
 
     private void SpawnPlayerSoldier()
@@ -44,13 +48,21 @@ public class SoldierSpawner : MonoBehaviour
             return;
         }
 
-        GameObject playerSoldier = Instantiate(playerSoldierPrefab, friendlySpawnPoint.position, Quaternion.identity);
+        int randomIndex = Random.Range(0, friendlyTroopPrefabs.Length);
+        GameObject playerSoldier = Instantiate(friendlyTroopPrefabs[randomIndex], friendlySpawnPoint.position, Quaternion.identity);
+        Animator animator = playerSoldier.GetComponent<Animator>();
+
+        if (animator != null && randomIndex < friendlyTroopControllers.Length)
+        {
+            animator.runtimeAnimatorController = friendlyTroopControllers[randomIndex];
+        }
+
         playerSoldier.tag = "FriendlyTroop";
         playerSoldier.GetComponent<BaseSoldier>().SetPlayerStatus(true);
         currentSoldiers++;
         //Debug.Log($"Player soldier spawned at {friendlySpawnPoint.position}. Current soldiers: {currentSoldiers}");
     }
-
+    /*
     private void SpawnEnemySoldier()
     {
         if (currentSoldiers >= maxSoldiers)
@@ -65,7 +77,7 @@ public class SoldierSpawner : MonoBehaviour
         currentSoldiers++;
         //Debug.Log($"Enemy soldier spawned at {hostileSpawnPoint.position}. Current soldiers: {currentSoldiers}");
     }
-
+    */
     public void DecreaseSoldierCount()
     {
         currentSoldiers = Mathf.Max(0, currentSoldiers - 1);

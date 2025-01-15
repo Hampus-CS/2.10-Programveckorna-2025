@@ -37,10 +37,10 @@ public class TroopAI : MonoBehaviour
         {
             troopNavigation.holdPosition = true;
             Debug.Log("Hold position = flase");
-        }  
+        }
         else if (Input.GetKeyUp(KeyCode.Space) && troopNavigation.holdPosition)
         {
-            troopNavigation.holdPosition= false;
+            troopNavigation.holdPosition = false;
             Debug.Log("hold position = true");
         }
 
@@ -98,7 +98,8 @@ public class TroopAI : MonoBehaviour
         if (personalityScript.stress < 5 && !troopNavigation.isAtCover)
         {
             troopNavigation.RunToNearestCover();
-        } else 
+        }
+        else
         {
             troopNavigation.RunToBackToCover();
         }
