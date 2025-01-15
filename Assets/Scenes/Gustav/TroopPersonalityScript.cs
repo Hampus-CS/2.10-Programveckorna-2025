@@ -1,6 +1,10 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
+using UnityEngine.SearchService;
 
 public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
 {

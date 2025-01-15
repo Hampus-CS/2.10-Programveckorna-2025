@@ -99,7 +99,7 @@ public class TroopNavigation : MonoBehaviour
                 if (closestWaypointInFront != null)
                 {
                     agent.isStopped = false;
-                    agent.SetDestination(closestWaypointInFront.transform.position);
+                    agent.SetDestination(closestWaypointInFront.transform.position);                    
                 }
                 else
                 {
