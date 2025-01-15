@@ -1,11 +1,10 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
 {
     private GameObject targetedTroop;
-    private TroopNavigation troopNavigation;
+    //private TroopNavigation troopNavigation;
     private NavMeshAgent agent;
     public int health { get; set; }
     public int stress { get; set; }
@@ -16,7 +15,7 @@ public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
 
     void Start()
     {
-        troopNavigation = GetComponent<TroopNavigation>();
+        //troopNavigation = GetComponent<TroopNavigation>();
         health = 100;
         stress = 0;
         range = 10;

@@ -14,8 +14,7 @@ GameObject:
   - component: {fileID: 68444300931841004}
   - component: {fileID: 7735905736917110664}
   - component: {fileID: 2243143271583494250}
-  - component: {fileID: 849802648975057023}
-  - component: {fileID: -606316333458418902}
+  - component: {fileID: 417964062768540535}
   m_Layer: 0
   m_Name: EnemySoldier
   m_TagString: HostileTroop
@@ -163,8 +162,8 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 0
---- !u!114 &849802648975057023
+  m_ObstacleAvoidanceType: 1
+--- !u!114 &417964062768540535
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -173,19 +172,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3087335521371444203}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6677398e76268f242824a88e6d43696d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c43e3362928519499c37be2d475f5e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-606316333458418902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3087335521371444203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cbfd921cdd788d45b850e421ca32882, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
+  IsPlayer: 0
+  MaxHealth: 100
+  AttackDamage: 10
+  AttackRange: 2
+  AttackInterval: 1.5
+  HealthBarPrefab: {fileID: 6912853240155715726, guid: 7014312dce7ba9047a4d42779cc9b382, type: 3}
