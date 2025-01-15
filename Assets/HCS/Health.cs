@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class Health : MonoBehaviour
 {
@@ -17,9 +19,12 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float amount)
     {
-        currentHealth -= damage;
+        if (!IsAlive) return;
+
+        currentHealth -= amount;
+        Debug.Log($"{gameObject.name} took {amount} damage. Remaining health: {currentHealth}");
 
         if (currentHealth <= 0)
         {
@@ -34,14 +39,7 @@ public class Health : MonoBehaviour
             CurrentLine.RemoveSoldier(gameObject, IsPlayer);
         }
 
-        // Minska räkningen av soldater
-        var spawner = FindObjectOfType<SoldierSpawner>();
-        if (spawner != null)
-        {
-            spawner.DecreaseSoldierCount();
-        }
-
-        // Förstör gameobject
         Destroy(gameObject);
+        Debug.Log($"{gameObject.name} has died.");
     }
 }

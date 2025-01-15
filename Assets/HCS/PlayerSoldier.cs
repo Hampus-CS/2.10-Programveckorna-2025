@@ -10,68 +10,39 @@ public class PlayerSoldier : BaseSoldier
         return line.CurrentState == Line.LineState.PlayerOwned || line.CurrentState == Line.LineState.Contested || line.CurrentState == Line.LineState.Neutral;
     }
 
-    protected override void EngageLine()
+    public override void EngageLine()
     {
         if (currentTargetLine == null) return;
 
-        // Ensure soldier doesn't leave slot prematurely
-        if (!currentTargetLine.IsSufficientlyFilled(IsPlayer, 5)) // Example: 5 player soldiers required
+        if (currentTargetLine.IsContested())
         {
-            Debug.Log($"{gameObject.name} (PlayerSoldier) is holding position on line {currentTargetLine.name}");
-            return;
+            var enemies = currentTargetLine.EnemySoldiers;
+            AttackEnemies(enemies); // Call PlayerSoldier's AttackEnemies
         }
-
-        // Attack enemy soldiers on the line
-        List<GameObject> enemies = currentTargetLine.EnemySoldiers;
-        if (enemies.Count > 0)
+        else if (currentTargetLine.CurrentState == Line.LineState.PlayerOwned)
         {
-            Debug.Log($"{gameObject.name} (PlayerSoldier) is attacking enemy soldiers on line {currentTargetLine.name}");
-            AttackEnemies(enemies);
-        }
-        else
-        {
-            Debug.Log($"{gameObject.name} (PlayerSoldier) found no enemies to attack. Advancing to the next line.");
-            FindNextLine();
+            FindNextLine(); // Move forward if line is owned
         }
     }
 
+
     private void AttackEnemies(List<GameObject> enemies)
     {
-        // Försök attackera fiender på linjen först
-        if (enemies != null && enemies.Count > 0)
-        {
-            foreach (var enemy in enemies)
-            {
-                if (enemy == null) continue;
+        if (enemies == null || enemies.Count == 0) return;
 
-                Health enemyHealth = enemy.GetComponent<Health>();
-                if (enemyHealth != null && enemyHealth.IsAlive)
-                {
-                    Debug.Log($"{gameObject.name} (PlayerSoldier) is attacking {enemy.name}");
-                    enemyHealth.TakeDamage(attackDamage);
-                    return; // Attackera en fiende åt gången
-                }
+        foreach (var enemy in enemies)
+        {
+            if (enemy == null) continue;
+
+            var enemyHealth = enemy.GetComponent<Health>();
+            if (enemyHealth != null && enemyHealth.IsAlive)
+            {
+                Debug.Log($"{gameObject.name} (PlayerSoldier) is attacking {enemy.name}");
+                enemyHealth.TakeDamage(attackDamage);
+                return; // Attack one enemy per frame
             }
         }
 
-        // Om inga fiender på linjen, sök efter fiender i närheten
-        Debug.Log($"{gameObject.name} (PlayerSoldier) found no valid enemies on the line. Searching nearby.");
-        Collider[] hits = Physics.OverlapSphere(transform.position, base.attackRange);
-
-        foreach (var hit in hits)
-        {
-            if (IsEnemy(hit.gameObject)) // Kontrollera om det är en fiende
-            {
-                Health enemyHealth = hit.GetComponent<Health>();
-                if (enemyHealth != null && enemyHealth.IsAlive)
-                {
-                    Debug.Log($"{gameObject.name} (PlayerSoldier) is attacking nearby {hit.gameObject.name}");
-                    enemyHealth.TakeDamage(base.attackDamage);
-                    return;
-                }
-            }
-        }
-
-        Debug.Log($"{gameObject.name} (PlayerSoldier) found no valid enemies to attack.");
+        Debug.Log($"{gameObject.name} (PlayerSoldier) found no valid enemies on the line.");
     }
 }

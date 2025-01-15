@@ -21,7 +21,37 @@ public class Line : MonoBehaviour
             Debug.LogWarning($"Mismatch between TotalSlots ({TotalSlots}) and actual slot count ({Slots.Length}) on line {name}. Adjusting TotalSlots.");
             TotalSlots = Slots.Length;
         }
+
+        // Find spawn points
+        Transform friendlySpawn = GameObject.Find("FriendlySpawnPoint")?.transform;
+        Transform hostileSpawn = GameObject.Find("HostileSpawnPoint")?.transform;
+
+        if (friendlySpawn == null || hostileSpawn == null)
+        {
+            Debug.LogError("Spawn points not found. Ensure they are named 'FriendlySpawnPoint' and 'HostileSpawnPoint'.");
+            return;
+        }
+
+        // Assign initial ownership based on proximity to spawn points
+        float playerDistance = Vector3.Distance(transform.position, friendlySpawn.position);
+        float enemyDistance = Vector3.Distance(transform.position, hostileSpawn.position);
+
+        if (playerDistance < enemyDistance)
+        {
+            CurrentState = LineState.PlayerOwned;
+        }
+        else if (enemyDistance < playerDistance)
+        {
+            CurrentState = LineState.EnemyOwned;
+        }
+        else
+        {
+            CurrentState = LineState.Neutral;
+        }
+
+        Debug.Log($"Line {name} initialized with state: {CurrentState}");
     }
+
 
     public void RegisterSoldier(GameObject soldier, bool isPlayer)
     {
@@ -44,8 +74,16 @@ public class Line : MonoBehaviour
         }
     }
 
+    private void CleanupNullReferences()
+    {
+        PlayerSoldiers.RemoveAll(soldier => soldier == null);
+        EnemySoldiers.RemoveAll(soldier => soldier == null);
+    }
+
     public void RemoveSoldier(GameObject soldier, bool isPlayer)
     {
+        if (soldier == null) return;
+
         if (isPlayer)
         {
             PlayerSoldiers.Remove(soldier);
@@ -56,11 +94,38 @@ public class Line : MonoBehaviour
         }
 
         Debug.Log($"Soldier {soldier.name} removed from line {name}. Player soldiers: {PlayerSoldiers.Count}, Enemy soldiers: {EnemySoldiers.Count}");
-        UpdateLineState(); // Uppdatera endast vid ändringar
+        UpdateLineState();
+    }
+
+    public void CommandSoldiersToStorm(Line targetLine)
+    {
+        if (CurrentState == LineState.PlayerOwned || CurrentState == LineState.Contested)
+        {
+            for (int i = PlayerSoldiers.Count - 1; i >= 0; i--) // Iterate backward to handle removal
+            {
+                var soldierObj = PlayerSoldiers[i];
+
+                if (soldierObj == null) // Check if the soldier has been destroyed
+                {
+                    PlayerSoldiers.RemoveAt(i); // Remove destroyed references
+                    continue;
+                }
+
+                var soldier = soldierObj.GetComponent<PlayerSoldier>();
+                if (soldier != null)
+                {
+                    soldier.AssignTargetLine(targetLine);
+                }
+            }
+
+            Debug.Log($"Commanded soldiers on line {name} to storm {targetLine.name}.");
+        }
     }
 
     private void UpdateLineState()
     {
+        CleanupNullReferences();
+
         int playerCount = PlayerSoldiers.Count;
         int enemyCount = EnemySoldiers.Count;
 
@@ -88,11 +153,18 @@ public class Line : MonoBehaviour
 
     public bool HasFreeCapacity()
     {
-        return Slots.Any(slotTransform =>
+        bool hasCapacity = Slots.Any(slotTransform =>
         {
             var slot = slotTransform.GetComponent<Slot>();
-            return slot != null && slot.OccupyingSoldier == null;
+            return slot != null && slot.IsFree();
         });
+
+        if (!hasCapacity)
+        {
+            Debug.Log($"Line {name} has no free capacity.");
+        }
+
+        return hasCapacity;
     }
 
     public bool IsSufficientlyFilled(bool isPlayer, int requiredCount)
@@ -111,8 +183,48 @@ public class Line : MonoBehaviour
                 return slotTransform;
             }
         }
-        Debug.LogWarning("No free slot found!");
+
+        // Only log the warning when absolutely necessary
+        Debug.LogWarning($"No free slot found in line {name}!");
         return null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Draw line ownership state
+        Gizmos.color = CurrentState switch
+        {
+            LineState.PlayerOwned => Color.green,
+            LineState.EnemyOwned => Color.red,
+            LineState.Contested => Color.yellow,
+            _ => Color.gray, // Neutral
+        };
+
+        // Draw a rectangle to represent the line
+        Gizmos.DrawWireCube(transform.position, new Vector3(25, 1, 1)); // Adjust the size to match your line dimensions
+
+        // Draw slots within the line
+        foreach (var slotTransform in Slots)
+        {
+            Slot slot = slotTransform.GetComponent<Slot>();
+            if (slot != null)
+            {
+                Gizmos.color = slot.IsFree() ? Color.green : Color.red;
+                Gizmos.DrawWireSphere(slotTransform.position, 0.5f);
+            }
+        }
+    }
+
+    public bool CanAdvance(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            return CurrentState == LineState.PlayerOwned || CurrentState == LineState.Contested;
+        }
+        else
+        {
+            return CurrentState == LineState.EnemyOwned || CurrentState == LineState.Contested;
+        }
     }
 
     public bool CanPushForward(bool isPlayer)

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -18,10 +19,16 @@ public class SoldierSpawner : MonoBehaviour
     private float playerSpawnTimer;
     private float enemySpawnTimer;
 
+    private float enemyAttackInterval = 10f; // Time between enemy attacks
+    private float enemyAttackTimer = 0f;
+
+    BaseSoldier baseSoldier;
+
     private void Update()
     {
         playerSpawnTimer += Time.deltaTime;
         enemySpawnTimer += Time.deltaTime;
+        enemyAttackTimer += Time.deltaTime;
 
         if (playerSpawnTimer >= playerSpawnInterval)
         {
@@ -33,6 +40,89 @@ public class SoldierSpawner : MonoBehaviour
         {
             SpawnEnemySoldier();
             enemySpawnTimer = 0;
+        }
+
+        if (enemyAttackTimer >= enemyAttackInterval)
+        {
+            PeriodicEnemyStorm();
+            enemyAttackTimer = 0;
+        }
+    }
+
+    public void PeriodicEnemyStorm()
+    {
+        Line[] lines = FindObjectsOfType<Line>();
+        Line lastEnemyLine = lines.FirstOrDefault(line => line.CurrentState == Line.LineState.EnemyOwned);
+
+        // If no enemy-owned line exists, fallback to neutral lines
+        if (lastEnemyLine == null)
+        {
+            lastEnemyLine = lines.FirstOrDefault(line => line.CurrentState == Line.LineState.Neutral);
+            if (lastEnemyLine == null)
+            {
+                Debug.LogWarning("No enemy-owned or neutral line found. Skipping periodic enemy storm.");
+                return;
+            }
+        }
+
+        // Find the nearest player-owned or neutral line
+        Line nearestPlayerLine = lines
+            .OrderBy(line => Vector3.Distance(lastEnemyLine.transform.position, line.transform.position))
+            .FirstOrDefault(line => line.CurrentState == Line.LineState.PlayerOwned || line.CurrentState == Line.LineState.Neutral);
+
+        if (nearestPlayerLine != null)
+        {
+            lastEnemyLine.CommandSoldiersToStorm(nearestPlayerLine);
+            Debug.Log($"Enemy soldiers commanded to storm line: {nearestPlayerLine.name}");
+        }
+        else
+        {
+            Debug.LogWarning("No valid target line found for enemy storm.");
+        }
+    }
+
+    public void CommandAllSoldiersToStorm(Line targetLine, bool isPlayer)
+    {
+        Line[] lines = FindObjectsOfType<Line>();
+        Line lastLine = isPlayer
+            ? lines.LastOrDefault(line => line.CurrentState == Line.LineState.PlayerOwned)
+            : lines.FirstOrDefault(line => line.CurrentState == Line.LineState.EnemyOwned);
+
+        if (lastLine != null)
+        {
+            lastLine.CommandSoldiersToStorm(targetLine);
+        }
+    }
+
+    public void PlayerCommandStorm()
+    {
+        Line[] lines = FindObjectsOfType<Line>();
+        Line lastPlayerLine = lines.LastOrDefault(line => line.CurrentState == Line.LineState.PlayerOwned);
+
+        // If no player-owned line exists, fallback to neutral lines
+        if (lastPlayerLine == null)
+        {
+            lastPlayerLine = lines.FirstOrDefault(line => line.CurrentState == Line.LineState.Neutral);
+            if (lastPlayerLine == null)
+            {
+                Debug.LogWarning("No player-owned or neutral line found. Skipping player storm.");
+                return;
+            }
+        }
+
+        // Find the nearest enemy-owned or neutral line
+        Line nearestEnemyLine = lines
+            .OrderBy(line => Vector3.Distance(lastPlayerLine.transform.position, line.transform.position))
+            .FirstOrDefault(line => line.CurrentState == Line.LineState.EnemyOwned || line.CurrentState == Line.LineState.Neutral);
+
+        if (nearestEnemyLine != null)
+        {
+            lastPlayerLine.CommandSoldiersToStorm(nearestEnemyLine);
+            Debug.Log($"Player soldiers commanded to storm line: {nearestEnemyLine.name}");
+        }
+        else
+        {
+            Debug.LogWarning("No valid target line found for player storm.");
         }
     }
 

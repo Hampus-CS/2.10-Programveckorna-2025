@@ -6,6 +6,8 @@ public class Slot : MonoBehaviour
 {
     public GameObject OccupyingSoldier { get; set; } // Soldaten som tar upp slotten
 
+    private bool isTemporarilyClaimed = false;
+
     public void AssignSoldier(GameObject soldier)
     {
         if (OccupyingSoldier == null)
@@ -33,20 +35,11 @@ public class Slot : MonoBehaviour
         if (OccupyingSoldier == null && (other.CompareTag("FriendlyTroop") || other.CompareTag("HostileTroop")))
         {
             AssignSoldier(other.gameObject);
+
             var baseSoldier = other.GetComponent<BaseSoldier>();
             if (baseSoldier != null && baseSoldier.CurrentTargetLine != null)
             {
                 baseSoldier.CurrentTargetLine.RegisterSoldier(other.gameObject, baseSoldier.IsPlayer);
-            }
-        }
-        else if (OccupyingSoldier != null)
-        {
-            Debug.LogWarning($"{other.name} tried to occupy an already occupied slot at {transform.position}");
-            // Signalera till soldaten att omdirigera
-            var baseSoldier = other.GetComponent<BaseSoldier>();
-            if (baseSoldier != null)
-            {
-                baseSoldier.FindNewTargetSlotOrLine();
             }
         }
     }
@@ -65,6 +58,17 @@ public class Slot : MonoBehaviour
         }
     }
 
+    public void TemporarilyClaim()
+    {
+        isTemporarilyClaimed = true;
+        Invoke(nameof(ReleaseTemporaryClaim), 1f); // Release claim after 1 second
+    }
+
+    private void ReleaseTemporaryClaim()
+    {
+        isTemporarilyClaimed = false;
+    }
+
     public void VacateSlot()
     {
         if (OccupyingSoldier != null)
@@ -76,6 +80,6 @@ public class Slot : MonoBehaviour
 
     public bool IsFree()
     {
-        return OccupyingSoldier == null; // Returnera om slotten är ledig
+        return OccupyingSoldier == null && !isTemporarilyClaimed;
     }
 }
