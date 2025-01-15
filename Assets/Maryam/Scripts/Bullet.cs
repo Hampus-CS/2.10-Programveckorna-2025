@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    float speed = 20f; //bulet speed
+    float speed = 10f; //bulet speed
     public int range;  //bullet range
     public int damage; //bullet damage
 
@@ -23,9 +23,7 @@ public class Bullet : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision) //when bullet hits something
     {
-
         Debug.Log("Bullet hit: " + collision.gameObject.name);
         Destroy(gameObject); // Destroy the bullet
-
     }
 }

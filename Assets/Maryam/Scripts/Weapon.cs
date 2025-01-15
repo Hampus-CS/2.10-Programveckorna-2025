@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
 {
 
     [Header("Weapon Stats")]
-    [SerializeField]private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
+    [SerializeField] private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
     [SerializeField] private int range = 5;// same as damage
 
     [Header("Upgrae Points")] //to claridy what these ints are for
@@ -29,31 +29,29 @@ public class Weapon : MonoBehaviour
     public int  CurrentAmmo;
     public float ReloadTime = 0;
 
+    private float accuracy = 5;
+    private TroopPersonalityScript personalityScript;
+
     private void Awake()
     {
         //give each weapon a unique serial number and update the weapons name
         uniqueName = $"{name.Replace("(Clone)", "").Trim()} #{serialNumberCounter:D4}"; //replaces Clone with a serial number in each weapon thats bought name
         serialNumberCounter++;
 
-     gameObject.name = uniqueName; //make the gameobjects name the same as its name on the list
+        gameObject.name = uniqueName; //make the gameobjects name the same as its name on the list
 
         CurrentAmmo = AmmoCap;
+
+        personalityScript = GetComponent<TroopPersonalityScript>();
     }
     public string GetUniqueName()
     {
         return uniqueName; //for the debug to work in GM1
     }
 
-    void Update() 
+    public void Shoot()
     {
-        if (Input.GetKeyDown(KeyCode.Space))//just for testing weapons REMOVE WHEN IMPLEMENTED
-        {
-            Shoot();
-        }
-    }
-    void Shoot()
-    {
-        if (CurrentAmmo >= 0)
+        if (CurrentAmmo > 0)
         {
             if (Time.time - lastShot >= shootCoolDown)
             {  //check if cooldown passed
@@ -68,16 +66,18 @@ public class Weapon : MonoBehaviour
                     Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
                 }
 
-                //spawns the bullets
-                GameObject bulletInstance = Instantiate(
-                bulletPrefab,
-                firePoint.position,
-                firePoint.rotation
-                );
+                float spread = 1f / accuracy / personalityScript.accuracy; 
 
+                Vector3 shootDirection = firePoint.forward;
+                // Randomly adjust direction based on accuracy factor
+                shootDirection.x += UnityEngine.Random.Range(-accuracy, accuracy);  // Random adjustment for X axis
+                shootDirection.y += UnityEngine.Random.Range(-accuracy, accuracy);  // Random adjustment for Y axis
+
+                // Spawn the bullet and apply the modified direction
+                GameObject bulletInstance = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
                 // here bullets damaga and range get decided
                 Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
-
+                
                 if (bulletScript != null)
                 {
                     bulletScript.damage = damage; //bullets damage is equal to weapon damage
@@ -91,16 +91,10 @@ public class Weapon : MonoBehaviour
                 lastShot = Time.time;
                 CurrentAmmo -= 1;
             }
-            else
-            {
-                Debug.LogWarning("COOLDOWN");
-            }
         }
         else
         {
-            Debug.Log("Outa ammo, Reloading");
             StartReload(3f);
-
         }
     }
     private bool isReloading = false;
