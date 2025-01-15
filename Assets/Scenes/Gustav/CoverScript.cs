@@ -46,7 +46,7 @@ public class CoverScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Troop"))
+        if (other.CompareTag("EnemyTroop") || other.CompareTag("FriendlyTroop"))
         {
             troopsInCollider++;
             occupiedBy = other.gameObject.tag; // Adjust based on troop ownership logic
@@ -56,7 +56,7 @@ public class CoverScript : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Troop"))
+        if (other.CompareTag("EnemyTroop") || other.CompareTag("FriendlyTroop"))
         {
             troopsInCollider--;
             if (troopsInCollider <= 0)

@@ -349,4 +349,12 @@ public class TroopNavigation : MonoBehaviour
         yield return new WaitForSeconds(5f);
         canMove = true;
     }
+
+    public void RotateToEnemy(GameObject target)
+    {
+        Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 400);
+    }
+
 }
