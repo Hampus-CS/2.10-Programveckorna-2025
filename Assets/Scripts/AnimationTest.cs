@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class AnimationTest : MonoBehaviour
 {
-    Animator animator;
+    public Animator animator;
+    private string blendParameter = "Blend";
 
     void Start()
     {
@@ -11,13 +12,13 @@ public class AnimationTest : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
-            animator.SetFloat("WalkingSpeed", 1);
+            animator.SetFloat(blendParameter, 1);
         }
         else
         {
-            animator.SetFloat("WalkingSpeed", 0);
+            animator.SetFloat(blendParameter, 0);
         }
     }
 }
