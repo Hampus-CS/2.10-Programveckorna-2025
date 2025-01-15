@@ -19,8 +19,7 @@ public class TroopNavigation : MonoBehaviour
     private TroopPersonalityScript personality;
     public List<GameObject> waypoints = new List<GameObject>();
 
-    public Animator animator;
-    private string blendParameter = "Blend";
+    private Animator animator;
 
     public bool holdPosition = false;
     public bool isAtCover = false;
@@ -29,7 +28,6 @@ public class TroopNavigation : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        animator = GetComponent<Animator>();
 
         coverScript = FindAnyObjectByType<CoverScript>();
         personality = GetComponent<TroopPersonalityScript>();
@@ -64,6 +62,8 @@ public class TroopNavigation : MonoBehaviour
     private CoverScript coverScript;
     public void MoveForwards()
     {
+        animator = GetComponent<Animator>();
+
         if (!holdPosition && canMove)
         {
             StartCoroutine(TimerBetweenNavigation());
@@ -106,14 +106,16 @@ public class TroopNavigation : MonoBehaviour
                     agent.isStopped = false;
                     agent.SetDestination(closestWaypointInFront.transform.position);
 
-                    animator.SetFloat("Blend", 1);
+                    animator.SetBool("Idle", false);    
+                    animator.SetBool("Walk", true);
                 }
                 else
                 {
                     // Stop the agent if no valid waypoint is found
                     agent.isStopped = true;
 
-                    animator.SetFloat("Blend", 0);
+                    animator.SetBool("Walk", false);
+                    animator.SetBool("Idle", true);
                 }
             }
         }
