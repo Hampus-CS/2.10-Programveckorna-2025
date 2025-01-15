@@ -249,6 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &208720238
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &234227948
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &396515427
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,6 +693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &407706839
 GameObject:
   m_ObjectHideFlags: 0
@@ -719,7 +723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 5
+  CurrentState: 0
   Slots:
   - {fileID: 1388061981}
   - {fileID: 1481471195}
@@ -728,7 +732,7 @@ MonoBehaviour:
   - {fileID: 208720239}
   PlayerSoldiers: []
   EnemySoldiers: []
-  CurrentState: 3
+  ShowGizmos: 1
 --- !u!4 &407706841
 Transform:
   m_ObjectHideFlags: 0
@@ -778,7 +782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 5
+  CurrentState: 0
   Slots:
   - {fileID: 715669349}
   - {fileID: 801905599}
@@ -787,7 +791,7 @@ MonoBehaviour:
   - {fileID: 396515428}
   PlayerSoldiers: []
   EnemySoldiers: []
-  CurrentState: 3
+  ShowGizmos: 1
 --- !u!4 &566271822
 Transform:
   m_ObjectHideFlags: 0
@@ -874,6 +878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &659066422
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,6 +1024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &715669348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,6 +1091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &729269994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1151,6 +1158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &767498196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,6 +1225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &801905598
 GameObject:
   m_ObjectHideFlags: 0
@@ -1283,6 +1292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &838793239
 GameObject:
   m_ObjectHideFlags: 0
@@ -1349,6 +1359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &873763453
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,7 +1389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 5
+  CurrentState: 0
   Slots:
   - {fileID: 355266730}
   - {fileID: 1026096997}
@@ -1387,7 +1398,7 @@ MonoBehaviour:
   - {fileID: 2047497437}
   PlayerSoldiers: []
   EnemySoldiers: []
-  CurrentState: 3
+  ShowGizmos: 1
 --- !u!4 &873763455
 Transform:
   m_ObjectHideFlags: 0
@@ -1474,6 +1485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &958212682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,6 +1688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1043264038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1742,6 +1755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1079482972
 GameObject:
   m_ObjectHideFlags: 0
@@ -1771,7 +1785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 5
+  CurrentState: 0
   Slots:
   - {fileID: 1572356077}
   - {fileID: 1215164574}
@@ -1780,7 +1794,7 @@ MonoBehaviour:
   - {fileID: 729269995}
   PlayerSoldiers: []
   EnemySoldiers: []
-  CurrentState: 3
+  ShowGizmos: 1
 --- !u!4 &1079482974
 Transform:
   m_ObjectHideFlags: 0
@@ -1867,6 +1881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1213554656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1933,6 +1948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1215164573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1999,6 +2015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1296658605
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,7 +2045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 5
+  CurrentState: 0
   Slots:
   - {fileID: 1043264039}
   - {fileID: 1692356677}
@@ -2037,7 +2054,7 @@ MonoBehaviour:
   - {fileID: 1493198205}
   PlayerSoldiers: []
   EnemySoldiers: []
-  CurrentState: 3
+  ShowGizmos: 1
 --- !u!4 &1296658607
 Transform:
   m_ObjectHideFlags: 0
@@ -2124,6 +2141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1459493948
 GameObject:
   m_ObjectHideFlags: 0
@@ -2311,6 +2329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1493198204
 GameObject:
   m_ObjectHideFlags: 0
@@ -2377,6 +2396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1572356076
 GameObject:
   m_ObjectHideFlags: 0
@@ -2443,6 +2463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1626687084
 GameObject:
   m_ObjectHideFlags: 0
@@ -2472,7 +2493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b90a61523bf1ae4dac3014951a4df2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalSlots: 5
+  CurrentState: 0
   Slots:
   - {fileID: 580877233}
   - {fileID: 838793240}
@@ -2481,7 +2502,7 @@ MonoBehaviour:
   - {fileID: 2072842224}
   PlayerSoldiers: []
   EnemySoldiers: []
-  CurrentState: 3
+  ShowGizmos: 1
 --- !u!4 &1626687086
 Transform:
   m_ObjectHideFlags: 0
@@ -2568,6 +2589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1690920617
 GameObject:
   m_ObjectHideFlags: 0
@@ -2634,6 +2656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1692356676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2700,6 +2723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1813760407
 GameObject:
   m_ObjectHideFlags: 0
@@ -2766,6 +2790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1838136787
 GameObject:
   m_ObjectHideFlags: 0
@@ -2832,6 +2857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &1943215933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2998,9 +3024,6 @@ MonoBehaviour:
   enemySoldierPrefab: {fileID: 3087335521371444203, guid: 70f915b98d7f3ea4d90ffdff19439043, type: 3}
   friendlySpawnPoint: {fileID: 234227949}
   hostileSpawnPoint: {fileID: 288971684}
-  maxSoldiers: 30
-  playerSpawnInterval: 5
-  enemySpawnInterval: 5
 --- !u!4 &1957076705
 Transform:
   m_ObjectHideFlags: 0
@@ -3082,6 +3105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &2071074611
 GameObject:
   m_ObjectHideFlags: 0
@@ -3148,6 +3172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &2072433608
 GameObject:
   m_ObjectHideFlags: 0
@@ -3316,6 +3341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &2119077849
 GameObject:
   m_ObjectHideFlags: 0
@@ -3382,6 +3408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa11f4baac86a7e4d83487e7c53e82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowGizmos: 1
 --- !u!1 &2141808952
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,28 +1,16 @@
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEngine;
-using Debug = UnityEngine.Debug;
-
 public class EnemySoldier : BaseSoldier
 {
-    protected override bool IsTargetLine(Line line)
-    {
-        return line.CurrentState == Line.LineState.EnemyOwned || line.CurrentState == Line.LineState.Contested || line.CurrentState == Line.LineState.Neutral;
-    }
+    protected override bool IsValidLine(Line line) => line.CurrentState != Line.LineState.PlayerOwned;
 
-    public override void EngageLine()
+    protected override void EngageLine()
     {
-        if (currentTargetLine == null) return;
-
-        if (currentTargetLine.IsContested())
+        if (CurrentTargetLine.IsContested())
         {
-            var enemies = IsPlayer ? currentTargetLine.EnemySoldiers : currentTargetLine.PlayerSoldiers;
-            StartCoroutine(AttackEnemies(enemies)); // Call shared method from BaseSoldier
+            // Engage logic
         }
-        else if (currentTargetLine.CurrentState == Line.LineState.EnemyOwned)
+        else if (CurrentTargetLine.CurrentState == Line.LineState.EnemyOwned)
         {
-            FindNextLine(); // Move forward if the line is owned
+            FindNextLine();
         }
     }
-
 }

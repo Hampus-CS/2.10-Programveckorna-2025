@@ -1,45 +1,53 @@
-using System.Diagnostics;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 public class Slot : MonoBehaviour
 {
-    public GameObject OccupyingSoldier { get; set; } // Soldaten som tar upp slotten
+    public GameObject OccupyingSoldier { get; private set; }
 
-    private bool isTemporarilyClaimed = false;
+    [Header("Debug Settings")]
+    public bool ShowGizmos = true; // Toggle Gizmos visibility in the Inspector
+
+    public bool IsFree()
+    {
+        return OccupyingSoldier == null;
+    }
 
     public void AssignSoldier(GameObject soldier)
     {
-        if (OccupyingSoldier == null)
+        if (IsFree())
         {
             OccupyingSoldier = soldier;
             Debug.Log($"{soldier.name} assigned to slot at {transform.position}");
         }
-        else
+    }
+
+    public void ReleaseSoldier()
+    {
+        if (OccupyingSoldier != null)
         {
-            Debug.LogWarning($"Slot at {transform.position} is already occupied by {OccupyingSoldier.name}. {soldier.name} cannot take it.");
+            Debug.Log($"{OccupyingSoldier.name} released from slot at {transform.position}");
+            OccupyingSoldier = null;
         }
     }
 
-    public void ReleaseSoldier(GameObject soldier)
+    private void OnDrawGizmos()
     {
-        if (OccupyingSoldier == soldier)
-        {
-            OccupyingSoldier = null;
-            Debug.Log($"{soldier.name} released from slot at {transform.position}");
-        }
+        if (!ShowGizmos) return;
+
+        Gizmos.color = IsFree() ? Color.blue : Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.3f);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (OccupyingSoldier == null && (other.CompareTag("FriendlyTroop") || other.CompareTag("HostileTroop")))
+        if (IsFree() && (other.CompareTag("FriendlyTroop") || other.CompareTag("HostileTroop")))
         {
             AssignSoldier(other.gameObject);
 
             var baseSoldier = other.GetComponent<BaseSoldier>();
             if (baseSoldier != null && baseSoldier.CurrentTargetLine != null)
             {
-                baseSoldier.CurrentTargetLine.RegisterSoldier(other.gameObject, baseSoldier.IsPlayer);
+                baseSoldier.CurrentTargetLine.AddSoldier(other.gameObject, baseSoldier.IsPlayer);
             }
         }
     }
@@ -48,7 +56,7 @@ public class Slot : MonoBehaviour
     {
         if (OccupyingSoldier == other.gameObject)
         {
-            ReleaseSoldier(other.gameObject);
+            ReleaseSoldier();
 
             var baseSoldier = other.GetComponent<BaseSoldier>();
             if (baseSoldier != null && baseSoldier.CurrentTargetLine != null)
@@ -56,30 +64,5 @@ public class Slot : MonoBehaviour
                 baseSoldier.CurrentTargetLine.RemoveSoldier(other.gameObject, baseSoldier.IsPlayer);
             }
         }
-    }
-
-    public void TemporarilyClaim()
-    {
-        isTemporarilyClaimed = true;
-        Invoke(nameof(ReleaseTemporaryClaim), 1f); // Release claim after 1 second
-    }
-
-    private void ReleaseTemporaryClaim()
-    {
-        isTemporarilyClaimed = false;
-    }
-
-    public void VacateSlot()
-    {
-        if (OccupyingSoldier != null)
-        {
-            Debug.Log($"{OccupyingSoldier.name} vacated slot at {transform.position}");
-            OccupyingSoldier = null;
-        }
-    }
-
-    public bool IsFree()
-    {
-        return OccupyingSoldier == null && !isTemporarilyClaimed;
     }
 }
