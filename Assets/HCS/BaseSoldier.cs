@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
+using System.Collections.Generic;
 using System.Linq; 
 
 public abstract class BaseSoldier : MonoBehaviour
@@ -24,6 +25,9 @@ public abstract class BaseSoldier : MonoBehaviour
     private float lineSwitchCooldown = 3f;
     private float lineSwitchTimer = 0f;
 
+    private float updateTimer = 0f;
+    private float updateInterval = 0.1f; // Update every 0.1 seconds
+
     private float reevaluationCooldown = 2f; // Time before re-evaluating a line or slot
     private float reevaluationTimer = 0f;    // Tracks time until reevaluation is allowed
 
@@ -36,24 +40,41 @@ public abstract class BaseSoldier : MonoBehaviour
         // agent.SetDestination(new Vector3(5, 0, 5));
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
+        updateTimer += Time.fixedDeltaTime; // Use fixedDeltaTime for FixedUpdate timing
+        if (updateTimer < updateInterval) return; // Skip updates until the interval has elapsed
+
+        updateTimer = 0f; // Reset the timer
+
         if (!agent.isOnNavMesh) return;
 
-        attackTimer += Time.deltaTime;
+        attackTimer += Time.fixedDeltaTime;
 
+        // Enable or disable NavMeshAgent based on movement
+        if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
+        {
+            EnableNavMeshAgent(); // Moving
+        }
+        else
+        {
+            DisableNavMeshAgent(); // Idle
+        }
+
+        // Engage enemies in the current line
         if (currentTargetLine != null && attackTimer >= attackCooldown)
         {
-            EngageLine(); // Calls the subclass's EngageLine, triggering AttackEnemies
+            EngageLine();
             attackTimer = 0f;
         }
 
+        // Handle slot and line logic
         if (currentTargetSlot != null)
         {
             var slotScript = currentTargetSlot.GetComponent<Slot>();
             if (slotScript != null && slotScript.OccupyingSoldier == gameObject)
             {
-                return; // Stay in slot and engage
+                return; // Stay in the slot and engage
             }
 
             if (slotScript == null || slotScript.OccupyingSoldier != gameObject)
@@ -241,6 +262,56 @@ public abstract class BaseSoldier : MonoBehaviour
     public void SetPlayerStatus(bool isPlayer)
     {
         IsPlayer = isPlayer;
+    }
+
+    protected IEnumerator AttackEnemies(List<GameObject> enemies)
+    {
+        if (enemies == null || enemies.Count == 0) yield break;
+
+        while (true)
+        {
+            // Random delay between attacks
+            yield return new WaitForSeconds(Random.Range(1f, 3f));
+
+            foreach (var enemy in enemies)
+            {
+                if (enemy == null) continue;
+
+                var enemyHealth = enemy.GetComponent<Health>();
+                if (enemyHealth != null && enemyHealth.IsAlive)
+                {
+                    Debug.Log($"{gameObject.name} is attacking {enemy.name}");
+                    enemyHealth.TakeDamage(attackDamage);
+                    yield break; // Exit after attacking one enemy
+                }
+            }
+
+            // If no valid enemies are found, break the loop
+            Debug.Log($"{gameObject.name} found no valid enemies to attack.");
+            yield break;
+        }
+    }
+
+    private void DisableNavMeshAgent()
+    {
+        if (agent.enabled)
+        {
+            agent.updatePosition = false;
+            agent.updateRotation = false;
+            agent.enabled = false;
+            Debug.Log($"{gameObject.name} NavMeshAgent disabled.");
+        }
+    }
+
+    private void EnableNavMeshAgent()
+    {
+        if (!agent.enabled)
+        {
+            agent.enabled = true;
+            agent.updatePosition = true;
+            agent.updateRotation = true;
+            Debug.Log($"{gameObject.name} NavMeshAgent enabled.");
+        }
     }
 
     protected abstract bool IsTargetLine(Line line);

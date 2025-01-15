@@ -16,33 +16,13 @@ public class EnemySoldier : BaseSoldier
 
         if (currentTargetLine.IsContested())
         {
-            var enemies = currentTargetLine.PlayerSoldiers;
-            AttackEnemies(enemies); // Call EnemySoldier's AttackEnemies
+            var enemies = IsPlayer ? currentTargetLine.EnemySoldiers : currentTargetLine.PlayerSoldiers;
+            StartCoroutine(AttackEnemies(enemies)); // Call shared method from BaseSoldier
         }
         else if (currentTargetLine.CurrentState == Line.LineState.EnemyOwned)
         {
-            FindNextLine(); // Move forward if line is owned
+            FindNextLine(); // Move forward if the line is owned
         }
     }
 
-
-    private void AttackEnemies(List<GameObject> enemies)
-    {
-        if (enemies == null || enemies.Count == 0) return;
-
-        foreach (var enemy in enemies)
-        {
-            if (enemy == null) continue;
-
-            var enemyHealth = enemy.GetComponent<Health>();
-            if (enemyHealth != null && enemyHealth.IsAlive)
-            {
-                Debug.Log($"{gameObject.name} (EnemySoldier) is attacking {enemy.name}");
-                enemyHealth.TakeDamage(attackDamage);
-                return; // Attack one enemy per frame
-            }
-        }
-
-        Debug.Log($"{gameObject.name} (EnemySoldier) found no valid enemies on the line.");
-    }
 }
