@@ -10,8 +10,7 @@ public enum TroopState
 {
     MovingForward,
     HoldingPosition,
-    SeekingCover,
-    InCombat
+    SeekingCover
 }
 
 public class TroopNavigation : MonoBehaviour
@@ -20,7 +19,6 @@ public class TroopNavigation : MonoBehaviour
     private TroopPersonalityScript personality;
     public List<GameObject> waypoints = new List<GameObject>();
 
-    public bool inCombat = false;
     public bool holdPosition = false;
     public bool isAtCover = false;
     public bool canMove = true;
@@ -101,7 +99,7 @@ public class TroopNavigation : MonoBehaviour
                 if (closestWaypointInFront != null)
                 {
                     agent.isStopped = false;
-                    agent.SetDestination(closestWaypointInFront.transform.position);
+                    agent.SetDestination(closestWaypointInFront.transform.position);                    
                 }
                 else
                 {
