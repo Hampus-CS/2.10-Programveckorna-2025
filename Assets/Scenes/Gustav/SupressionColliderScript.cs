@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Collections;
+using UnityEditor.Rendering;
 
 public class SupressionColliderScript : MonoBehaviour
 {
@@ -24,10 +25,20 @@ public class SupressionColliderScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyBullet"))
+        if (gameObject.CompareTag("FriendlyTroop"))
         {
-            Supress(other.transform);
+            if (other.CompareTag("EnemyBullet"))
+            {
+                Supress(other.transform);
+            }
+        } else if (gameObject.CompareTag("EnemyTroop"))
+        {
+            if (other.CompareTag("FriendlyBullet"))
+            {
+                Supress(other.transform);
+            }
         }
+
     }
 
     private float distance;

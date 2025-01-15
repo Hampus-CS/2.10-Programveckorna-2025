@@ -14,17 +14,36 @@ public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
     public float suppresion { get; set; }
     public string personality { get; set; }
 
-    void Start()
+    private int startStress;
+
+    private void Start()
     {
         troopNavigation = GetComponent<TroopNavigation>();
         health = 100;
         stress = 0;
         range = 10;
         suppresion = 0;
-        accuracy = 5;
+        accuracy = 0.1f;
         Personality();
 
+        startStress = stress;
+
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Update()
+    {
+        DeStress();
+    }
+
+    private void DeStress()
+    {
+        if (stress > 0)
+        {
+            float stressReduction = Time.deltaTime / 10;
+            stress -= ((int)stressReduction);
+            Debug.Log(stress);
+        }
     }
 
     public void Personality()

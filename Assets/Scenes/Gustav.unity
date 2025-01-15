@@ -700,7 +700,6 @@ GameObject:
   - component: {fileID: 564529469}
   - component: {fileID: 564529468}
   - component: {fileID: 564529470}
-  - component: {fileID: 564529471}
   - component: {fileID: 564529473}
   - component: {fileID: 564529474}
   - component: {fileID: 564529475}
@@ -785,7 +784,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints: []
-  inCombat: 0
   holdPosition: 0
   isAtCover: 0
   canMove: 1
@@ -799,18 +797,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac69bc9daf3f2e9419a99487709e5af6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &564529471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564529461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25f13d773028e37459ce8c5c02a809d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &564529473

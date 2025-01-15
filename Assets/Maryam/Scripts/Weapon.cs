@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour
     public int  CurrentAmmo;
     public float ReloadTime = 0;
 
-    private float accuracy = 5;
+    private float accuracy = 0.1f;
     private TroopPersonalityScript personalityScript;
 
     private void Awake()
@@ -66,7 +66,7 @@ public class Weapon : MonoBehaviour
                     Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
                 }
 
-                float spread = 1f / accuracy / personalityScript.accuracy; 
+                float spread = 1f / (accuracy * personalityScript.accuracy); 
 
                 Vector3 shootDirection = firePoint.forward;
                 // Randomly adjust direction based on accuracy factor
