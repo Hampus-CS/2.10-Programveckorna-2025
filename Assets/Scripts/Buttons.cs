@@ -67,6 +67,9 @@ public class Buttons : MonoBehaviour
         skillInfoHandlers[11] = new SkillInfo(16); // Skill 11 Info
         skillInfoHandlers[12] = new SkillInfo(17); // Skill 12 Info
         skillInfoHandlers[13] = new SkillInfo(18); // Skill 13 Info
+        skillInfoHandlers[14] = new SkillInfo(19); // Skill 14 Info
+        skillInfoHandlers[15] = new SkillInfo(20); // Skill 15 Info
+        skillInfoHandlers[16] = new SkillInfo(21); // Skill 16 Info
 
         for (int i = 0; i < skillButtonMappings.Count; i++)
         {
