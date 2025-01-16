@@ -41,6 +41,8 @@ public class Buttons : MonoBehaviour
             }
         }
 
+        menus[2].SetActive(true);
+
         foreach (var skillInfo in skillInfoHandlers.Values)
         {
             if (skillInfo is SkillInfo skill)
@@ -48,7 +50,7 @@ public class Buttons : MonoBehaviour
                 menus[skill.skillMenuIndex].SetActive(false); // Deactivate the menu associated with the skill
             }
         }
-        menus[2].SetActive(true);
+
 
         button[0].gameObject.SetActive(true);
         button[1].gameObject.SetActive(false);
