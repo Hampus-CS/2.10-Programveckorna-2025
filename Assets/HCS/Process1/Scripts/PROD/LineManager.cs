@@ -30,7 +30,6 @@ public class LineManager : MonoBehaviour
     {
         if (CurrentState != previousState)
         {
-            Debug.Log($"Line {name}: State changed to {CurrentState}. Player = {playerSoldiers.Count}, Enemy = {enemySoldiers.Count}");
             previousState = CurrentState;
         }
 
@@ -79,8 +78,6 @@ public class LineManager : MonoBehaviour
         {
             CurrentState = LineState.Neutral;
         }
-
-        Debug.Log($"Line {name}: Player = {playerCount}, Enemy = {enemyCount}, State = {CurrentState}");
     }
 
     public Transform GetFreeSlot()
@@ -90,7 +87,6 @@ public class LineManager : MonoBehaviour
             var slotScript = slot.GetComponent<SlotManager>();
             if (slotScript != null && slotScript.IsFree())
             {
-                Debug.Log($"{slot.name} is free in line {name}.");
                 return slot;
             }
         }
@@ -113,7 +109,6 @@ public class LineManager : MonoBehaviour
                 soldier.SetTargetLine(targetLine);
             }
         }
-
         Debug.Log($"{name}: Soldiers storming {targetLine.name}");
     }
 

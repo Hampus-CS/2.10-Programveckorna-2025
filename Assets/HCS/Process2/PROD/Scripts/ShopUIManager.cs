@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ShopUIManager : MonoBehaviour
 {
@@ -34,20 +35,13 @@ public class ShopUIManager : MonoBehaviour
             return;
         }
         Weapon weapon = GameManager.Instance.GetWeaponFromImage(currentImage);
-        if (weapon == null) {
+        if (weapon == null)
+        {
             Debug.LogWarning("No weapon connected to current image");
             return;
         }
         GameManager.Instance.BuyWeapon(weapon.tag, weaponCost); //if current image has tag the BuyWeapon void is called from GameManager
     }
-    
-    public void OpenShop() {
-        shopButton.SetActive(false); //Hide shop button when shop is open
-        shopPanel.SetActive(true); //SHow pannel when shop is open
-    
-    }
-
-   
 
     public void MoveRight()//if this void is called the images will move right
     {
@@ -57,11 +51,10 @@ public class ShopUIManager : MonoBehaviour
             return;
         }
         currentIndex++;
-        for(int i = 0; i < images.Length; i++){
-
+        for(int i = 0; i < images.Length; i++)
+        {
             Vector3 targetPosition = initialPositions[i] - Vector3.right * moveDistance * currentIndex;
             StartCoroutine(MoveImage(images[i], targetPosition));
-           
         }
     }
   
@@ -76,13 +69,12 @@ public class ShopUIManager : MonoBehaviour
 
         for (int i = 0; i < images.Length; i++)
         {
-
             Vector3 targetPosition = initialPositions[i] - Vector3.right * moveDistance * currentIndex;
             StartCoroutine(MoveImage(images[i], targetPosition));
-            
         }
     }
-    private System.Collections.IEnumerator MoveImage(RectTransform image, Vector3 targetposition)
+
+    private IEnumerator MoveImage(RectTransform image, Vector3 targetposition)
     {
         Vector3 startPosition = image.anchoredPosition;
         float elapsedTime = 0f;
@@ -94,15 +86,12 @@ public class ShopUIManager : MonoBehaviour
         }
         image.anchoredPosition = targetposition;
     }
+
     public RectTransform GetCurrentImage()//here the current image on screen will be located to uppgrade specific weapons in the GameManager script
     {
         return images[currentIndex];
     }
-    public void CloseShop()
-    {
-        shopButton.SetActive(true); // Show shop buton when shop closed
-        shopPanel.SetActive(false); //hide panel
-    }
+
     public void UpgradeCurrentWeaponDamage()
     {
         RectTransform currentImage = GetCurrentImage();
@@ -110,9 +99,9 @@ public class ShopUIManager : MonoBehaviour
         if (weapon != null)
         {
             weapon.UpgradeDamage();
-
         }
     }
+
     public void UpgradeCurrentWeaponRange()
     {
         RectTransform currentImage = GetCurrentImage();
@@ -122,7 +111,6 @@ public class ShopUIManager : MonoBehaviour
             weapon.UpgradeRange();
         }
     }
-
 }
 
 /// <summary>
