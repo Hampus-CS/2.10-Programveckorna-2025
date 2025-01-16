@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
@@ -8,7 +9,7 @@ public class SkillManager : MonoBehaviour
     void Start()
     {
         // Initialize skills
-        AddSkill(new WeapondSmith(50));
+        AddSkill(new WeaponSmith(50));
         AddSkill(new LongerBarrels(50));
         AddSkill(new HigherQualityAmmunition(50));
         AddSkill(new StandardisedProduction(50));
@@ -21,6 +22,10 @@ public class SkillManager : MonoBehaviour
         AddSkill(new Birdwatching(50));
         AddSkill(new HeavierArmor(50));
         AddSkill(new BedsForScrap(50));
+        AddSkill(new ArmTheScientists(50));
+        AddSkill(new RooftopKorean(50));
+        AddSkill(new IncreasedTrainFirepower(50));
+
 
         // Example usage
         /*
@@ -145,9 +150,9 @@ public abstract class BaseSkill : ISkill
     }
 }
 
-public class WeapondSmith : BaseSkill
+public class WeaponSmith : BaseSkill
 {
-    public WeapondSmith(int cost) : base("WeapondSmith", cost) { }
+    public WeaponSmith(int cost) : base("WeaponSmith", cost) { }
 
     protected override void Execute()
     {
@@ -268,6 +273,33 @@ public class HeavierArmor : BaseSkill
 public class BedsForScrap : BaseSkill
 {
     public BedsForScrap(int cost) : base("BedsForScrap", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+public class ArmTheScientists : BaseSkill
+{
+    public ArmTheScientists(int cost) : base("ArmTheScientists", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+public class RooftopKorean: BaseSkill
+{
+    public RooftopKorean(int cost) : base("RooftopKorean", cost) { }
+
+    protected override void Execute()
+    {
+        // Implement dash logic here
+    }
+}
+public class IncreasedTrainFirepower : BaseSkill
+{
+    public IncreasedTrainFirepower(int cost) : base("IncreasedTrainFirepower", cost) { }
 
     protected override void Execute()
     {
