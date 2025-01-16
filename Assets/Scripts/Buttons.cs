@@ -27,6 +27,7 @@ public class Buttons : MonoBehaviour
     [SerializeField] private GameManager gameManager; // Management of Scrap
     private List<GameObject> stockpileButtons = new();
 
+    private bool isSkillInfoActive = false;
 
     private void Start()
     {
@@ -211,10 +212,12 @@ public class Buttons : MonoBehaviour
 
     public void SkillInfo(int skillId)
     {
-        if (skillInfoHandlers.TryGetValue(skillId, out ISkillInfo skillInfo))
+        if (skillInfoHandlers.TryGetValue(skillId, out ISkillInfo skillInfo) && isSkillInfoActive == false)
         {
             Time.timeScale = 0;
             skillInfo.ShowSkillInfo(menus);
+            isSkillInfoActive = true;
+            Debug.LogWarning("Skillinfo redan öppet");
         }
     }
 
@@ -224,6 +227,8 @@ public class Buttons : MonoBehaviour
         {
             menus[currentSkillMenuIndex].SetActive(false); // Close the relevant skill-info menu
             currentSkillMenuIndex = -1; // Reset the current skill menu index
+            isSkillInfoActive = false;
+            Debug.LogWarning("Skillinfo inte öppen");
         }
         menus[4].SetActive(true);  // Open skill tree
     }
