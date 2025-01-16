@@ -142,5 +142,4 @@ public class Settings : MonoBehaviour
         Debug.Log($"Settings Applied: {resolutionWidth}x{resolutionHeight}, Fullscreen: {isFullscreen}, MasterVolume: {masterVolume}");
 
     }
-
 }

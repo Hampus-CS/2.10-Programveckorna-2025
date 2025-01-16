@@ -8,21 +8,31 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int manPower;
     [SerializeField] private int scrap = 1000;
 
+    public static GameManager Instance { get; private set; }
+
     private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public bool TrySpendScrap(int amount)
@@ -30,10 +40,8 @@ public class GameManager : MonoBehaviour
         if (scrap >= amount)
         {
             scrap -= amount;
-            Debug.Log($"Scrap spent: {amount}. Remaining scrap: {scrap}");
             return true;
         }
-        Debug.Log("Not enough scrap.");
         return false;
     }
 
