@@ -262,6 +262,7 @@ public class Buttons : MonoBehaviour
             {
                 skillManager.Unlock(skillName);
                 print($"Unlocked {skillName}");
+                isSkillInfoActive = false;
             }
             else
             {
