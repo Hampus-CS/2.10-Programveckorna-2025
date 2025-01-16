@@ -13,7 +13,7 @@ public class GameManager1 : MonoBehaviour
     public int currency = 1000; //currency for player
     public List<Weapon> purchasedWeapons = new List<Weapon>();//list of purchased weapon
     public List<WeaponPrefabInfo> weaponPrefabs;//list of weapon prefabs
-    public UIManager uiManager;
+    public WeaponUI weaponUI;
 
     private void Awake()
     { //makes sure theres only one instance of GameManager1
@@ -28,7 +28,7 @@ public class GameManager1 : MonoBehaviour
     }
     private void Start()
     {
-        uiManager.UpdateCurrency(currency); //wowwww
+        weaponUI.UpdateCurrency(currency); //wowwww
     }
 
     [System.Serializable]
@@ -58,7 +58,7 @@ public class GameManager1 : MonoBehaviour
                         Debug.Log($" Bought weapon; {weaponComponent.GetUniqueName()}");
 
                         currency -= cost;
-                        uiManager.UpdateCurrency(currency);
+                        weaponUI.UpdateCurrency(currency);
                       
                        
                     }

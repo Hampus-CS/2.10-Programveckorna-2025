@@ -33,12 +33,12 @@ public class ShopUIManager : MonoBehaviour
             Debug.LogWarning("No weapon image selected rn");
             return;
         }
-        Weapon weapon = GameManager1.Instance.GetWeaponFromImage(currentImage);
+        Weapon weapon = GameManager.Instance.GetWeaponFromImage(currentImage);
         if (weapon == null) {
             Debug.LogWarning("No weapon connected to current image");
             return;
         }
-        GameManager1.Instance.BuyWeapon(weapon.tag, weaponCost); //if current image has tag the BuyWeapon void is called from gamemanager1
+        GameManager.Instance.BuyWeapon(weapon.tag, weaponCost); //if current image has tag the BuyWeapon void is called from GameManager
     }
     
     public void OpenShop() {
@@ -94,7 +94,7 @@ public class ShopUIManager : MonoBehaviour
         }
         image.anchoredPosition = targetposition;
     }
-    public RectTransform GetCurrentImage()//here the current image on screen will be located to uppgrade specific weapons in the GameManager1 script
+    public RectTransform GetCurrentImage()//here the current image on screen will be located to uppgrade specific weapons in the GameManager script
     {
         return images[currentIndex];
     }
@@ -106,7 +106,7 @@ public class ShopUIManager : MonoBehaviour
     public void UpgradeCurrentWeaponDamage()
     {
         RectTransform currentImage = GetCurrentImage();
-        Weapon weapon = GameManager1.Instance.GetWeaponFromImage(currentImage);
+        Weapon weapon = GameManager.Instance.GetWeaponFromImage(currentImage);
         if (weapon != null)
         {
             weapon.UpgradeDamage();
@@ -116,7 +116,7 @@ public class ShopUIManager : MonoBehaviour
     public void UpgradeCurrentWeaponRange()
     {
         RectTransform currentImage = GetCurrentImage();
-        Weapon weapon = GameManager1.Instance.GetWeaponFromImage(currentImage);
+        Weapon weapon = GameManager.Instance.GetWeaponFromImage(currentImage);
         if (weapon != null)
         {
             weapon.UpgradeRange();
@@ -124,3 +124,25 @@ public class ShopUIManager : MonoBehaviour
     }
 
 }
+
+/// <summary>
+/// Key Features:
+/// 
+///     Weapon Purchasing:
+///         - Allows players to buy weapons through the shop UI.
+///         - Automatically deducts scrap and updates the stockpile.
+/// 
+///     Weapon Navigation:
+///         - Scrolls through available weapons with smooth animations.
+///         - Highlights the currently selected weapon.
+/// 
+///     Integration with GameManager:
+///         - Fetches weapon details and calls relevant GameManager methods.
+///         - Ensures consistent data flow between UI and game state.
+/// </summary>
+
+// How to Use
+// 1. Attach this script to your shop panel GameObject.
+// 2. Assign weapon images, shop buttons, and GameManager in the Inspector.
+// 3. Use OpenShop() and CloseShop() to toggle the shop UI visibility.
+// 4. Call BuyWeaponButton() to handle weapon purchases.

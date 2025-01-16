@@ -47,6 +47,7 @@ public class Weapon : MonoBehaviour
 
         
     }
+    
     public string GetUniqueName()
     {
         return uniqueName; //for the debug to work in GM1
@@ -107,13 +108,16 @@ public class Weapon : MonoBehaviour
             StartReload(3f);
         }
     }
+    
     private bool isReloading = false;
+    
     public void StartReload(float reloadDuration)
     {
         if (isReloading) return; //prevents multiple reloads
         isReloading = true;
         ReloadTime = reloadDuration;
     }
+    
     private void FixedUpdate()
     {
         if (!isReloading) return;
@@ -139,6 +143,7 @@ public class Weapon : MonoBehaviour
         };
         return newWeapon;
     }
+    
     private Weapon GetWeaponFromImage(RectTransform image)
     {
         string imageTag = image.tag;//gets tag from current image and find weapon with same tag
@@ -153,40 +158,39 @@ public class Weapon : MonoBehaviour
 
     public void UpgradeDamage()
     {
-        if (GameManager1.Instance.currency >= UpgradeDamageCost)
+        if (GameManager.Instance.TrySpendScrap(UpgradeDamageCost))
         {
-            GameManager1.Instance.currency -= UpgradeDamageCost;
             damage += damageUpgradePoints;
             UpgradeDamageCost += costIncreaseFactor; // Increase the cost for the next upgrade
 
             // Update UI
-            GameManager1.Instance.uiManager.UpdateCurrency(GameManager1.Instance.currency);
-            GameManager1.Instance.uiManager.UpdateDamageUpgrade(UpgradeDamageCost);
+            GameManager.Instance.weaponUI.UpdateCurrency(GameManager.Instance.GetScrap());
+            GameManager.Instance.weaponUI.UpdateDamageUpgrade(UpgradeDamageCost);
 
             Debug.Log($"Upgraded damage. New damage: {damage}, New upgrade cost: {UpgradeDamageCost}");
         }
         else
         {
-            Debug.LogWarning("Not enough currency to upgrade damage.");
+            Debug.LogWarning("Not enough scrap to upgrade damage.");
         }
     }
+
     public void UpgradeRange()
     {
-        if (GameManager1.Instance.currency >= UpgradeRangeCost)
+        if (GameManager.Instance.TrySpendScrap(UpgradeRangeCost))
         {
-            GameManager1.Instance.currency -= UpgradeRangeCost;
             range += rangeUpgradePoints;
             UpgradeRangeCost += costIncreaseFactor; // Increase the cost for the next upgrade
 
             // Update UI
-            GameManager1.Instance.uiManager.UpdateCurrency(GameManager1.Instance.currency);
-            GameManager1.Instance.uiManager.UpdateRangeUpgrade(UpgradeRangeCost);
+            GameManager.Instance.weaponUI.UpdateCurrency(GameManager.Instance.GetScrap());
+            GameManager.Instance.weaponUI.UpdateRangeUpgrade(UpgradeRangeCost);
 
             Debug.Log($"Upgraded range. New range: {range}, New upgrade cost: {UpgradeRangeCost}");
         }
         else
         {
-            Debug.LogWarning("Not enough currency to upgrade range.");
+            Debug.LogWarning("Not enough scrap to upgrade range.");
         }
     }
 
@@ -200,5 +204,27 @@ public class Weapon : MonoBehaviour
 
 }
 
+/// <summary>
+/// Key Features:
+/// 
+///     Weapon Customization:
+///         - Supports damage, range, and upgrade point adjustments.
+///         - Provides unique names for each weapon instance.
+/// 
+///     Shooting Mechanics:
+///         - Handles shooting cooldowns, accuracy, and ammo.
+///         - Supports reload mechanics and bullet behavior.
+/// 
+///     Integration with GameManager and UI:
+///         - Uses GameManager to check and deduct scrap for upgrades.
+///         - Updates UI elements like currency and upgrade costs.
+/// 
+///     Debugging Tools:
+///         - Outputs weapon-related actions to the console for clarity.
+/// </summary>
 
-
+// How to Use
+// 1. Attach this script to your weapon prefab GameObjects.
+// 2. Assign bullet prefabs and fire points in the Inspector.
+// 3. Call UpgradeDamage() and UpgradeRange() to apply upgrades.
+// 4. Use Shoot() to fire bullets and manage cooldowns.

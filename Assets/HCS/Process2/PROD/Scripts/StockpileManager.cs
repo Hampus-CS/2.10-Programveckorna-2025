@@ -1,66 +1,51 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class StockpileManager : MonoBehaviour
 {
-    public List<WeaponTemp> Weapons { get; private set; } = new List<WeaponTemp>();
-
     [SerializeField] private GameManager gameManager;
-
+    [SerializeField] private Buttons buttons;
+    /*
     private void Start()
     {
-        // Lägg till exempelvapen
-        Weapons.Add(new WeaponTemp("Pistol", 0, -1)); // Oändligt vapen
-        Weapons.Add(new WeaponTemp("Shotgun", 2, 5));
-        Weapons.Add(new WeaponTemp("Rifle", 3, 2));
-
-        UpdateUI();
+        // Example stockpile setup (if needed during initialization)
+        gameManager.AddWeaponToStockpile("Pistol", -1, 0); // Infinite weapon
+        gameManager.AddWeaponToStockpile("Shotgun", 5, 2);
+        gameManager.AddWeaponToStockpile("Rifle", 3, 3);
     }
-    
+    */
     public void BuyWeapon(string weaponName, int cost)
     {
-        if (gameManager.TrySpendScrap(cost))
-        {
-            var weapon = Weapons.FirstOrDefault(weapon => weapon.Name == weaponName);
-            if (weapon != null)
-            {
-                weapon.Quantity++;
-                UpdateUI();
-            }
-        }
-        else
-        {
-            // visuall imput: för lite pengar
-        }
+        gameManager.BuyWeapon(weaponName, cost);
+        buttons.UpdateStockpileUI();
     }
-    
+
     public void UseWeapon(string weaponName)
     {
-        var weapon = Weapons.FirstOrDefault(weapon => weapon.Name == weaponName);
-        if (weapon != null)
-        {
-            if (weapon.Quantity > 0 || weapon.Quantity == -1) // Kontrollera att vapnet inte är slut
-            {
-                if (weapon.Quantity > 0) weapon.Quantity--;
-                UpdateUI();
-            }
-            else
-            {
-                // visuall imput: out of stock
-            }
-        }
+        gameManager.UseWeapon(weaponName);
+        buttons.UpdateStockpileUI();
     }
 
-    private void UpdateUI()
-    {
-        // Sortera vapnen efter Tier
-        Weapons = Weapons.OrderByDescending(weapon => weapon.Tier).ToList();
-
-        // Uppdatera UI med vapnen (implementera ditt UI här)
-        foreach (var weapon in Weapons)
-        {
-            
-        }
-    }
 }
+
+/// <summary>
+/// Key Features:
+/// 
+///     Stockpile Management:
+///         - Updates the stockpile UI to reflect available weapons.
+///         - Handles weapon usage and removal from the stockpile.
+/// 
+///     GameManager Integration:
+///         - Relies on GameManager to manage weapon stockpile data.
+///         - Updates UI via Buttons.cs to ensure consistency.
+/// 
+///     Simplified Weapon Usage:
+///         - Enables soldiers to use weapons dynamically.
+///         - Tracks weapon availability and infinite-stock weapons.
+/// </summary>
+
+// How to Use
+// 1. Attach this script to the stockpile panel GameObject.
+// 2. Assign references for GameManager and Buttons in the Inspector.
+// 3. Use BuyWeapon() and UseWeapon() for stockpile operations.
+// 4. Update UI dynamically through the Buttons script.

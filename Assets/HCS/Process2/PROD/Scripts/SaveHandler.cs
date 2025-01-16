@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class SaveHandler : MonoBehaviour
         savePath = Application.persistentDataPath + "/savegame.json";
     }
 
-    // Saves the entire game state.
+    // Save the game state
     public void Save(GameState gameState)
     {
         string json = JsonUtility.ToJson(gameState, true);
@@ -19,35 +20,65 @@ public class SaveHandler : MonoBehaviour
         Debug.Log("Game state saved successfully.");
     }
 
-    // Loads the entire game state.
+    // Load the game state
     public GameState Load()
     {
         if (File.Exists(savePath))
         {
             string json = File.ReadAllText(savePath);
-            GameState state = JsonUtility.FromJson<GameState>(json);
+            GameState gameState = JsonUtility.FromJson<GameState>(json);
             Debug.Log("Game state loaded successfully.");
-            return state;
+            return gameState;
         }
 
         Debug.LogWarning("Save file not found. Returning default state.");
         return null;
     }
+
+    // Represents the game state
+    [System.Serializable]
+    public class GameState
+    {
+        public int Scrap;
+        public List<WeaponData> Stockpile = new();
+        public int ResolutionWidth;
+        public int ResolutionHeight;
+        public bool IsFullscreen;
+        public float MasterVolume;
+        public float MusicVolume;
+        public float MiscVolume;
+    }
+
+    // Represents weapon data for saving/loading
+    [System.Serializable]
+    public class WeaponData
+    {
+        public string Name;
+        public int Quantity;
+        public int Tier;
+    }
 }
 
-// Represents the entire game state for saving/loading.
-[System.Serializable]
-public class GameState
-{
+/// <summary>
+/// Key Features:
+/// 
+///     Game State Persistence:
+///         - Saves and loads the game state to/from a JSON file.
+///         - Handles key game data such as stockpile, resources, and player settings.
+/// 
+///     Flexible Serialization:
+///         - Supports custom serializable classes for modular and scalable saves.
+///         - Ensures stockpile and weapon data are preserved with full fidelity.
+/// 
+///     Debugging Tools:
+///         - Outputs save/load status and errors for easier debugging.
+/// 
+///     Cross-System Integration:
+///         - Works seamlessly with GameManager and Settings for data persistence.
+/// </summary>
 
-    public string GameDate; // Example of additional data
-    public int PlayerLevel; // Example of game progress
-    public int Score; // Example of player score
-    public int ResolutionWidth = 1920; // Default resolution width
-    public int ResolutionHeight = 1080; // Default resolution height
-    public bool IsFullscreen = true;
-    public float MasterVolume = 1f;
-    public float MusicVolume = 1f;
-    public float MiscVolume = 1f;
-
-}
+// How to Use
+// 1. Attach this script to a GameObject in your scene.
+// 2. Use Save(GameState) to serialize and save data.
+// 3. Use Load() to deserialize and retrieve saved data.
+// 4. Ensure other systems like GameManager and Settings interact with this script for persistence.
