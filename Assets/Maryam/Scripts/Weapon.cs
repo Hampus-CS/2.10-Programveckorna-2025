@@ -5,12 +5,11 @@ using TMPro;
 
 public class Weapon : MonoBehaviour
 {
-
     [Header("Weapon Stats")]
     [SerializeField] private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
     [SerializeField] private int range = 5;// same as damage
 
-    [Header("Upgrae Points")] //to claridy what these ints are for
+    [Header("Upgrade Points")] //to claridy what these ints are for
     public int damageUpgradePoints = 2; //the amount of points the weapons damage will increase with every update
     public int rangeUpgradePoints = 3; //amount of range "points" the weapon will increase with every update
 
@@ -19,18 +18,20 @@ public class Weapon : MonoBehaviour
     public Transform firePoint; //where bullets spawn
     public float shootCoolDown = 1f; //cooldown for shooting
     private float lastShot = 0; //when last shot was shot
-    public  int UpgradeDamageCost = 8;
+    public int UpgradeDamageCost = 8;
     public int UpgradeRangeCost = 6;
     public int costIncreaseFactor = 2; //how much the cost of items will increase
     private static int serialNumberCounter = 1; //Static to make sure each new weapon will have a number
     private string uniqueName; //stores the name/serial for weapons
     public float ReloadDuration = 3f; //reload duration
     public int AmmoCap = 10;
-    public int  CurrentAmmo;
+    public int CurrentAmmo;
     public float ReloadTime = 0;
 
-    private float accuracy = 5;
+    private float accuracy = 0.1f;
     private TroopPersonalityScript personalityScript;
+
+
 
     private void Awake()
     {
@@ -43,6 +44,8 @@ public class Weapon : MonoBehaviour
         CurrentAmmo = AmmoCap;
 
         personalityScript = GetComponent<TroopPersonalityScript>();
+
+        
     }
     public string GetUniqueName()
     {
@@ -51,6 +54,8 @@ public class Weapon : MonoBehaviour
 
     public void Shoot()
     {
+        Animator animator = GetComponent<Animator>();
+
         if (CurrentAmmo > 0)
         {
             if (Time.time - lastShot >= shootCoolDown)
@@ -66,7 +71,9 @@ public class Weapon : MonoBehaviour
                     Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
                 }
 
-                float spread = 1f / accuracy / personalityScript.accuracy; 
+                animator.SetBool("Shoot", true);
+
+                float spread = 1f / (accuracy * personalityScript.accuracy);
 
                 Vector3 shootDirection = firePoint.forward;
                 // Randomly adjust direction based on accuracy factor
@@ -77,7 +84,7 @@ public class Weapon : MonoBehaviour
                 GameObject bulletInstance = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
                 // here bullets damaga and range get decided
                 Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
-                
+
                 if (bulletScript != null)
                 {
                     bulletScript.damage = damage; //bullets damage is equal to weapon damage
@@ -90,10 +97,13 @@ public class Weapon : MonoBehaviour
 
                 lastShot = Time.time;
                 CurrentAmmo -= 1;
+
+                
             }
         }
         else
         {
+            animator.SetBool("Shoot", false);
             StartReload(3f);
         }
     }
@@ -109,7 +119,7 @@ public class Weapon : MonoBehaviour
         if (!isReloading) return;
         ReloadTime -= Time.fixedDeltaTime;
 
-        if(ReloadTime <= 0)
+        if (ReloadTime <= 0)
         {
             ReloadTime = 0;
             CurrentAmmo = AmmoCap;
@@ -124,7 +134,7 @@ public class Weapon : MonoBehaviour
         {
             damage = this.damage,
             range = this.range,
-            
+
             bulletPrefab = this.bulletPrefab
         };
         return newWeapon;
@@ -182,7 +192,7 @@ public class Weapon : MonoBehaviour
 
 
     //public getters for weapon stats
-    public int GetDamage() => damage; 
+    public int GetDamage() => damage;
     public int GetRange() => range;
 
     public int GetDamageUpgradePoints() => damageUpgradePoints;

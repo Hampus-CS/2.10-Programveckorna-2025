@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -26,10 +28,14 @@ public class BaseSoldier : MonoBehaviour
     private float lastAttackTime;
     private BaseSoldier targetEnemy; // Target enemy for combat
 
+    Animator animator;
+
     public LineManager CurrentTargetLine { get; private set; }
 
     private void Start()
     {
+        animator = GetComponentInChildren<Animator>();
+
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
         {
@@ -55,6 +61,7 @@ public class BaseSoldier : MonoBehaviour
         // Check for movement to slot
         if (!isAtSlot && currentTargetSlot != null)
         {
+
             MoveToSlot();
         }
 
@@ -113,10 +120,18 @@ public class BaseSoldier : MonoBehaviour
             spawner.SoldierDied(IsPlayer);
         }
 
-        Destroy(gameObject);
+        animator.SetBool("Die", true);
+
+        DeathDelay();
         Debug.Log($"{name} has died.");
     }
 
+    private IEnumerator DeathDelay()
+    {
+        yield return new WaitForSeconds(3);
+
+        Destroy(gameObject);
+    }
 
     public void SetTargetLine(LineManager targetLine)
     {
@@ -170,6 +185,7 @@ public class BaseSoldier : MonoBehaviour
     {
         if (agent == null)
         {
+
             // Attempt to find the NavMeshAgent if it wasn't initialized in Start()
             agent = GetComponent<NavMeshAgent>();
             if (agent == null)
@@ -196,6 +212,7 @@ public class BaseSoldier : MonoBehaviour
 
         isAtSlot = false;
         agent.isStopped = false;
+        animator.SetBool("Walk", true);
         agent.SetDestination(currentTargetSlot.position);
         Debug.Log($"{name} moving to slot at {currentTargetSlot.position}");
     }
@@ -215,6 +232,7 @@ public class BaseSoldier : MonoBehaviour
     {
         if (agent == null) return; // Prevent null reference
         agent.isStopped = true;
+        animator.SetBool("Walk", false);
     }
 
     private void EngageCombat()
@@ -234,6 +252,7 @@ public class BaseSoldier : MonoBehaviour
 
         if (targetEnemy != null && Time.time >= lastAttackTime + AttackInterval)
         {
+            animator.SetBool("Shoot", true);
             lastAttackTime = Time.time;
             targetEnemy.TakeDamage(AttackDamage);
             Debug.Log($"{name} attacked {targetEnemy.name} for {AttackDamage} damage.");
