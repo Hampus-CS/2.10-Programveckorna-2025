@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WeaponTemp : MonoBehaviour
+public class WeaponTemp
 {
     public string Name { get; private set; }
     public int Tier { get; private set; }

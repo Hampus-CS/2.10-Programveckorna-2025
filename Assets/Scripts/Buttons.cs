@@ -17,6 +17,7 @@ public class Buttons : MonoBehaviour
     public SkillManager skillManager;
     private Dictionary<int, ISkillInfo> skillInfoHandlers = new(); // Hanterar skills dynamiskt
     [SerializeField] private List<SkillButtonMapping> skillButtonMappings = new(); // Skill Buttons Mapping
+    private int currentSkillMenuIndex = -1;
 
     [Header("Stockpile UI")]
     [SerializeField] private GameObject buttonTemplate; // Template for weapon buttons
@@ -42,6 +43,15 @@ public class Buttons : MonoBehaviour
 
         menus[2].SetActive(true);
 
+        foreach (var skillInfo in skillInfoHandlers.Values)
+        {
+            if (skillInfo is SkillInfo skill)
+            {
+                menus[skill.skillMenuIndex].SetActive(false); // Deactivate the menu associated with the skill
+            }
+        }
+
+
         button[0].gameObject.SetActive(true);
         button[1].gameObject.SetActive(false);
 
@@ -59,6 +69,9 @@ public class Buttons : MonoBehaviour
         skillInfoHandlers[11] = new SkillInfo(16); // Skill 11 Info
         skillInfoHandlers[12] = new SkillInfo(17); // Skill 12 Info
         skillInfoHandlers[13] = new SkillInfo(18); // Skill 13 Info
+        skillInfoHandlers[14] = new SkillInfo(19); // Skill 14 Info
+        skillInfoHandlers[15] = new SkillInfo(20); // Skill 15 Info
+        skillInfoHandlers[16] = new SkillInfo(21); // Skill 16 Info
 
         for (int i = 0; i < skillButtonMappings.Count; i++)
         {
@@ -114,14 +127,22 @@ public class Buttons : MonoBehaviour
 
     public void Settings()
     {
-        menus[2].SetActive(false);
+        Time.timeScale = 0;
         menus[3].SetActive(true);
     }
 
     public void CloseSettings()
     {
-        menus[3].SetActive(false);
-        menus[2].SetActive(true);
+        Time.timeScale = 1;
+        if (menus[2].activeSelf == true)
+        {
+            menus[3].SetActive(false);
+        }
+        else
+        {
+            menus[3].SetActive(false);
+            menus[0].SetActive(true);
+        }
     }
 
     public void OpenSidePanel()
@@ -177,15 +198,16 @@ public class Buttons : MonoBehaviour
     public void SkillTree()
     {
         Time.timeScale = 0;
-        menus[0].SetActive(false); // Close main menu
+        menus[0].SetActive(false); // Close game view
         menus[4].SetActive(true);  // Open skill tree
     }
 
     public void CloseSkillTree()
     {
         Time.timeScale = 1;
-        menus[4].SetActive(false);
-        menus[0].SetActive(true);
+        
+        menus[4].SetActive(false); // Close skill tree
+        menus[0].SetActive(true); // Open game view
     }
 
     public void SkillInfo(int skillId)
@@ -199,23 +221,13 @@ public class Buttons : MonoBehaviour
 
     public void CloseSkillInfo()
     {
-        // Iterate through all menus and deactivate skill-info menus
-        for (int i = 6; i < menus.Count; i++)
+
+        if (currentSkillMenuIndex != -1)
         {
-            if (menus[i] != null && menus[i].activeSelf)
-            {
-                menus[i].SetActive(false); // Close any active skill-info menu
-            }
+            menus[currentSkillMenuIndex].SetActive(false); // Close the relevant skill-info menu
+            currentSkillMenuIndex = -1; // Reset the current skill menu index
         }
-
-        // Open skill tree menu
-        menus[4].SetActive(true);
-    }
-
-    /*
-    public void CloseSkillInfo()
-    {
-        menus[6].SetActive(false); // Close active skill-info menu
+        
         menus[4].SetActive(true);  // Open skill tree
     }
     */
@@ -298,7 +310,7 @@ public interface ISkillInfo
 
 public class SkillInfo : ISkillInfo
 {
-    private int skillMenuIndex;
+    public int skillMenuIndex;
 
     public SkillInfo(int skillMenuIndex)
     {
