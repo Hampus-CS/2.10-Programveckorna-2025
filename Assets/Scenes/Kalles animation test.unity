@@ -694,10 +694,12 @@ GameObject:
   m_Component:
   - component: {fileID: 564529466}
   - component: {fileID: 564529467}
+  - component: {fileID: 564529469}
   - component: {fileID: 564529468}
+  - component: {fileID: 564529470}
+  - component: {fileID: 564529473}
   - component: {fileID: 564529474}
   - component: {fileID: 564529475}
-  - component: {fileID: 564529476}
   m_Layer: 0
   m_Name: Player
   m_TagString: FriendlyTroop
@@ -766,6 +768,42 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &564529469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564529461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97c9ef5559e20c4dbbac8055bb443ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &564529470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564529461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69bc9daf3f2e9419a99487709e5af6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &564529473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564529461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a272a70b64e4bdb4292692fa2684ceaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &564529474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -815,23 +853,6 @@ CapsuleCollider:
   m_Height: 1.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &564529476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564529461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c43e3362928519499c37be2d475f5e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsPlayer: 1
-  AttackDamage: 10
-  AttackRange: 2
-  AttackInterval: 1.5
-  HealthBarPrefab: {fileID: 1674009994}
 --- !u!1 &616603298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1303,7 +1324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c103500d3c5dca498b435714fc4c5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggers: []
 --- !u!135 &1145880005
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1475,9 +1495,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd787915f6af60d4db022d50c7f67f00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 20
-  panLimit: 50
-  scrollSpeed: 100
 --- !u!1 &1312700052
 GameObject:
   m_ObjectHideFlags: 0

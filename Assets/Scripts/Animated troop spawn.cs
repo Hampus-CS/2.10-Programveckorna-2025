@@ -14,7 +14,7 @@ public class TroopSpawner : MonoBehaviour
         GameObject spawnedTroop = Instantiate(troopPrefabs[randomIndex], transform.position, Quaternion.identity);
 
         // Get the Animator component of the spawned troop
-        Animator animator = spawnedTroop.GetComponentInChildren<Animator>();
+        Animator animator = spawnedTroop.GetComponent<Animator>();
 
         // Assign the correct AnimatorController
         if (animator != null && randomIndex < troopControllers.Length)

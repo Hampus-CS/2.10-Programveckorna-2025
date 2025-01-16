@@ -46,7 +46,7 @@ public class Artillery : MonoBehaviour
 
             StartCoroutine(MoveArtillery(Artillery, target));
             GameManager1.Instance.currency -= ArtilleryCost;
-            GameManager1.Instance.uiManager.UpdateCurrency(GameManager1.Instance.currency);
+            GameManager1.Instance.weaponUI.UpdateCurrency(GameManager1.Instance.currency);
         }
         else
         {
