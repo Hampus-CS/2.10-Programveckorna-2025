@@ -261,7 +261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!1 &189074287
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +294,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!65 &189074289
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -686,7 +684,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!1 &564529461
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,7 +700,6 @@ GameObject:
   - component: {fileID: 564529473}
   - component: {fileID: 564529474}
   - component: {fileID: 564529475}
-  - component: {fileID: 564529476}
   m_Layer: 0
   m_Name: Player
   m_TagString: FriendlyTroop
@@ -784,10 +780,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e97c9ef5559e20c4dbbac8055bb443ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypoints: []
-  holdPosition: 0
-  isAtCover: 0
-  canMove: 1
 --- !u!114 &564529470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -861,28 +853,6 @@ CapsuleCollider:
   m_Height: 1.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!95 &564529476
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564529461}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c4ce1a7251022fd4686a885785a780c0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &616603298
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,7 +886,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!65 &616603300
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1168,7 +1137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!1 &938511604
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,7 +1170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!65 &938511606
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1357,7 +1324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c103500d3c5dca498b435714fc4c5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggers: []
 --- !u!135 &1145880005
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1529,9 +1495,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd787915f6af60d4db022d50c7f67f00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 20
-  panLimit: 50
-  scrollSpeed: 2
 --- !u!1 &1312700052
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,7 +1863,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!114 &1457822685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1913,7 +1875,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!1 &1674009994
 GameObject:
   m_ObjectHideFlags: 0
@@ -2229,7 +2190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!1 &2059331328
 GameObject:
   m_ObjectHideFlags: 0
@@ -2361,6 +2321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2076889002}
   - component: {fileID: 2076889003}
+  - component: {fileID: 2076889004}
   m_Layer: 0
   m_Name: PlayerGraphics
   m_TagString: Untagged
@@ -2438,6 +2399,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &2076889004
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2076889001}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c4ce1a7251022fd4686a885785a780c0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2129224351
 GameObject:
   m_ObjectHideFlags: 0
@@ -2471,7 +2454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6f08770f6afa46aca3a67234db773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupiedBy: none
 --- !u!65 &2129224353
 BoxCollider:
   m_ObjectHideFlags: 0
