@@ -98,9 +98,7 @@ public class Weapon : MonoBehaviour
 
                 lastShot = Time.time;
                 CurrentAmmo -= 1;
-
-                
-            }
+                }
         }
         else
         {

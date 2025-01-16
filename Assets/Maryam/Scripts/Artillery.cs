@@ -13,7 +13,6 @@ public class Artillery : MonoBehaviour
 
     private void Start()
     {
-
         ArtilleryMark.SetActive(false);
     }
 
@@ -36,14 +35,11 @@ public class Artillery : MonoBehaviour
             {
                 SpawnArtillery(mouseWorldPosition);
             }
-
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-
             ArtilleryMark.SetActive(false);
         }
-
     }
     public void SpawnArtillery(Vector3 target)
     {
@@ -54,8 +50,7 @@ public class Artillery : MonoBehaviour
 
             StartCoroutine(MoveArtillery(Artillery, target));
             GameManager1.Instance.currency -= ArtilleryCost;
-            GameManager1.Instance.uiManager.UpdateCurrency(GameManager1.Instance.currency);
-
+            GameManager1.Instance.weaponUI.UpdateCurrency(GameManager1.Instance.currency);
         }
         else
         {
@@ -83,15 +78,11 @@ public class Artillery : MonoBehaviour
             }
             Destroy(Artillery);
             Debug.Log("Impact");
-
         }
-
     }
     public void ShowArtilleryMark()
     {
         ArtilleryMark.SetActive(true);
         Debug.Log("Show mark");
-
     }
-
 }
