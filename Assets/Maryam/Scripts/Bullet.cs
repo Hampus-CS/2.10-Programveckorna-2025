@@ -23,6 +23,10 @@ public class Bullet : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision) //when bullet hits something
     {
+        BaseSoldier soldier = collision.gameObject.GetComponent<BaseSoldier>();
+        if (soldier != null) { 
+        soldier.TakeDamage(damage);
+        }
         Debug.Log("Bullet hit: " + collision.gameObject.name);
         Destroy(gameObject); // Destroy the bullet
     }

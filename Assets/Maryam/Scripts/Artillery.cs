@@ -10,10 +10,13 @@ public class Artillery : MonoBehaviour
     public float NukeImpactSpeed = 5f; //just how long itll take the nuke to hit the ground
     public float SpawnHeight = 20f; //WHERE IT SPAWN
     public int ArtilleryCost = 200; //how much it cost
+    
     private void Start()
     {
+       
         ArtilleryMark.SetActive(false);
     }
+   
     void Update()
     {
         Vector3 mouseScreenPosition = Input.mousePosition;
@@ -35,6 +38,10 @@ public class Artillery : MonoBehaviour
             }
 
         }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+
+            ArtilleryMark.SetActive(false);
+        }
         
     }
     public void SpawnArtillery(Vector3 target)
@@ -47,6 +54,7 @@ public class Artillery : MonoBehaviour
             StartCoroutine(MoveArtillery(Artillery, target));
             GameManager1.Instance.currency -= ArtilleryCost;
             GameManager1.Instance.uiManager.UpdateCurrency(GameManager1.Instance.currency);
+            
         }
         else
         {
@@ -63,7 +71,13 @@ public class Artillery : MonoBehaviour
                 );
             yield return null;
         }
-        if (Artillery != null) {
+        if (Artillery != null) 
+        {
+            MissileBehavoiur missileBehaviour = Artillery.GetComponent<MissileBehavoiur>();
+            if (missileBehaviour != null) {
+
+                missileBehaviour.impactZone();
+            }
         Destroy(Artillery);
             Debug.Log("Impact");
         
@@ -73,8 +87,8 @@ public class Artillery : MonoBehaviour
    public void ShowArtilleryMark()
     {
        ArtilleryMark.SetActive(true);
-       Debug.Log("Show mark");
+        Debug.Log("Show mark");
        
-        
     }
+   
 }
