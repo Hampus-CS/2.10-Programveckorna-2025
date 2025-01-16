@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
-using JetBrains.Annotations;
-using Unity.VisualScripting.FullSerializer;
 
 public class Buttons : MonoBehaviour
 {
+    [Header("GameManager")]
+    [SerializeField] private GameManager gameManager; // Reference to GameManager
+
     [Header("All Menus")]
     public List<GameObject> menus = new();
 
@@ -22,9 +23,14 @@ public class Buttons : MonoBehaviour
     [SerializeField] private GameObject buttonTemplate; // Template for weapon buttons
     [SerializeField] private Transform content; // Scroll View content
     [SerializeField] private TMP_Text scrapText; // Text for Scrap
-    [SerializeField] private StockpileManager stockpileManager; // Link to stockpile manager
-    [SerializeField] private GameManager gameManager; // Management of Scrap
-    private List<GameObject> stockpileButtons = new();
+
+
+    [Header("Save UI")]
+    [SerializeField] private SaveHandler saveHandler;
+    [SerializeField] private Settings settings;
+
+
+    private List<GameObject> stockpileButtons = new(); // Dynamic list of stockpile buttons
 
     private bool isSkillInfoActive = false;
 
@@ -177,10 +183,22 @@ public class Buttons : MonoBehaviour
         print("Quit");
     }
 
-    public void Save()
+    public void SaveGame()
     {
-        print("Save");
+        gameManager.SaveGame(saveHandler);
+        settings.SaveSettings(saveHandler);
+        Debug.Log("Game and settings saved.");
     }
+
+    public void LoadGame()
+    {
+        gameManager.LoadGame(saveHandler);
+        settings.LoadSettings(saveHandler);
+        UpdateStockpileUI(); // Directly update the UI here
+        Debug.Log("Game and settings loaded.");
+    }
+
+
 
     /// <summary>
     /// Skill Tree UI
@@ -224,6 +242,7 @@ public class Buttons : MonoBehaviour
         isSkillInfoActive = false;
         Debug.LogWarning("Skillinfo inte öppen");
     }
+
     public void UnlockSkillByIndex(int skillIndex)
     {
         if (skillIndex > 0 && skillIndex <= skillButtonMappings.Count)
@@ -269,22 +288,37 @@ public class Buttons : MonoBehaviour
         // Update Scrap-text
         scrapText.text = $"Scrap: {gameManager.GetScrap()}";
 
-        // Create new buttons for weapon
-        foreach (var weapon in stockpileManager.Weapons)
+        // Create new buttons for each weapon in the stockpile
+        foreach (var weapon in gameManager.stockpile)
         {
             GameObject button = Instantiate(buttonTemplate, content);
-            button.transform.Find("Text").GetComponent<TMP_Text>().text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "and" : weapon.Quantity.ToString())})";
+            button.transform.Find("Text").GetComponent<TMP_Text>().text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())})";
 
-            // Add click event
-            button.GetComponent<Button>().onClick.AddListener(() =>
+            // Add click event to use weapon
+            button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
             {
-                stockpileManager.UseWeapon(weapon.Name);
+                gameManager.UseWeapon(weapon.Name);
                 UpdateStockpileUI();
             });
 
             stockpileButtons.Add(button);
         }
+
     }
+
+    public void BuyWeapon(string tag, int cost)
+    {
+        if (gameManager != null)
+        {
+            gameManager.BuyWeapon(tag, cost);
+            UpdateStockpileUI();
+        }
+        else
+        {
+            Debug.LogError("GameManager reference is not assigned in Buttons.cs.");
+        }
+    }
+
 }
 
 /// <summary>
