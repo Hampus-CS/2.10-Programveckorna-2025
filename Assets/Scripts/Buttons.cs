@@ -230,7 +230,7 @@ public class Buttons : MonoBehaviour
         
         menus[4].SetActive(true);  // Open skill tree
     }
-    */
+
     public void UnlockSkillByIndex(int skillIndex)
     {
         if (skillIndex > 0 && skillIndex <= skillButtonMappings.Count)
