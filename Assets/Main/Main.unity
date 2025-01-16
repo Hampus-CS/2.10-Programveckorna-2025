@@ -2740,11 +2740,11 @@ MonoBehaviour:
   purchasedWeapons: []
   stockpile: []
   weaponPrefabs:
-  - tag: 1
+  - tag: Weapon 1
     weaponPrefab: {fileID: 5207141877086924392, guid: f7d4a7d5257f81b439f069a85694061f, type: 3}
-  - tag: 2
+  - tag: Weapon 2
     weaponPrefab: {fileID: 4638369088567660085, guid: 43af7c2db383c6e41bea77b7f9298680, type: 3}
-  - tag: 3
+  - tag: Weapon 3
     weaponPrefab: {fileID: 8608361861048716154, guid: de6403f1781930747abef9676950711a, type: 3}
   weaponUI: {fileID: 1325141704}
 --- !u!4 &246478213
@@ -6680,6 +6680,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 608051386}
+  - component: {fileID: 608051388}
+  - component: {fileID: 608051387}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -6703,9 +6705,49 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000015637046}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &608051387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608051385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
+--- !u!114 &608051388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608051385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &609068173
 GameObject:
   m_ObjectHideFlags: 0
@@ -11506,6 +11548,7 @@ MonoBehaviour:
   moveDistance: 1000
   moveDuration: 0.8
   weaponCost: 20
+  buttons: {fileID: 1688369878}
 --- !u!4 &932735566
 Transform:
   m_ObjectHideFlags: 0
@@ -15827,7 +15870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0aa705c470229042be88b86d85a0f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currencyText: {fileID: 0}
+  currencyText: {fileID: 1983590776}
   UpgradeDamageCostText: {fileID: 1042287380}
   UpgradeRangeCostText: {fileID: 1243529753}
   WeaponCostText: {fileID: 39635031}
@@ -20835,11 +20878,11 @@ MonoBehaviour:
     skillName: RooftopKorean
   - button: {fileID: 2134710504}
     skillName: IncreasedTrainFirepower
-  buttonTemplate: {fileID: 491912665}
+  imageTemplate: {fileID: 5894300402629643554, guid: d7d6a83d6c70fce478c25e82ea9adc8c, type: 3}
   content: {fileID: 1513381645}
   scrapText: {fileID: 1983590776}
-  saveHandler: {fileID: 0}
-  settings: {fileID: 0}
+  saveHandler: {fileID: 318974227}
+  settings: {fileID: 844481762}
 --- !u!4 &1688369879
 Transform:
   m_ObjectHideFlags: 0

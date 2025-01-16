@@ -162,3 +162,11 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1558594641397180924, guid: dc527375ca4d80e4d972e80a33f9ecba, type: 3}
   firePoint: {fileID: 4862908297635839840}
   shootCoolDown: 0.9
+  UpgradeDamageCost: 8
+  UpgradeRangeCost: 6
+  costIncreaseFactor: 2
+  ReloadDuration: 3
+  AmmoCap: 10
+  CurrentAmmo: 0
+  ReloadTime: 0
+  Icon: {fileID: 21300000, guid: c291362f29d54694c8ab2f38daae5467, type: 3}

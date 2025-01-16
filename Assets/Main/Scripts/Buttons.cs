@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class Buttons : MonoBehaviour
 {
@@ -20,9 +21,11 @@ public class Buttons : MonoBehaviour
     [SerializeField] private List<SkillButtonMapping> skillButtonMappings = new(); // Skill Buttons Mapping
 
     [Header("Stockpile UI")]
-    [SerializeField] private GameObject buttonTemplate; // Template for weapon buttons
-    [SerializeField] private Transform content; // Scroll View content
-    [SerializeField] private TMP_Text scrapText; // Text for Scrap
+    [SerializeField] private GameObject imageTemplate; // Prefab of the weapon image with text
+    [SerializeField] private Transform content; // Parent for dynamically created weapon images
+    [SerializeField] private TMP_Text scrapText; // Scrap display text
+
+    private List<GameObject> stockpileImages = new List<GameObject>(); // List to track created images
 
 
     [Header("Save UI")]
@@ -287,33 +290,104 @@ public class Buttons : MonoBehaviour
 
     public void UpdateStockpileUI()
     {
-        // Remove old buttons
-        foreach (var button in stockpileButtons)
-        {
-            Destroy(button);
-        }
-        stockpileButtons.Clear();
+        Debug.Log("Starting UpdateStockpileUI");
 
-        // Update Scrap-text
+        // Clear old weapon images
+        foreach (var child in stockpileImages)
+        {
+            Destroy(child);
+        }
+        stockpileImages.Clear();
+
+        if (scrapText == null)
+        {
+            Debug.LogError("scrapText is null!");
+            return;
+        }
+        Debug.Log("scrapText is assigned.");
+
+        if (gameManager == null)
+        {
+            Debug.LogError("gameManager is null!");
+            return;
+        }
+        Debug.Log("gameManager is assigned.");
+
+        // Update scrap text
         scrapText.text = $"Scrap: {gameManager.GetScrap()}";
 
-        // Create new buttons for each weapon in the stockpile
-        foreach (var weapon in gameManager.stockpile)
+        if (imageTemplate == null)
         {
-            GameObject button = Instantiate(buttonTemplate, content);
-            button.transform.Find("Text").GetComponent<TMP_Text>().text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())})";
-
-            // Add click event to use weapon
-            button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
-            {
-                gameManager.UseWeapon(weapon.Name);
-                UpdateStockpileUI();
-            });
-
-            stockpileButtons.Add(button);
+            Debug.LogError("imageTemplate is null!");
+            return;
         }
+        Debug.Log("imageTemplate is assigned.");
 
+        if (content == null)
+        {
+            Debug.LogError("content is null!");
+            return;
+        }
+        Debug.Log("content is assigned.");
+
+        // Sort the stockpile by weapon tier (best to worst)
+        var sortedStockpile = gameManager.stockpile.OrderByDescending(w => w.Tier).ToList();
+
+        Debug.Log($"Stockpile count: {sortedStockpile.Count}");
+
+        // Create new images or update existing ones
+        foreach (var weapon in sortedStockpile)
+        {
+            Debug.Log($"Creating UI for weapon: {weapon.Name} (x{weapon.Quantity})");
+
+            // Check if this weapon already exists in the UI
+            var existingImage = stockpileImages
+                .FirstOrDefault(image => image.name == weapon.Name);
+
+            if (existingImage != null)
+            {
+                // Update the existing entry
+                TMP_Text existingWeaponText = existingImage.transform.Find("WeaponText").GetComponent<TMP_Text>();
+                existingWeaponText.text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())})";
+                continue;
+            }
+
+            // Instantiate a new image for this weapon
+            GameObject weaponImage = Instantiate(imageTemplate, content);
+            weaponImage.name = weapon.Name; // Set name for easier identification
+
+            // Update Instantiation Code - Resets RectTransform
+            RectTransform rectTransform = weaponImage.GetComponent<RectTransform>();
+            rectTransform.localScale = Vector3.one; // Reset scale to default
+            rectTransform.anchoredPosition = Vector2.zero; // Let layout control positioning
+            rectTransform.sizeDelta = new Vector2(0, 100); // Optional: Adjust height if needed
+
+            TMP_Text newWeaponText = weaponImage.transform.Find("WeaponText").GetComponent<TMP_Text>();
+            if (newWeaponText == null)
+            {
+                Debug.LogError("WeaponText is null or missing from the template!");
+                continue;
+            }
+
+            newWeaponText.text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())})";
+
+            Image weaponIcon = weaponImage.GetComponent<Image>();
+            if (weaponIcon == null)
+            {
+                Debug.LogError("Image component is missing on the weapon template!");
+                continue;
+            }
+
+            if (weapon.Icon != null)
+            {
+                weaponIcon.sprite = weapon.Icon;
+            }
+
+            // Add to the list for future reference
+            stockpileImages.Add(weaponImage);
+        }
     }
+
 
     public void BuyWeapon(string tag, int cost)
     {
