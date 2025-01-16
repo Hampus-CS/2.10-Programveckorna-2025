@@ -198,8 +198,6 @@ public class Buttons : MonoBehaviour
         Debug.Log("Game and settings loaded.");
     }
 
-
-
     /// <summary>
     /// Skill Tree UI
     /// </summary>
