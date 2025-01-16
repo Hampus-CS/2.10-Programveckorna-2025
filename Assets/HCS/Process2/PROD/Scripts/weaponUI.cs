@@ -12,22 +12,18 @@ public class WeaponUI : MonoBehaviour
     public void UpdateCurrency(int currency)
     {
         currencyText.text = $"Currency: {currency}";
-
     }
     public void UpdateDamageUpgrade(int UpgradeDamageCost)
     {
         UpgradeDamageCostText.text = $"Upgrade Cost: {UpgradeDamageCost}";
-
     }
     public void UpdateRangeUpgrade(int UpgradeRangeCost)
     {
         UpgradeRangeCostText.text = $"Upgrade Cost: {UpgradeRangeCost}";
-
     }
     public void UpdateWeaponCost(int WeaponCost)
     {
         WeaponCostText.text = $"Weapon Cost: {WeaponCost}";
-
     }
 }
 

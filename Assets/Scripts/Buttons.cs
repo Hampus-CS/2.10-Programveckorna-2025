@@ -211,6 +211,16 @@ public class Buttons : MonoBehaviour
         public string skillName;
     }
 
+    public void OpenShop()
+    {
+        menus[22].SetActive(true); // Open shop
+    }
+
+    public void CloseShop()
+    {
+        menus[22].SetActive(false); // Close shop
+    }
+
     public void SkillTree()
     {
         Time.timeScale = 0;
@@ -252,6 +262,7 @@ public class Buttons : MonoBehaviour
             {
                 skillManager.Unlock(skillName);
                 print($"Unlocked {skillName}");
+                isSkillInfoActive = false;
             }
             else
             {
