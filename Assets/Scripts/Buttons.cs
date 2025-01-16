@@ -205,6 +205,7 @@ public class Buttons : MonoBehaviour
     public void CloseSkillTree()
     {
         Time.timeScale = 1;
+        
         menus[4].SetActive(false); // Close skill tree
         menus[0].SetActive(true); // Open game view
     }
@@ -220,14 +221,16 @@ public class Buttons : MonoBehaviour
 
     public void CloseSkillInfo()
     {
+
         if (currentSkillMenuIndex != -1)
         {
             menus[currentSkillMenuIndex].SetActive(false); // Close the relevant skill-info menu
             currentSkillMenuIndex = -1; // Reset the current skill menu index
         }
+        
         menus[4].SetActive(true);  // Open skill tree
     }
-
+    */
     public void UnlockSkillByIndex(int skillIndex)
     {
         if (skillIndex > 0 && skillIndex <= skillButtonMappings.Count)

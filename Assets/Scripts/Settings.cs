@@ -88,7 +88,6 @@ public class Settings : MonoBehaviour
     public void SetFullscreen(bool fullscreen)
     {
         isFullscreen = fullscreen;
-        ApplySettings();
     }
 
     public void SetMasterVolume(float volume)
@@ -103,13 +102,9 @@ public class Settings : MonoBehaviour
         // Skicka värdet till musikhanteraren (om du har en separat musikkomponent)
     }
 
-    public void SetMiscVolume(float volume)
-    {
-        miscVolume = Mathf.Clamp(volume, 0f, 1f);
-    }
     public void SaveSettings()
     {
-        GameState currentState = new GameState
+        GameState currentState = new()
         {
             ResolutionWidth = resolutionWidth,
             ResolutionHeight = resolutionHeight,
@@ -120,8 +115,15 @@ public class Settings : MonoBehaviour
         };
         saveHandler.Save(currentState);
     }
-    
-    private void LoadSettings()
+
+    public void ApplySettings()
+    {
+        Screen.SetResolution(resolutionWidth, resolutionHeight, isFullscreen);
+        AudioListener.volume = masterVolume;
+        Debug.Log($"Settings Applied: {resolutionWidth}x{resolutionHeight}, Fullscreen: {isFullscreen}, MasterVolume: {masterVolume}");
+    }
+
+    void LoadSettings()
     {
         GameState loadedState = saveHandler.Load();
         if (loadedState != null)
@@ -135,11 +137,8 @@ public class Settings : MonoBehaviour
         }
     }
 
-    private void ApplySettings()
+    public void SetMiscVolume(float volume)
     {
-        Screen.SetResolution(resolutionWidth, resolutionHeight, isFullscreen);
-        AudioListener.volume = masterVolume;
-        Debug.Log($"Settings Applied: {resolutionWidth}x{resolutionHeight}, Fullscreen: {isFullscreen}, MasterVolume: {masterVolume}");
-
+        miscVolume = Mathf.Clamp(volume, 0f, 1f);
     }
 }
