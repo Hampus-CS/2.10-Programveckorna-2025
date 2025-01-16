@@ -29,9 +29,9 @@ public class Weapon : MonoBehaviour
     public float ReloadTime = 0;
 
     private float accuracy = 0.1f;
-    private TroopPersonalityScript personalityScript;
+    private BaseSoldier baseSoldier;
 
-
+    Animator animator;
 
     private void Awake()
     {
@@ -43,9 +43,9 @@ public class Weapon : MonoBehaviour
 
         CurrentAmmo = AmmoCap;
 
-        personalityScript = GetComponent<TroopPersonalityScript>();
+        baseSoldier = GetComponent<BaseSoldier>();
 
-        
+        animator = GetComponentInChildren<Animator>();
     }
     public string GetUniqueName()
     {
@@ -54,8 +54,6 @@ public class Weapon : MonoBehaviour
 
     public void Shoot()
     {
-        Animator animator = GetComponent<Animator>();
-
         if (CurrentAmmo > 0)
         {
             if (Time.time - lastShot >= shootCoolDown)
@@ -73,7 +71,7 @@ public class Weapon : MonoBehaviour
 
                 animator.SetBool("Shoot", true);
 
-                float spread = 1f / (accuracy * personalityScript.accuracy);
+                float spread = 1f / (accuracy * baseSoldier.accuracy);
 
                 Vector3 shootDirection = firePoint.forward;
                 // Randomly adjust direction based on accuracy factor
@@ -97,8 +95,6 @@ public class Weapon : MonoBehaviour
 
                 lastShot = Time.time;
                 CurrentAmmo -= 1;
-
-                
             }
         }
         else
@@ -124,7 +120,6 @@ public class Weapon : MonoBehaviour
             ReloadTime = 0;
             CurrentAmmo = AmmoCap;
             isReloading = false;
-
         }
     }
 
@@ -139,6 +134,7 @@ public class Weapon : MonoBehaviour
         };
         return newWeapon;
     }
+
     private Weapon GetWeaponFromImage(RectTransform image)
     {
         string imageTag = image.tag;//gets tag from current image and find weapon with same tag
@@ -170,6 +166,7 @@ public class Weapon : MonoBehaviour
             Debug.LogWarning("Not enough currency to upgrade damage.");
         }
     }
+
     public void UpgradeRange()
     {
         if (GameManager1.Instance.currency >= UpgradeRangeCost)
@@ -190,15 +187,10 @@ public class Weapon : MonoBehaviour
         }
     }
 
-
     //public getters for weapon stats
     public int GetDamage() => damage;
     public int GetRange() => range;
 
     public int GetDamageUpgradePoints() => damageUpgradePoints;
     public int GetRangeUpgradePoints() => rangeUpgradePoints;
-
 }
-
-
-

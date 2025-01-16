@@ -3079,8 +3079,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c308a6fc056980c4e8d43a3e3c443b4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSoldierPrefab: {fileID: 1639296028334649981, guid: 153de70c24524a44095ccbf7f6367f48, type: 3}
-  enemySoldierPrefab: {fileID: 3087335521371444203, guid: 70f915b98d7f3ea4d90ffdff19439043, type: 3}
+  playerSoldierPrefabs:
+  - {fileID: 1639296028334649981, guid: 153de70c24524a44095ccbf7f6367f48, type: 3}
+  - {fileID: 1639296028334649981, guid: 456682e8f540b414bbd3d86ca38e4b8f, type: 3}
+  - {fileID: 1639296028334649981, guid: 31a41576960851e4c9f51e66e286d8e0, type: 3}
+  - {fileID: 1639296028334649981, guid: 9009f9496fc76fd44b17e4fe42f40735, type: 3}
+  enemySoldierPrefabs:
+  - {fileID: 3087335521371444203, guid: 70f915b98d7f3ea4d90ffdff19439043, type: 3}
+  - {fileID: 3087335521371444203, guid: 9cac9f30d26c3f14193a85f99c875144, type: 3}
+  - {fileID: 3087335521371444203, guid: b53daf4aa9285264c854fbaa17b43e6a, type: 3}
+  - {fileID: 3087335521371444203, guid: d538638f1a6c1254a8a8fff508a497ae, type: 3}
   playerSpawnPoint: {fileID: 234227949}
   enemySpawnPoint: {fileID: 288971684}
   playerSpawnInterval: 5

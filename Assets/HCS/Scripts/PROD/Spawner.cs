@@ -3,8 +3,8 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [Header("Spawning Settings")]
-    public GameObject playerSoldierPrefab; // Prefab for player soldiers
-    public GameObject enemySoldierPrefab; // Prefab for enemy soldiers
+    public GameObject[] playerSoldierPrefabs; // Array of player soldier prefabs
+    public GameObject[] enemySoldierPrefabs; // Array of enemy soldier prefabs
     public Transform playerSpawnPoint;    // Spawn point for player soldiers
     public Transform enemySpawnPoint;    // Spawn point for enemy soldiers
     public float playerSpawnInterval = 5f; // Time between player spawns
@@ -22,7 +22,7 @@ public class Spawner : MonoBehaviour
     public int maxEnemySoldiers = 30;  // Max enemy soldiers allowed on the field
     private int currentPlayerSoldiers = 0; // Tracks number of player soldiers
     private int currentEnemySoldiers = 0;  // Tracks number of enemy soldiers
-
+    
     private void Update()
     {
         HandleAutoSpawning();
@@ -49,19 +49,16 @@ public class Spawner : MonoBehaviour
 
     public void SpawnSoldier(bool isPlayer)
     {
-        GameObject soldierPrefab = isPlayer ? playerSoldierPrefab : enemySoldierPrefab;
-
-        if (soldierPrefab == null)
+        GameObject[] soldierPrefabs = isPlayer ? playerSoldierPrefabs : enemySoldierPrefabs;
+        
+        if (soldierPrefabs == null || soldierPrefabs.Length == 0)
         {
-            Debug.LogError($"Spawner: {(isPlayer ? "Player" : "Enemy")} Soldier Prefab is not assigned!");
+            Debug.LogError($"Spawner: {(isPlayer ? "Player" : "Enemy")} Soldier Prefabs are not assigned!");
             return;
         }
-
-        if (soldierPrefab.GetComponent<UnityEngine.AI.NavMeshAgent>() == null)
-        {
-            Debug.LogError($"Spawner: {(isPlayer ? "Player" : "Enemy")} Soldier Prefab is missing a NavMeshAgent!");
-            return;
-        }
+        
+        // Randomly select a troop type
+        int randomIndex = Random.Range(0, soldierPrefabs.Length);
 
         Transform spawnPoint = isPlayer ? playerSpawnPoint : enemySpawnPoint;
         LineManager initialLine = isPlayer ? playerLineManager : enemyLineManager;
@@ -72,7 +69,7 @@ public class Spawner : MonoBehaviour
             return;
         }
 
-        GameObject soldier = Instantiate(soldierPrefab, spawnPoint.position, Quaternion.identity);
+        GameObject soldier = Instantiate(soldierPrefabs[randomIndex], spawnPoint.position, Quaternion.identity);
         var baseSoldier = soldier.GetComponent<BaseSoldier>();
 
         if (baseSoldier != null)
@@ -80,13 +77,13 @@ public class Spawner : MonoBehaviour
             baseSoldier.IsPlayer = isPlayer;
             baseSoldier.SetTargetLine(initialLine);
         }
-
+        
         if (isPlayer)
             currentPlayerSoldiers++;
         else
             currentEnemySoldiers++;
 
-        Debug.Log($"{soldier.name} spawned at {spawnPoint.position}");
+        Debug.Log($"{soldier.name} spawned at {spawnPoint.position} with animation.");
     }
 
     public void SoldierDied(bool isPlayer)
@@ -97,7 +94,6 @@ public class Spawner : MonoBehaviour
         else
             currentEnemySoldiers--;
     }
-
 }
 
 /// <summary>

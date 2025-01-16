@@ -11,6 +11,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Walk
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Shoot
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5059450923261759526}
   m_Solo: 0
@@ -605,6 +608,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: Shoot
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Walk
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5059450923261759526}
