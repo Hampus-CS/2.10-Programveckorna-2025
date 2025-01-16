@@ -33,6 +33,28 @@ public class Spawner : MonoBehaviour
         {
             instance = this;
         }
+
+        Debug.Assert(playerSoldierPrefabs.Length > 0, "Player soldier prefabs are missing!");
+        Debug.Assert(enemySoldierPrefabs.Length > 0, "Enemy soldier prefabs are missing!");
+        Debug.Assert(playerSpawnPoint != null, "Player spawn point is not assigned!");
+        Debug.Assert(enemySpawnPoint != null, "Enemy spawn point is not assigned!");
+        Debug.Assert(playerLineManager != null, "Player line manager is not assigned!");
+        Debug.Assert(enemyLineManager != null, "Enemy line manager is not assigned!");
+
+        ValidatePrefabs(playerSoldierPrefabs, "Player");
+        ValidatePrefabs(enemySoldierPrefabs, "Enemy");
+
+    }
+
+    private void ValidatePrefabs(GameObject[] prefabs, string type)
+    {
+        foreach (var prefab in prefabs)
+        {
+            if (prefab == null || !prefab.GetComponent<BaseSoldier>())
+            {
+                Debug.LogError($"Invalid {type} prefab: Missing BaseSoldier component. Prefab: {prefab?.name}");
+            }
+        }
     }
 
     private void Start()
@@ -50,82 +72,69 @@ public class Spawner : MonoBehaviour
     {
         while (true)
         {
-            Debug.LogWarning($"AutoSpawn running... Player: {currentPlayerSoldiers}/{maxPlayerSoldiers}, Enemy: {currentEnemySoldiers}/{maxEnemySoldiers}");
+            if (currentPlayerSoldiers >= maxPlayerSoldiers && currentEnemySoldiers >= maxEnemySoldiers)
+            {
+                Debug.Log("Maximum soldiers reached. Stopping AutoSpawn.");
+                yield break;
+            }
 
-            // Player spawn logic
             if (currentPlayerSoldiers < maxPlayerSoldiers)
             {
                 Debug.LogWarning("Attempting to spawn a player soldier...");
                 SpawnSoldier(true);
             }
 
-            // Enemy spawn logic
             if (currentEnemySoldiers < maxEnemySoldiers)
             {
                 Debug.LogWarning("Attempting to spawn an enemy soldier...");
                 SpawnSoldier(false);
             }
 
-            // Wait before checking again
             yield return new WaitForSeconds(1f);
         }
     }
 
+
     public void SpawnSoldier(bool isPlayer)
     {
-        // Check if soldier limit has been reached
-        if (isPlayer && currentPlayerSoldiers >= maxPlayerSoldiers)
+        try
         {
-            Debug.LogWarning("Player soldier limit reached. No spawn.");
-            return;
-        }
-        else if (!isPlayer && currentEnemySoldiers >= maxEnemySoldiers)
-        {
-            Debug.LogWarning("Enemy soldier limit reached. No spawn.");
-            return;
-        }
+            if (isPlayer && currentPlayerSoldiers >= maxPlayerSoldiers) return;
+            if (!isPlayer && currentEnemySoldiers >= maxEnemySoldiers) return;
 
-        // Get the appropriate prefab and spawn point
-        GameObject[] soldierPrefabs = isPlayer ? playerSoldierPrefabs : enemySoldierPrefabs;
-        Transform spawnPoint = isPlayer ? playerSpawnPoint : enemySpawnPoint;
-        LineManager initialLine = isPlayer ? playerLineManager : enemyLineManager;
+            GameObject[] soldierPrefabs = isPlayer ? playerSoldierPrefabs : enemySoldierPrefabs;
+            Transform spawnPoint = isPlayer ? playerSpawnPoint : enemySpawnPoint;
+            LineManager initialLine = isPlayer ? playerLineManager : enemyLineManager;
 
-        if (soldierPrefabs == null || soldierPrefabs.Length == 0)
-        {
-            Debug.LogWarning("No soldier prefabs assigned!");
-            return;
+            if (soldierPrefabs == null || soldierPrefabs.Length == 0 || spawnPoint == null || initialLine == null)
+            {
+                Debug.LogError("Spawner setup is incomplete!");
+                return;
+            }
+
+            GameObject soldier = Instantiate(soldierPrefabs[Random.Range(0, soldierPrefabs.Length)], spawnPoint.position, Quaternion.identity);
+
+            if (soldier.TryGetComponent<BaseSoldier>(out var baseSoldier))
+            {
+                baseSoldier.IsPlayer = isPlayer;
+                baseSoldier.SetTargetLine(initialLine);
+
+                if (isPlayer) currentPlayerSoldiers++;
+                else currentEnemySoldiers++;
+            }
+            else
+            {
+                Debug.LogError("Spawned prefab lacks BaseSoldier component!");
+                Destroy(soldier); // Clean up invalid prefab
+            }
         }
-
-        if (spawnPoint == null || initialLine == null)
+        catch (System.Exception ex)
         {
-            Debug.LogWarning("Spawner setup is incomplete!");
-            return;
-        }
-
-        // Spawn a random soldier
-        int randomIndex = Random.Range(0, soldierPrefabs.Length);
-        GameObject soldier = Instantiate(soldierPrefabs[randomIndex], spawnPoint.position, Quaternion.identity);
-
-        // Assign properties to the spawned soldier
-        var baseSoldier = soldier.GetComponent<BaseSoldier>();
-        if (baseSoldier != null)
-        {
-            baseSoldier.IsPlayer = isPlayer;
-            baseSoldier.SetTargetLine(initialLine);
-        }
-
-        // Update the soldier count
-        if (isPlayer)
-        {
-            currentPlayerSoldiers++;
-            Debug.LogWarning($"Player soldier spawned. Current count: {currentPlayerSoldiers}/{maxPlayerSoldiers}");
-        }
-        else
-        {
-            currentEnemySoldiers++;
-            Debug.LogWarning($"Enemy soldier spawned. Current count: {currentEnemySoldiers}/{maxEnemySoldiers}");
+            Debug.LogError($"Error spawning soldier: {ex.Message}");
         }
     }
+
+
 
     public void SoldierDied(bool isPlayer)
     {
