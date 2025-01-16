@@ -17,7 +17,6 @@ public class Buttons : MonoBehaviour
     public SkillManager skillManager;
     private Dictionary<int, ISkillInfo> skillInfoHandlers = new(); // Hanterar skills dynamiskt
     [SerializeField] private List<SkillButtonMapping> skillButtonMappings = new(); // Skill Buttons Mapping
-    private int currentSkillMenuIndex = -1;
 
     [Header("Stockpile UI")]
     [SerializeField] private GameObject buttonTemplate; // Template for weapon buttons
@@ -51,7 +50,6 @@ public class Buttons : MonoBehaviour
                 menus[skill.skillMenuIndex].SetActive(false); // Deactivate the menu associated with the skill
             }
         }
-
 
         button[0].gameObject.SetActive(true);
         button[1].gameObject.SetActive(false);
@@ -123,7 +121,6 @@ public class Buttons : MonoBehaviour
 
         menus[2].SetActive(false);
         menus[0].SetActive(true);
-
     }
 
     public void Settings()
@@ -206,7 +203,7 @@ public class Buttons : MonoBehaviour
     public void CloseSkillTree()
     {
         Time.timeScale = 1;
-        
+
         menus[4].SetActive(false); // Close skill tree
         menus[0].SetActive(true); // Open game view
     }
@@ -224,18 +221,9 @@ public class Buttons : MonoBehaviour
 
     public void CloseSkillInfo()
     {
-
-        if (currentSkillMenuIndex != -1)
-        {
-            menus[currentSkillMenuIndex].SetActive(false); // Close the relevant skill-info menu
-            currentSkillMenuIndex = -1; // Reset the current skill menu index
-            isSkillInfoActive = false;
-            Debug.LogWarning("Skillinfo inte öppen");
-        }
-        
-        menus[4].SetActive(true);  // Open skill tree
+        isSkillInfoActive = false;
+        Debug.LogWarning("Skillinfo inte öppen");
     }
-    */
     public void UnlockSkillByIndex(int skillIndex)
     {
         if (skillIndex > 0 && skillIndex <= skillButtonMappings.Count)
@@ -297,7 +285,6 @@ public class Buttons : MonoBehaviour
             stockpileButtons.Add(button);
         }
     }
-
 }
 
 /// <summary>
