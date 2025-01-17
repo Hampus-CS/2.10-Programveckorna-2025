@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class BaseSoldier : MonoBehaviour
 {
+    public List<AudioClip> damageSounds = new List<AudioClip>();
+    public List<AudioClip> walkingSounds = new List<AudioClip>();
+
+    private AudioSource audioSource;
+
     private NavMeshAgent agent;
     private TroopPersonalityScript personality;
     private RangeColliderScript rangeColliderScript;
@@ -29,6 +34,8 @@ public class BaseSoldier : MonoBehaviour
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume *= 0.0f;
 
         Debug.Log($"isHostile before Start logic: {isHostile}");
         coverScript = FindAnyObjectByType<CoverScript>();
@@ -111,6 +118,8 @@ public class BaseSoldier : MonoBehaviour
                     Debug.Log("No more waypoints to move towards. Stopping.");
                     agent.isStopped = true;
                     animator.SetBool("Walk", false);
+                    int rand = Random.Range(0, walkingSounds.Count); // Random index
+                    audioSource.PlayOneShot(walkingSounds[rand]);    // Play the selected sound
                     return;
                 }
 
@@ -404,6 +413,12 @@ public class BaseSoldier : MonoBehaviour
             Destroy(gameObject);
 
             Debug.Log("DEAD " + gameObject.name);
+        }
+
+        if (damage >= 10 && damageSounds.Count > 0) // Ensure there are sounds to play
+        {
+            int rand = Random.Range(0, damageSounds.Count); // Random index
+            audioSource.PlayOneShot(damageSounds[rand]);    // Play the selected sound
         }
     }
 
