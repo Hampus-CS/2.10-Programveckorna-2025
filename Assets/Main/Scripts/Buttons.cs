@@ -356,11 +356,13 @@ public class Buttons : MonoBehaviour
             GameObject weaponImage = Instantiate(imageTemplate, content);
             weaponImage.name = weapon.Name; // Set name for easier identification
 
+            /*
             // Update Instantiation Code - Resets RectTransform
             RectTransform rectTransform = weaponImage.GetComponent<RectTransform>();
             rectTransform.localScale = Vector3.one; // Reset scale to default
             rectTransform.anchoredPosition = Vector2.zero; // Let layout control positioning
             rectTransform.sizeDelta = new Vector2(0, 100); // Optional: Adjust height if needed
+            */
 
             TMP_Text newWeaponText = weaponImage.transform.Find("WeaponText").GetComponent<TMP_Text>();
             if (newWeaponText == null)
