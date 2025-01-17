@@ -214,10 +214,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints: []
+  bloodPartiles: {fileID: 0}
   inCombat: 0
   holdPosition: 0
   isAtCover: 0
   canMove: 1
+  isHostile: 1
 --- !u!114 &6029891478567569475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac69bc9daf3f2e9419a99487709e5af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFriendly: 1
+  isFriendly: 0
   startStress: 0
   baseAccuracy: 0
   accuracyDecrese: 0.05

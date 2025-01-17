@@ -1,7 +1,5 @@
-using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemySpawningScript : MonoBehaviour
@@ -42,7 +40,21 @@ public class EnemySpawningScript : MonoBehaviour
                 int rand = Random.Range(0, troops.Count);
 
                 Vector3 spawnPosition = new Vector3(spawnX, spawn1.transform.position.y, spawn1.transform.position.z);
-                Instantiate(troops[rand], spawnPosition, Quaternion.identity);
+
+                // Instantiate the troop
+                GameObject spawnedTroop = Instantiate(troops[rand], spawnPosition, Quaternion.identity);
+
+                // Set the isHostile property for the spawned troop
+                BaseSoldier baseSoldier = spawnedTroop.GetComponent<BaseSoldier>();
+                if (baseSoldier != null)
+                {
+                    baseSoldier.isHostile = true; // Mark as hostile
+                    Debug.Log($"Spawned enemy at {spawnPosition} with isHostile = {baseSoldier.isHostile}");
+                }
+                else
+                {
+                    Debug.LogError("Spawned object does not have a BaseSoldier component!");
+                }
             }
         }
     }
