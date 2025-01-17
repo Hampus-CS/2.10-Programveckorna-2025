@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1858384307138468611}
   - component: {fileID: 6558344540465450806}
   - component: {fileID: 1164690622489618341}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SuppressionCollider (3)
-  m_TagString: EditorOnly
+  m_TagString: IgnoreCannon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: -673356866298272382}
   - component: {fileID: -3014452505290045436}
   - component: {fileID: 3576962010254508884}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemySoldier4
   m_TagString: EnemyTroop
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints: []
-  bloodPartiles: {fileID: 0}
+  bloodPartiles: {fileID: 6385896519208436379, guid: e0af29fa6a54f89468fce8381845850b, type: 3}
   inCombat: 0
   holdPosition: 0
   isAtCover: 0
@@ -308,6 +308,7 @@ MonoBehaviour:
   AmmoCap: 10
   CurrentAmmo: 0
   ReloadTime: 0
+  Icon: {fileID: 0}
 --- !u!114 &-3014452505290045436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,9 +350,9 @@ GameObject:
   - component: {fileID: 5050609099433262841}
   - component: {fileID: 9157642612918742409}
   - component: {fileID: 373806105208895319}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RangeCollider (3)
-  m_TagString: EditorOnly
+  m_TagString: IgnoreCannon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -444,7 +445,7 @@ GameObject:
   - component: {fileID: 3810305011182428423}
   - component: {fileID: 6314821463360727880}
   - component: {fileID: 8972932132210818616}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Animation Stuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8454092571157000325}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FirePoint (3)
   m_TagString: EditorOnly
   m_Icon: {fileID: 0}

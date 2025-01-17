@@ -8,12 +8,14 @@ TagManager:
   - FriendlyTroop
   - EnemyTroop
   - EnemyBullet
-  - Weapon 3
+  - HostileTroop
   - Weapon 1
   - Weapon 2
-  - HostileTroop
-  - FriendlyBullet
+  - Weapon 3
+  - DefaultWeapon
   - Finnish
+  - FriendlyBullet
+  - IgnoreCannon
   layers:
   - Default
   - TransparentFX
@@ -21,7 +23,7 @@ TagManager:
   - enemyLayer
   - Water
   - UI
-  - 
+  - IgnoreCannon
   - 
   - 
   - 

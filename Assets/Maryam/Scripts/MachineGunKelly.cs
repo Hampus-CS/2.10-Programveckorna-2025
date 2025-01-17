@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MachineGunKelly : MonoBehaviour //går inte att ändra namn tyvärr :/
+public class MachineGunKelly : MonoBehaviour //gÃ¥r inte att Ã¤ndra namn tyvÃ¤rr :/
 {
     public GameObject bulletPrefab; //prefab for MG bullets
     public Transform firePoint; //where bullets coma from
@@ -10,90 +10,74 @@ public class MachineGunKelly : MonoBehaviour //går inte att ändra namn tyvärr :/
     public float accuracy = 0.4f; //the offset for accuracy
     private int maxammo = 40; //maxammo for MG
     private int currentAmmo;
-    private float coolDown = 10f; //100 second cooldown to start shooting again
-    private float coolDownTimer = 0f;
     private bool isCoolingDown = false;
     float WaitBetweenShots = 0.3f; //the time the gun will wait in between each shot
     float lastShot = 0f;
+    private bool uppgrade = false;
 
-    private void Start()
-    {
-        currentAmmo = maxammo; //sets current ammo to maxammo
-    }
+
+
+    public Transform cannonBarrel; // The part of the cannon that rotates
+    public Camera playerCamera; // The camera used for aiming
+    public float aimSpeed = 5f; // Speed of aiming
+
     void Update()
     {
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = 10f; // Set the fixed distance from the camera (adjust this value based on the depth of your scene)
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-
-        // Calculate direction to the mouse in world space
-        Vector3 directionToMouse = worldPosition - transform.position;
-        directionToMouse.z = 0f; // Ensure no change in the z-axis (if you're working in 2D view or want to restrict rotation to a plane)
-
-        // Rotate towards the mouse position
-        if (directionToMouse != Vector3.zero) // Make sure the direction is valid
+        AimCannon();
+        if (Input.GetMouseButton(0))
         {
-            Quaternion lookRotation = Quaternion.LookRotation(Vector3.forward, directionToMouse); // Rotate only on the XY plane
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, 100f * Time.deltaTime); // Smooth rotation
+            FireCannon();
         }
+    }
 
-        if (isCoolingDown)
+    void AimCannon()
+    {
+        // Create a ray from the camera through the mouse position
+        Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
+        int layerMask = ~LayerMask.GetMask("IgnoreCannon");
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask, QueryTriggerInteraction.Ignore))
         {
-            coolDownTimer -= Time.deltaTime;
-            if (coolDownTimer <= 0f)
-            {
-                Reload();
-            }
+                // Get the direction to the hit point
+                Vector3 aimDirection = (hit.point - cannonBarrel.position).normalized;
+
+                // Rotate the cannon to aim smoothly
+                Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
+                cannonBarrel.rotation = Quaternion.Slerp(cannonBarrel.rotation, targetRotation, Time.deltaTime * aimSpeed);
         }
+    }
+
+    private void FireCannon()
+    {
         if (!isCoolingDown)
         {
-            Shoot();
+            StartCoroutine(cooldown());
+            GameObject bullet = Instantiate(bulletPrefab, cannonBarrel.position, cannonBarrel.rotation);
+            Bullet bulletScript = bullet.GetComponent<Bullet>();
+            bulletScript.machingunBUllet = true;
+
+            if (uppgrade)
+            {
+                bulletScript.damage = 2;
+                bulletScript.range = 100;
+                bulletScript.speed = 45;
+            }
+            else
+            {
+                bulletScript.damage = 1;
+                bulletScript.range = 100;
+                bulletScript.speed = 35;
+            }
+
+            bullet.transform.localScale = new Vector3(6, 1, 2);
         }
     }
 
-
-    public void Shoot()
-    {
-        if (Time.time - lastShot >= WaitBetweenShots)
-        {
-            if (currentAmmo > 0)
-            {
-                float spread = 1f / accuracy;
-
-                Vector3 shootDirection = (Input.mousePosition - firePoint.position).normalized;
-                // Randomly adjust direction based on accuracy factor
-                shootDirection.x += UnityEngine.Random.Range(-spread, spread);  // Random adjustment for X axis
-                shootDirection.y += UnityEngine.Random.Range(-spread, spread);  // Random adjustment for Y axis
-
-                // Spawn the bullet and apply the modified direction
-                GameObject bulletInstance = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
-                Bullet bullet = bulletInstance.GetComponent<Bullet>();
-                bullet.machingunBUllet = true;
-
-                currentAmmo--;
-            }
-            if (currentAmmo <= 0) //start cooldown when no ammo
-            {
-                StartCoolDown();
-            }
-
-            lastShot = Time.time;
-        }
-    }
-    public void StartCoolDown()
+    private IEnumerator cooldown()
     {
         isCoolingDown = true;
-        coolDownTimer = coolDown;
-    }
-    private void Reload()
-    {
+        yield return new WaitForSeconds(0.2f);
         isCoolingDown = false;
-        currentAmmo = maxammo;//reload
-    }
-
-    private IEnumerator reload()
-    {
-        yield return new WaitForSeconds(coolDownTimer);
-        
     }
 }

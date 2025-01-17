@@ -20,7 +20,7 @@ public class MissileBehavoiur : MonoBehaviour
         {
             soldier.TakeDamage(damage);
         }
-
+        
     }
     public void impactZone()
     {
@@ -28,7 +28,7 @@ public class MissileBehavoiur : MonoBehaviour
         {
             GameObject explosionInstance = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Animator animator = explosionInstance.GetComponent<Animator>();
-            if (animator != null)
+            if(animator != null)
             {
                 float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
                 Destroy(explosionInstance, animationLength);//Destroy if animation has ended
@@ -38,13 +38,13 @@ public class MissileBehavoiur : MonoBehaviour
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, SC.radius); //get collider within the sphere collider
 
-        foreach (Collider nearbyCollider in colliders)
-        {
+        foreach (Collider nearbyCollider in colliders) 
+        { 
             BaseSoldier nearbySoldier = nearbyCollider.GetComponent<BaseSoldier>();
-            if (nearbySoldier != null)
-            {
-                nearbySoldier.TakeDamage(damage);
-
+            if (nearbySoldier != null) 
+            { 
+            nearbySoldier.TakeDamage(damage);
+            
             }
         }
         Debug.Log("Impact zone triggered");

@@ -16,7 +16,7 @@ public class TrainScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position += new Vector3(0, 0, 0.001f);
+        transform.position += new Vector3(0, 0, 0.003f);
 
         if (health <= 0)
         {

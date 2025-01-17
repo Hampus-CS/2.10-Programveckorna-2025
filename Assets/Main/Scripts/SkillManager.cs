@@ -6,6 +6,8 @@ public class SkillManager : MonoBehaviour
 {
     private Dictionary<string, ISkill> skills = new();
 
+    TroopPersonalityScript troopPersonalityScript;
+
     void Start()
     {
         // Initialize skills
@@ -156,7 +158,7 @@ public class WeaponSmith : BaseSkill
 
     protected override void Execute()
     {
-        // Implement dash logic here
+        // + Unlocks weapon crafting system
     }
 }
 
@@ -166,7 +168,8 @@ public class LongerBarrels : BaseSkill
 
     protected override void Execute()
     {
-        // Implement dash logic here
+        // + Longer range
+        //troopPersonalityScript.range += 1;
     }
 }
 
