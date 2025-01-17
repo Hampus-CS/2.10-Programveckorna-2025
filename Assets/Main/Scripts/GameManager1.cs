@@ -8,7 +8,7 @@ using TMPro;
 
 public class GameManager1 : MonoBehaviour
 {
-    public static GameManager1 Instance; //Will be used to check how many gamemanager instances there are
+    /*public static GameManager1 Instance; //Will be used to check how many gamemanager instances there are
     
     public int currency = 1000; //currency for player
     public List<Weapon> purchasedWeapons = new List<Weapon>();//list of purchased weapon
@@ -149,5 +149,5 @@ public class GameManager1 : MonoBehaviour
             Debug.LogWarning("No weapon with same tag as this image");
         }
 
-    }
+    }*/
 }

@@ -3,14 +3,23 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     float speed = 10f; //bulet speed
-    public int range;  //bullet range
+    public float range;  //bullet range
     public int damage; //bullet damage
 
+    private Weapon weapon;
     private Vector3 startPosition; //where the bullet was spawned
+
+    public bool isFriendly;
+    public bool machingunBUllet;
 
     void Start()
     {
+        weapon = FindAnyObjectByType<Weapon>();
         startPosition = transform.localPosition; //get starting position to calculate how far the buullet has traveled
+        if (!machingunBUllet)
+        {
+           range = weapon.range;
+        }
     }
     void Update()
     {
@@ -21,15 +30,28 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    void OnCollisionEnter(Collision collision) //when bullet hits something
+    private void OnTriggerEnter(Collider other)
     {
-        BaseSoldier soldier = collision.gameObject.GetComponent<BaseSoldier>();
-        if (soldier != null)
+        BaseSoldier soldier = other.gameObject.GetComponent<BaseSoldier>();
+
+        if (isFriendly && other.gameObject.CompareTag("EnemyTroop"))
         {
-            soldier.TakeDamage(damage);
+            if (soldier != null)
+            {
+                soldier.TakeDamage(damage);
+            }
+            Debug.Log("Bullet hit: " + other.gameObject.name);
+            Destroy(gameObject); // Destroy the bullet
         }
-        Debug.Log("Bullet hit: " + collision.gameObject.name);
-        Destroy(gameObject); // Destroy the bullet
+        if (isFriendly && other.gameObject.CompareTag("FriendlyTroop"))
+        {
+            if (soldier != null)
+            {
+                soldier.TakeDamage(damage);
+            }
+            Debug.Log("Bullet hit: " + other.gameObject.name);
+            Destroy(gameObject); // Destroy the bullet
+        }
     }
 }
 

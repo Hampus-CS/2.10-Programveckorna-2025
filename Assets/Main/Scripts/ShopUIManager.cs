@@ -5,7 +5,7 @@ using System.Collections;
 public class ShopUIManager : MonoBehaviour
 {
     //script to manage shop UI stuff
-    public GameObject shopButton;
+    /*public GameObject shopButton;
     public GameObject shopPanel;
     public RectTransform[] images;//assign the images recttransform/hitbox in inspector
     public float moveDistance = 200f; //how far the images will move 
@@ -114,7 +114,7 @@ public class ShopUIManager : MonoBehaviour
         {
             weapon.UpgradeRange();
         }
-    }
+    }*/
 }
 
 /// <summary>

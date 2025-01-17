@@ -1,38 +1,61 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 using System.Linq;
 
 public class RangeColliderScript : MonoBehaviour
 {
     private SphereCollider collider;
+    private Weapon weapon;
     public List<GameObject> triggers = new List<GameObject>();
+    private TroopPersonalityScript personality;
 
+    bool isReady = false;
+    private float range;
+    public bool isFriendly;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        personality = GetComponentInParent<TroopPersonalityScript>();
         collider = GetComponent<SphereCollider>();
-        collider.radius = 10f;
+        weapon = GetComponentInParent<Weapon>();
+
+        StartCoroutine(wait());
     }
 
     // Update is called once per frame
     void Update()
     {
-        EnemyByDistance();
-        RemoveMissingObjects();
+        if (isReady)
+        {
+            EnemyByDistance();
+            RemoveMissingObjects();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("TRIGGER " + other.name);
-        if (other.CompareTag("EnemyTroop"))
+        if (isReady)
         {
-            triggers.Add(other.gameObject);
+            Debug.Log("TRIGGER " + other.name);
+            if (isFriendly && other.CompareTag("EnemyTroop"))
+            {
+                triggers.Add(other.gameObject);
+            }
+            if (!isFriendly && other.CompareTag("FriendlyTroop"))
+            {
+                triggers.Add(other.gameObject);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("EnemyTroop"))
+        if (isFriendly && other.CompareTag("EnemyTroop"))
+        {
+            triggers.Remove(other.gameObject);
+        }
+        if (!isFriendly && other.CompareTag("FriendlyTroop"))
         {
             triggers.Remove(other.gameObject);
         }
@@ -48,5 +71,14 @@ public class RangeColliderScript : MonoBehaviour
     {
         // Remove all null objects from the list
         triggers.RemoveAll(item => item == null);
+    }
+
+    private IEnumerator wait()
+    {
+        yield return new WaitForSeconds(2);
+        isFriendly = personality.isFriendly;
+        isReady = true;
+        range = weapon.range;
+        collider.radius = range;
     }
 }

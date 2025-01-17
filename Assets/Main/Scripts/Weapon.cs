@@ -5,9 +5,8 @@ using TMPro;
 
 public class Weapon : MonoBehaviour
 {
-    [Header("Weapon Stats")]
-    [SerializeField] private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
-    [SerializeField] private int range = 5;// same as damage
+    private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
+    public float range = 60;
 
     [Header("Upgrade Points")] //to claridy what these ints are for
     public int damageUpgradePoints = 2; //the amount of points the weapons damage will increase with every update
@@ -28,10 +27,11 @@ public class Weapon : MonoBehaviour
     public int CurrentAmmo;
     public float ReloadTime = 0;
     public Sprite Icon;
+    private bool isFriendly;
 
-    private float accuracy = 0.1f;
+    private float accuracy = 0.2f;
     private TroopPersonalityScript personalityScript;
-
+    private RangeColliderScript rangeColliderScript;
 
 
     private void Awake()
@@ -45,8 +45,16 @@ public class Weapon : MonoBehaviour
         CurrentAmmo = AmmoCap;
 
         personalityScript = GetComponent<TroopPersonalityScript>();
+        rangeColliderScript = FindAnyObjectByType<RangeColliderScript>();
 
-        
+        if (gameObject.CompareTag("EnemyTroop"))
+        {
+            isFriendly = false;
+        }
+        else if (gameObject.CompareTag("FriendlyTroop"))
+        {
+            isFriendly = true;
+        }
     }
     
     public string GetUniqueName()
@@ -54,7 +62,7 @@ public class Weapon : MonoBehaviour
         return uniqueName; //for the debug to work in GM1
     }
 
-    public void Shoot()
+    public void Shoot(Vector3 target)
     {
         Animator animator = GetComponent<Animator>();
 
@@ -73,14 +81,14 @@ public class Weapon : MonoBehaviour
                     Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
                 }
 
-                animator.SetBool("Shoot", true);
+                //animator.SetBool("Shoot", true);
 
                 float spread = 1f / (accuracy * personalityScript.accuracy);
 
-                Vector3 shootDirection = firePoint.forward;
+                Vector3 shootDirection = (target - firePoint.position).normalized;
                 // Randomly adjust direction based on accuracy factor
-                shootDirection.x += UnityEngine.Random.Range(-accuracy, accuracy);  // Random adjustment for X axis
-                shootDirection.y += UnityEngine.Random.Range(-accuracy, accuracy);  // Random adjustment for Y axis
+                shootDirection.x += UnityEngine.Random.Range(-spread, spread);  // Random adjustment for X axis
+                shootDirection.y += UnityEngine.Random.Range(-spread, spread);  // Random adjustment for Y axis
 
                 // Spawn the bullet and apply the modified direction
                 GameObject bulletInstance = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
@@ -91,6 +99,7 @@ public class Weapon : MonoBehaviour
                 {
                     bulletScript.damage = damage; //bullets damage is equal to weapon damage
                     bulletScript.range = range; //bullets range is equal to weapons range
+                    bulletScript.isFriendly = isFriendly;
                 }
                 else
                 {
@@ -103,7 +112,7 @@ public class Weapon : MonoBehaviour
         }
         else
         {
-            animator.SetBool("Shoot", false);
+            //animator.SetBool("Shoot", false);
             StartReload(3f);
         }
     }
@@ -131,7 +140,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public Weapon CreateCopy()
+    /*public Weapon CreateCopy()
     {
         Weapon newWeapon = new Weapon
         {
@@ -196,11 +205,11 @@ public class Weapon : MonoBehaviour
 
     //public getters for weapon stats
     public int GetDamage() => damage;
-    public int GetRange() => range;
+    public float GetRange() => range;
 
     public int GetDamageUpgradePoints() => damageUpgradePoints;
     public int GetRangeUpgradePoints() => rangeUpgradePoints;
-
+    */
 }
 
 /// <summary>

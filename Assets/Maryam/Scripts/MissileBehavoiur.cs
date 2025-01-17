@@ -4,7 +4,7 @@ public class MissileBehavoiur : MonoBehaviour
 {
     public GameObject explosionPrefab;
     public float cooldown = 100f;
-    private float damage = 100f;
+    private int damage = 100;
     public SphereCollider SC;
     private float distance;
     private void Start()
