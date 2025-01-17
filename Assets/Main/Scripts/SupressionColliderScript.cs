@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Collections;
-using UnityEditor.Rendering;
 
 public class SupressionColliderScript : MonoBehaviour
 {

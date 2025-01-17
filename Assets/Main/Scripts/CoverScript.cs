@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem.iOS;
 
 public class CoverScript : MonoBehaviour
 {

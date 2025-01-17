@@ -1,8 +1,5 @@
-using System;
-using UnityEditor.Build;
 using UnityEngine;
 using TMPro;
-using NUnit.Framework;
 using System.Collections.Generic;
 
 public class Weapon : MonoBehaviour
