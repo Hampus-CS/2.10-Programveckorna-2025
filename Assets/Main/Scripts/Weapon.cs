@@ -26,6 +26,7 @@ public class Weapon : MonoBehaviour
     public int AmmoCap = 10;
     public int CurrentAmmo;
     public float ReloadTime = 0;
+    public Sprite Icon;
     private bool isFriendly;
 
     private float accuracy = 0.2f;

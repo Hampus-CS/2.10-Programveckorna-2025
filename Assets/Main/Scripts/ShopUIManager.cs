@@ -13,6 +13,8 @@ public class ShopUIManager : MonoBehaviour
     private Vector3[] initialPositions;
     private int currentIndex = 0; //tracks what image is being wieved so u cant go to far right/left
     public int weaponCost = 20;
+    public Buttons buttons;
+
 
     public void Start()
     {
@@ -41,6 +43,8 @@ public class ShopUIManager : MonoBehaviour
             return;
         }
         GameManager.Instance.BuyWeapon(weapon.tag, weaponCost); //if current image has tag the BuyWeapon void is called from GameManager
+        buttons.UpdateStockpileUI(); // Refresh the stockpile UI
+
     }
 
     public void MoveRight()//if this void is called the images will move right

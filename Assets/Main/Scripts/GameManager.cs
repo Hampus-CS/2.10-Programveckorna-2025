@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -107,7 +106,7 @@ public class GameManager : MonoBehaviour
     public int GetScrap() => scrap;
 
     // Stockpile Management
-    public void AddWeaponToStockpile(string weaponName, int initialQuantity, int tier) // "w" stands for weapon
+    public void AddWeaponToStockpile(string weaponName, int initialQuantity, int tier, Sprite icon = null)
     {
         var existingWeapon = stockpile.FirstOrDefault(w => w.Name == weaponName);
         if (existingWeapon != null)
@@ -116,7 +115,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            stockpile.Add(new WeaponStock(weaponName, initialQuantity, tier));
+            stockpile.Add(new WeaponStock(weaponName, initialQuantity, tier, icon));
         }
     }
 
@@ -164,8 +163,14 @@ public class GameManager : MonoBehaviour
                     {
                         purchasedWeapons.Add(weaponComponent);
 
-                        // Add to stockpile
-                        //AddWeaponToStockpile(weaponComponent.GetUniqueName(), 1, weaponComponent.GetDamage());
+                        // Add weapon to stockpile and include the icon
+                        AddWeaponToStockpile(
+                            weaponComponent.GetUniqueName(),
+                            1, // Quantity
+                            weaponComponent.GetDamage(), // Tier
+                            weaponComponent.Icon // Pass the icon from the prefab
+                        );
+
                         Debug.Log($"Bought weapon: {weaponComponent.GetUniqueName()}");
                     }
                     return;
@@ -179,7 +184,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*public void UpgradeWeaponDamage(RectTransform currentImage, int cost)
+    public void UpgradeWeaponDamage(RectTransform currentImage, int cost)
     {
         Weapon weapon = GetWeaponFromImage(currentImage);
 
@@ -191,7 +196,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("Cannot upgrade weapon damage. Either no weapon found or insufficient scrap.");
         }
-    }*/
+    }
 
     /*public void UpgradeWeaponRange(RectTransform currentImage, int cost)
     {
@@ -235,14 +240,18 @@ public class GameManager : MonoBehaviour
         public string Name;
         public int Quantity; // -1 means infinite
         public int Tier;
+        public Sprite Icon; // Add the icon property
 
-        public WeaponStock(string name, int quantity, int tier)
+        public WeaponStock(string name, int quantity, int tier, Sprite icon = null)
         {
             Name = name;
             Quantity = quantity;
             Tier = tier;
+            Icon = icon;
         }
     }
+
+
 }
 
 /// <summary>

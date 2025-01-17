@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8161125995728608050}
   - component: {fileID: 4313158903391737480}
   m_Layer: 0
-  m_Name: Weapon
+  m_Name: Weapon 1
   m_TagString: Weapon 1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,6 +134,11 @@ MonoBehaviour:
   UpgradeDamageCost: 8
   UpgradeRangeCost: 6
   costIncreaseFactor: 2
+  ReloadDuration: 3
+  AmmoCap: 10
+  CurrentAmmo: 0
+  ReloadTime: 0
+  Icon: {fileID: 21300000, guid: 7294f9dcb516cd24d90a7e53a1171005, type: 3}
 --- !u!1 &5259874138404492303
 GameObject:
   m_ObjectHideFlags: 0
