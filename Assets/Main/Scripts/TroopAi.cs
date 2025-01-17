@@ -25,12 +25,16 @@ public class TroopAi : MonoBehaviour
 
     private bool isFriendly;
 
+    Animator animator;
+
     void Start()
     {
         rangeColliderScript = GetComponentInChildren<RangeColliderScript>();
+        animator = GetComponentInChildren<Animator>();
         BaseSoldier = GetComponent<BaseSoldier>();
         personalityScript = GetComponent<TroopPersonalityScript>();
         weapon = GetComponent<Weapon>();
+
 
         isFriendly = personalityScript.isFriendly;
     }
@@ -60,6 +64,11 @@ public class TroopAi : MonoBehaviour
 
         List<PriorityAction> actions = GetAvailableActions();
         ExecuteHighestPriorityAction(actions);
+
+        if (rangeColliderScript.triggers == null)
+        {
+            animator.SetBool("Shoot", false);
+        }
     }
 
     private List<PriorityAction> GetAvailableActions()
@@ -109,11 +118,13 @@ public class TroopAi : MonoBehaviour
 
     private void Shoot()
     {
+        animator.SetBool("Shoot", true);
         weapon.Shoot(rangeColliderScript.triggers[0].transform.position);
     }
 
     private void MoveForward()
     {
+        animator.SetBool("Walk", true);
         BaseSoldier.MoveForwards();
     }
 
