@@ -1,6 +1,4 @@
 # 2.10-Programveckorna-2025
- 
-# Gruppmedlemmar:
 
 Programmering:
 - Hampus Carlström Svanberg
