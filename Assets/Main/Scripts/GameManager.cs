@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*public void UpgradeWeaponRange(RectTransform currentImage, int cost)
+    public void UpgradeWeaponRange(RectTransform currentImage, int cost)
     {
         Weapon weapon = GetWeaponFromImage(currentImage);
 
@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("Cannot upgrade weapon range. Either no weapon found or insufficient scrap.");
         }
-    }*/
+    }
 
     public Weapon GetWeaponFromImage(RectTransform image)
     {

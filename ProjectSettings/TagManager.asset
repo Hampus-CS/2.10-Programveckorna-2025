@@ -8,12 +8,11 @@ TagManager:
   - FriendlyTroop
   - EnemyTroop
   - EnemyBullet
-  - Weapon 3
+  - HostileTroop
   - Weapon 1
   - Weapon 2
-  - HostileTroop
-  - FriendlyBullet
-  - Finnish
+  - Weapon 3
+  - DefaultWeapon
   layers:
   - Default
   - TransparentFX
