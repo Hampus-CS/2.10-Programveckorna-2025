@@ -9,6 +9,13 @@ public class WeaponUI : MonoBehaviour
     public TMP_Text UpgradeRangeCostText;
     public TMP_Text WeaponCostText;
 
+    private void Start()
+    {
+        UpdateDamageUpgrade(50);
+        UpdateRangeUpgrade(50);
+        UpdateWeaponCost(50);
+    }
+
     public void UpdateCurrency(int currency)
     {
         currencyText.text = $"Currency: {currency}";
