@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerSpawningScript : MonoBehaviour
+public class EnemySpawningScript : MonoBehaviour
 {
-    private float coolDown = 1;
-    private int cost = 10;
+    private float coolDown = 5;
     private bool canSpawn = true;
 
     public List<GameObject> troops = new List<GameObject>();
@@ -19,7 +18,7 @@ public class PlayerSpawningScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -27,25 +26,8 @@ public class PlayerSpawningScript : MonoBehaviour
     {
         if (canSpawn)
         {
-            
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                StartCoroutine(Cooldown());
-
-                SpawnTroop(1);
-            }
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                StartCoroutine(Cooldown());
-
-                SpawnTroop(2);
-            }
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                StartCoroutine(Cooldown());
-
-                SpawnTroop(3);
-            }
+            StartCoroutine(Cooldown());
+            SpawnTroop(1);
         }
     }
 

@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 7735905736917110664}
   - component: {fileID: 2243143271583494250}
   - component: {fileID: 417964062768540535}
+  - component: {fileID: 4484542050569125871}
   - component: {fileID: 3270801049246227865}
   - component: {fileID: 7082934798628930838}
-  - component: {fileID: 4484542050569125871}
   m_Layer: 0
   m_Name: EnemySoldier3
   m_TagString: EnemyTroop
@@ -33,7 +33,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3087335521371444203}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -43,7 +43,7 @@ Transform:
   - {fileID: 2756297474154586772}
   - {fileID: 1722749629909844566}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!33 &8160494303616280210
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -187,6 +187,31 @@ MonoBehaviour:
   holdPosition: 0
   isAtCover: 0
   canMove: 1
+--- !u!114 &4484542050569125871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3087335521371444203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebff88bb68194684dbe9cc6a37bd7c16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 10
+  damageUpgradePoints: 2
+  rangeUpgradePoints: 3
+  bulletPrefab: {fileID: 1558594641397180924, guid: dc3e5daa1501e0649b3a2cdcae74577e, type: 3}
+  firePoint: {fileID: 1722749629909844566}
+  shootCoolDown: 1
+  UpgradeDamageCost: 8
+  UpgradeRangeCost: 6
+  costIncreaseFactor: 2
+  ReloadDuration: 3
+  AmmoCap: 10
+  CurrentAmmo: 0
+  ReloadTime: 0
 --- !u!114 &3270801049246227865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,31 +241,6 @@ MonoBehaviour:
   baseAccuracy: 0
   accuracyDecrese: 0.05
   hurtStress: 0
---- !u!114 &4484542050569125871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3087335521371444203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebff88bb68194684dbe9cc6a37bd7c16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 10
-  damageUpgradePoints: 2
-  rangeUpgradePoints: 3
-  bulletPrefab: {fileID: 1558594641397180924, guid: dc3e5daa1501e0649b3a2cdcae74577e, type: 3}
-  firePoint: {fileID: 1722749629909844566}
-  shootCoolDown: 1
-  UpgradeDamageCost: 8
-  UpgradeRangeCost: 6
-  costIncreaseFactor: 2
-  ReloadDuration: 3
-  AmmoCap: 10
-  CurrentAmmo: 0
-  ReloadTime: 0
 --- !u!1 &3250993376454428048
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,13 +333,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4892459357281325148}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.8, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4973278858080189448}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!212 &6314821463360727880
 SpriteRenderer:
   m_ObjectHideFlags: 0

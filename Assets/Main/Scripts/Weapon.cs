@@ -5,7 +5,6 @@ using TMPro;
 
 public class Weapon : MonoBehaviour
 {
-    [Header("Weapon Stats")]
     private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
     public float range = 60;
 
@@ -87,8 +86,8 @@ public class Weapon : MonoBehaviour
 
                 Vector3 shootDirection = (target - firePoint.position).normalized;
                 // Randomly adjust direction based on accuracy factor
-                shootDirection.x += UnityEngine.Random.Range(-accuracy, accuracy);  // Random adjustment for X axis
-                shootDirection.y += UnityEngine.Random.Range(-accuracy, accuracy);  // Random adjustment for Y axis
+                shootDirection.x += UnityEngine.Random.Range(-spread, spread);  // Random adjustment for X axis
+                shootDirection.y += UnityEngine.Random.Range(-spread, spread);  // Random adjustment for Y axis
 
                 // Spawn the bullet and apply the modified direction
                 GameObject bulletInstance = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection));

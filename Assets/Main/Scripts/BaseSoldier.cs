@@ -10,6 +10,8 @@ public class BaseSoldier : MonoBehaviour
     private RangeColliderScript rangeColliderScript;
     public List<GameObject> waypoints = new List<GameObject>();
 
+    public ParticleSystem bloodPartiles;
+
     public bool inCombat = false;
     public bool holdPosition = false;
     public bool isAtCover = false;
@@ -59,42 +61,51 @@ public class BaseSoldier : MonoBehaviour
             StartCoroutine(TimerBetweenNavigation());
             UpdateWaypoints();
 
-            Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left; // Right for friendly, left for enemy
-            GameObject closestWaypointInFront = null;
+            // Determine the movement direction based on whether the unit is friendly or enemy
+            Vector3 forwardDirection = isFriendly ? Vector3.forward : Vector3.forward;
+            GameObject closestWaypoint = null;
             float closestDistance = Mathf.Infinity;
 
             foreach (GameObject waypoint in waypoints)
             {
                 coverScript = waypoint.GetComponent<CoverScript>();
 
-                if (Vector3.Distance(transform.position, waypoint.transform.position) < 1f || (coverScript != null && coverScript.occupiedBy != "none" && coverScript.occupiedBy != name))
+                // Skip waypoints that are too close or occupied
+                if (Vector3.Distance(transform.position, waypoint.transform.position) < 1f ||
+                    (coverScript != null && coverScript.occupiedBy != "none" && coverScript.occupiedBy != name))
                 {
                     continue;
                 }
 
                 Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
-
-                // Adjust based on isFriendly
                 float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
-                if (dotProduct > 0) // Only consider waypoints in the desired direction
+
+                // Debugging: Check if we're moving in the correct direction
+                Debug.Log($"dotProduct for waypoint {waypoint.name}: {dotProduct}");
+
+                // Only consider waypoints in the correct direction
+                if ((isFriendly && dotProduct > 0) || (!isFriendly && dotProduct < 0))
                 {
                     float distance = Vector3.Distance(transform.position, waypoint.transform.position);
                     if (distance < closestDistance)
                     {
                         closestDistance = distance;
-                        closestWaypointInFront = waypoint;
+                        closestWaypoint = waypoint;
                     }
                 }
             }
 
-            if (closestWaypointInFront != null)
+            // Move to the closest valid waypoint
+            if (closestWaypoint != null)
             {
                 agent.isStopped = false;
-                agent.SetDestination(closestWaypointInFront.transform.position);
+                agent.SetDestination(closestWaypoint.transform.position);
+                Debug.Log($"Moving towards waypoint: {closestWaypoint.name}");
             }
             else
             {
                 agent.isStopped = true;
+                Debug.Log("No valid waypoint found to move towards.");
             }
         }
     }
@@ -104,7 +115,7 @@ public class BaseSoldier : MonoBehaviour
     {
         StartCoroutine(TimerBetweenNavigation());
         UpdateWaypoints();
-        Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left;
+        Vector3 forwardDirection = isFriendly ? Vector3.forward : Vector3.back;
 
         GameObject closestWaypointInFront = null;
         float closestDistance = Mathf.Infinity;
@@ -164,7 +175,7 @@ public class BaseSoldier : MonoBehaviour
         {
             StartCoroutine(TimerBetweenNavigation());
             UpdateWaypoints();
-            Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left;
+            Vector3 forwardDirection = isFriendly ? Vector3.forward : Vector3.back;
 
             GameObject closestWaypointInFront = null;
             float closestDistance = Mathf.Infinity;
@@ -219,7 +230,7 @@ public class BaseSoldier : MonoBehaviour
         {
             StartCoroutine(TimerBetweenNavigation());
             UpdateWaypoints();
-            Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left;
+            Vector3 forwardDirection = isFriendly ? Vector3.forward : Vector3.back;
 
             GameObject closestWaypointInFront = null;
             float closestDistance = Mathf.Infinity;
@@ -339,6 +350,7 @@ public class BaseSoldier : MonoBehaviour
     public void TakeDamage(int damage)
     {
         personality.health -= damage;
+        Instantiate(bloodPartiles, transform.position, Quaternion.identity);
 
         if (personality.health <= 0)
         {

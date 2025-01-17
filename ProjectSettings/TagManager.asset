@@ -13,6 +13,7 @@ TagManager:
   - Weapon 2
   - HostileTroop
   - FriendlyBullet
+  - Finnish
   layers:
   - Default
   - TransparentFX

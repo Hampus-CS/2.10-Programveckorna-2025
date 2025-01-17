@@ -90,8 +90,6 @@ public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
         // Calculate stress as 1 for every 10 suppression points
         stress = Mathf.Clamp(Mathf.FloorToInt(suppresion / 10f), 0, 10); // Limit max stress to 100
 
-        Debug.Log($"Suppression: {suppresion}, Calculated Stress: {stress}");
-
         // Trigger stress timer if stress is high enough
         if (stress > startStress)
         {
@@ -129,16 +127,12 @@ public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
             // Gradual recovery of accuracy as suppression decreases
             accuracy = Mathf.Min(baseAccuracy, accuracy + suppressionRecoveryRate); // Recover to base accuracy
         }
-
-        Debug.Log("Suppression: " + suppresion + ", Accuracy: " + accuracy);
     }
 
     private void Update()
     {
         Suppression();
         Stress();
-        Debug.LogWarning("stress = " + stress);
-        Debug.LogError("supress = " + suppresion);
     }
 
     private IEnumerator StressTimer()

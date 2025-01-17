@@ -10,12 +10,16 @@ public class Bullet : MonoBehaviour
     private Vector3 startPosition; //where the bullet was spawned
 
     public bool isFriendly;
+    public bool machingunBUllet;
 
     void Start()
     {
         weapon = FindAnyObjectByType<Weapon>();
         startPosition = transform.localPosition; //get starting position to calculate how far the buullet has traveled
-        range = weapon.range;
+        if (!machingunBUllet)
+        {
+           range = weapon.range;
+        }
     }
     void Update()
     {
