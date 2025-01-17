@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class Artillery : MonoBehaviour
 {
-    public float GroundDistance = 20; // How high up the nuke will spawn
+    public float GroundDistance = 3.318794f; // How high up the mark will spawn
     public GameObject ArtilleryMark;
     public GameObject artilleryPrefab;
     public float NukeImpactSpeed = 5f; //just how long itll take the nuke to hit the ground
@@ -12,8 +12,7 @@ public class Artillery : MonoBehaviour
     public int ArtilleryCost = 200; //how much it cost
     
     private void Start()
-    {
-       
+    {       
         ArtilleryMark.SetActive(false);
     }
    
@@ -29,7 +28,12 @@ public class Artillery : MonoBehaviour
         mouseWorldPosition.y = GroundDistance;
         transform.position = mouseWorldPosition;
 
-       if(ArtilleryMark.activeSelf) //if mark is showing u can nuke
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            ArtilleryMark.SetActive(true);
+        }
+
+       if(ArtilleryMark.active == true) //if mark is showing u can nuke
         {
             ArtilleryMark.transform.position = mouseWorldPosition;
             if (Input.GetMouseButtonDown(0))
@@ -42,24 +46,24 @@ public class Artillery : MonoBehaviour
 
             ArtilleryMark.SetActive(false);
         }
-        
     }
     public void SpawnArtillery(Vector3 target)
     {
-        if (GameManager1.Instance.currency >= ArtilleryCost)
-        {
+        /*if (GameManager1.Instance.currency >= ArtilleryCost)
+        {*/
             Vector3 impactZone = new Vector3(target.x, target.y + SpawnHeight, target.z);
             GameObject Artillery = Instantiate(artilleryPrefab, impactZone, Quaternion.identity);
 
             StartCoroutine(MoveArtillery(Artillery, target));
             GameManager1.Instance.currency -= ArtilleryCost;
             GameManager1.Instance.weaponUI.UpdateCurrency(GameManager1.Instance.currency);
-            
-        }
+
+            ArtilleryMark.SetActive(false);
+        /*}
         else
         {
             Debug.LogWarning("Not enough for this bomb");
-        }
+        }*/
     }
     System.Collections.IEnumerator MoveArtillery(GameObject Artillery, Vector3 target)
     {
@@ -79,8 +83,7 @@ public class Artillery : MonoBehaviour
                 missileBehaviour.impactZone();
             }
         Destroy(Artillery);
-            Debug.Log("Impact");
-        
+            Debug.Log("Impact");        
         }
 
     }
@@ -88,7 +91,6 @@ public class Artillery : MonoBehaviour
     {
        ArtilleryMark.SetActive(true);
         Debug.Log("Show mark");
-       
     }
    
 }
