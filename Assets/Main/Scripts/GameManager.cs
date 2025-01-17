@@ -156,7 +156,6 @@ public class GameManager : MonoBehaviour
 
     public float GetPlayerWeaponCooldown() => playerWeaponCooldown;
 
-
     // Stockpile Management
     public void AddWeaponToStockpile(string weaponName, int initialQuantity, int tier, Sprite icon = null)
     {

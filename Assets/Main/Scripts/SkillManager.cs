@@ -117,13 +117,15 @@ public class SkillManager : MonoBehaviour
         if (shopUIManager != null)
         {
             StandardisedProduction standardisedProduction = new StandardisedProduction(100);
-            standardisedProduction.Execute(shopUIManager); // Pass the reference
+            standardisedProduction.Unlock(); // Unlock the skill before using it
+            standardisedProduction.Use();   // Use the skill (internally calls Execute)
         }
         else
         {
             Debug.LogError("ShopUIManager not found in the scene.");
         }
     }
+
 
 
 }
