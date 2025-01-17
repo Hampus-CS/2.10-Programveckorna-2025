@@ -2,6 +2,8 @@ using System;
 using UnityEditor.Build;
 using UnityEngine;
 using TMPro;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class Weapon : MonoBehaviour
 {
@@ -35,8 +37,13 @@ public class Weapon : MonoBehaviour
 
     Animator animator;
 
+    private AudioSource audioSource;
+    public List<AudioClip> shootingSounds = new List<AudioClip>();
+
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = 1;
         animator = GetComponentInChildren<Animator>();
 
         //give each weapon a unique serial number and update the weapons name
@@ -94,6 +101,8 @@ public class Weapon : MonoBehaviour
 
                 // Spawn the bullet and apply the modified direction
                 GameObject bulletInstance = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
+                int rand = UnityEngine.Random.Range(0, shootingSounds.Count); // Random index
+                audioSource.PlayOneShot(shootingSounds[rand]);    // Play the selected sound
                 // here bullets damaga and range get decided
                 Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
 
