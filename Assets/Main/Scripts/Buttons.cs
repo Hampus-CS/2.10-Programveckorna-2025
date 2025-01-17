@@ -98,9 +98,6 @@ public class Buttons : MonoBehaviour
          3 = settings
          4 = skill tree
          5 = SidePanel
-         6 = skill 1 info
-         7 = skill 2 info
-        
         */
 
         UpdateStockpileUI();
