@@ -87,6 +87,21 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void AddManpower(int amount)
+    {
+        mp += amount;
+        Debug.Log($"Manpower increased by {amount}. Current manpower: {mp}");
+    }
+
+    public void ReduceResearchGain(int amount)
+    {
+        rp = Mathf.Max(0, rp - amount); // Ensure research points don't go negative
+        Debug.Log($"Research points reduced by {amount}. Current research points: {rp}");
+    }
+
+    public int GetManpower() => mp;
+    public int GetResearchPoints() => rp;
+
     // Currency Management
     public bool TrySpendScrap(int amount)
     {
@@ -104,6 +119,42 @@ public class GameManager : MonoBehaviour
     }
 
     public int GetScrap() => scrap;
+
+
+    /// <summary>
+    /// Gör finare om tid finns:
+
+    private bool isPlayerShootingEnabled = false;
+    private float playerWeaponCooldown = 1.0f; // Default cooldown
+
+    public void EnablePlayerShooting()
+    {
+        if (!isPlayerShootingEnabled)
+        {
+            isPlayerShootingEnabled = true;
+            Debug.Log("Player shooting has been enabled. Rooftop positions are now active.");
+        }
+        else
+        {
+            Debug.Log("Player shooting is already enabled.");
+        }
+    }
+
+    public void ReducePlayerWeaponCooldown(float percentage)
+    {
+        if (isPlayerShootingEnabled)
+        {
+            float reductionFactor = 1 - (percentage / 100f);
+            playerWeaponCooldown *= reductionFactor;
+            Debug.Log($"Player weapon cooldown reduced by {percentage}%. New cooldown: {playerWeaponCooldown}s.");
+        }
+        else
+        {
+            Debug.LogWarning("Player shooting is not enabled. Cannot modify weapon cooldown.");
+        }
+    }
+
+    public float GetPlayerWeaponCooldown() => playerWeaponCooldown;
 
     // Stockpile Management
     public void AddWeaponToStockpile(string weaponName, int initialQuantity, int tier, Sprite icon = null)
