@@ -1,14 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     [Header("Important Values")]
     [SerializeField] private int scrap = 1000; // Currency for the player
+    [SerializeField] private int rp; // Research
     [SerializeField] private int mp; // Manpower
-    [SerializeField] private int cp; // Command power
-    [SerializeField] private int rp; // Research points
+
+    [Header("Resource Gain Settings")]
+    [SerializeField] private float resourceGainInterval = 1f; // Time interval (seconds)
+    [SerializeField] private int scrapGainAmount = 10; // Scrap added per interval
+    [SerializeField] private int rpGainAmount = 5; // RP added per interval
+    private Coroutine resourceGainCoroutine; // Store reference to the coroutine
 
     [Header("Weapon Management")]
     public List<Weapon> purchasedWeapons = new List<Weapon>(); // List of purchased weapons
@@ -34,6 +40,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        // Start the resource gain coroutine
+        StartResourceGain();
     }
 
     private void Update()
@@ -86,6 +98,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartResourceGain()
+    {
+        if (resourceGainCoroutine == null) // Avoid starting multiple coroutines
+        {
+            resourceGainCoroutine = StartCoroutine(AddResourcesOverTime());
+        }
+    }
+
+    private IEnumerator AddResourcesOverTime()
+    {
+        while (true) // Run indefinitely
+        {
+            AddScrap(scrapGainAmount); // Add scrap
+            AddRP(rpGainAmount);       // Add RP
+
+            Debug.Log($"Added {scrapGainAmount} scrap and {rpGainAmount} RP. Total Scrap: {scrap}, Total RP: {rp}");
+
+            yield return new WaitForSeconds(resourceGainInterval); // Wait for the next interval
+        }
+    }
+
+    public void AddScrap(int amount)
+    {
+        scrap += amount;
+        // Optionally trigger UI updates or events here
+    }
+
+    public void AddRP(int amount)
+    {
+        rp += amount;
+        // Optionally trigger UI updates or events here
+    }
 
     public void AddManpower(int amount)
     {
@@ -99,9 +143,6 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Research points reduced by {amount}. Current research points: {rp}");
     }
 
-    public int GetManpower() => mp;
-    public int GetResearchPoints() => rp;
-
     // Currency Management
     public bool TrySpendScrap(int amount)
     {
@@ -113,13 +154,9 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    public void AddScrap(int amount)
-    {
-        scrap += amount;
-    }
-
     public int GetScrap() => scrap;
-
+    public int GetResearchPoints() => rp;
+    public int GetManpower() => mp;
 
     /// <summary>
     /// Gör finare om tid finns:
