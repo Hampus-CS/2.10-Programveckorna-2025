@@ -10,17 +10,20 @@ public class WeatherSystem : MonoBehaviour
     public TMP_Text currentWeatherText;
     public TMP_Text forecastText;
 
-    public GameObject rainEffect;  
-    public GameObject snowEffect;   
-    public GameObject fogEffect;   
-    public Light sunLight;          
+    public GameObject rainEffect;
+    public GameObject snowEffect;
+    public GameObject fogEffect;
+    public Light sunLight;
+
+    public AudioSource rainAudioSource; 
+    public AudioSource windAudioSource;  
 
     private string currentWeather;
 
     void Start()
     {
         ChangeWeather();
-        InvokeRepeating("ChangeWeather", 120f, 120f); //2min
+        InvokeRepeating("ChangeWeather", 120f, 120f); 
     }
 
     void ChangeWeather()
@@ -37,22 +40,44 @@ public class WeatherSystem : MonoBehaviour
         fogEffect.SetActive(false);
         sunLight.enabled = false;
 
+        rainAudioSource.Stop();
+        windAudioSource.Stop();
+
         switch (currentWeather)
         {
             case "Sunny":
                 sunLight.enabled = true;
+                PlayWindSound();
                 break;
             case "Rainy":
                 rainEffect.SetActive(true);
+                PlayRainSound();
                 break;
             case "Snowing":
                 snowEffect.SetActive(true);
+                PlayWindSound();
                 break;
             case "Foggy":
                 fogEffect.SetActive(true);
+                PlayWindSound();
                 break;
         }
-
         currentWeatherText.text = $"Current Weather: {currentWeather}";
+    }
+
+    void PlayRainSound()
+    {
+        if (!rainAudioSource.isPlaying)
+        {
+            rainAudioSource.Play();
+        }
+    }
+
+    void PlayWindSound()
+    {
+        if (!windAudioSource.isPlaying)
+        {
+            windAudioSource.Play();
+        }
     }
 }
