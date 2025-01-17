@@ -140,7 +140,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    /*public Weapon CreateCopy()
+    public Weapon CreateCopy()
     {
         Weapon newWeapon = new Weapon
         {
@@ -209,7 +209,7 @@ public class Weapon : MonoBehaviour
 
     public int GetDamageUpgradePoints() => damageUpgradePoints;
     public int GetRangeUpgradePoints() => rangeUpgradePoints;
-    */
+    
 }
 
 /// <summary>
