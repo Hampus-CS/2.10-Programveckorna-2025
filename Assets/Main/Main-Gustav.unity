@@ -27712,7 +27712,7 @@ MonoBehaviour:
     skillName: RooftopKorean
   - button: {fileID: 2134710504}
     skillName: IncreasedTrainFirepower
-  buttonTemplate: {fileID: 491912665}
+  imageTemplate: {fileID: 0}
   content: {fileID: 1513381645}
   scrapText: {fileID: 1983590776}
   saveHandler: {fileID: 0}
@@ -34009,6 +34009,9 @@ MonoBehaviour:
   firePoint: {fileID: 318717199}
   bulletSpeed: 100
   accuracy: 5
+  cannonBarrel: {fileID: 2133493341}
+  playerCamera: {fileID: 258304483}
+  aimSpeed: 5
 --- !u!212 &2090637845
 SpriteRenderer:
   m_ObjectHideFlags: 0
