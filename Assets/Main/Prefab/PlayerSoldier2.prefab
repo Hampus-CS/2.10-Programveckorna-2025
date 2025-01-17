@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2621075578593446533}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FirePoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,9 +42,9 @@ GameObject:
   - component: {fileID: 3973967921187639408}
   - component: {fileID: 3492027064225203579}
   - component: {fileID: 64224018450208603}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SuppressionCollider (1)
-  m_TagString: Untagged
+  m_TagString: IgnoreCannon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: -2656232809601841374}
   - component: {fileID: 2023130378915250692}
   - component: {fileID: 1946450560454705704}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerSoldier2
   m_TagString: FriendlyTroop
   m_Icon: {fileID: 0}
@@ -280,10 +280,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints: []
+  bloodPartiles: {fileID: 6385896519208436379, guid: e0af29fa6a54f89468fce8381845850b, type: 3}
   inCombat: 0
   holdPosition: 0
   isAtCover: 0
   canMove: 1
+  isHostile: 0
 --- !u!114 &-2656232809601841374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,6 +311,7 @@ MonoBehaviour:
   AmmoCap: 10
   CurrentAmmo: 0
   ReloadTime: 0
+  Icon: {fileID: 0}
 --- !u!114 &2023130378915250692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,7 +352,7 @@ GameObject:
   - component: {fileID: 6823697363440040325}
   - component: {fileID: 8861424961173124141}
   - component: {fileID: 288649464748274636}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Animation Stuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -459,9 +462,9 @@ GameObject:
   - component: {fileID: 3145207109097023695}
   - component: {fileID: 9152162178185361542}
   - component: {fileID: 6815338874720873749}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RangeCollider (1)
-  m_TagString: Untagged
+  m_TagString: IgnoreCannon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
