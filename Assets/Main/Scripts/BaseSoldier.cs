@@ -24,8 +24,12 @@ public class BaseSoldier : MonoBehaviour
 
     private int currentWaypointIndex = 0; // Tracks the current waypoint
 
+    Animator animator;
+
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
+
         Debug.Log($"isHostile before Start logic: {isHostile}");
         coverScript = FindAnyObjectByType<CoverScript>();
         personality = GetComponent<TroopPersonalityScript>();
@@ -106,6 +110,7 @@ public class BaseSoldier : MonoBehaviour
                 {
                     Debug.Log("No more waypoints to move towards. Stopping.");
                     agent.isStopped = true;
+                    animator.SetBool("Walk", false);
                     return;
                 }
 
@@ -117,6 +122,7 @@ public class BaseSoldier : MonoBehaviour
             // Move toward the current waypoint
             agent.isStopped = false;
             agent.SetDestination(targetWaypoint.transform.position);
+            animator.SetBool("Walk", true);
             Debug.Log($"Moving to waypoint: {targetWaypoint.name}, Distance: {distanceToWaypoint}");
         }
     }
@@ -384,16 +390,25 @@ public class BaseSoldier : MonoBehaviour
         Debug.Log("Timer ended. Movement re-enabled.");
     }
 
-
     public void TakeDamage(int damage)
     {
         personality.health -= damage;
         Instantiate(bloodPartiles, transform.position, Quaternion.identity);
 
+        // Handle death
         if (personality.health <= 0)
         {
+            animator.SetBool("Die", true);
+            StartCoroutine(DeathDelay());
+            animator.SetBool("Die", false);
+            Destroy(gameObject);
+
             Debug.Log("DEAD " + gameObject.name);
-            // Handle death
         }
+    }
+
+    private IEnumerator DeathDelay()
+    {
+        yield return new WaitForSeconds(1.5f);
     }
 }

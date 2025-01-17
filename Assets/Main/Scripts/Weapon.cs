@@ -33,9 +33,12 @@ public class Weapon : MonoBehaviour
     private TroopPersonalityScript personalityScript;
     private RangeColliderScript rangeColliderScript;
 
+    Animator animator;
 
     private void Awake()
     {
+        animator = GetComponentInChildren<Animator>();
+
         //give each weapon a unique serial number and update the weapons name
         uniqueName = $"{name.Replace("(Clone)", "").Trim()} #{serialNumberCounter:D4}"; //replaces Clone with a serial number in each weapon thats bought name
         serialNumberCounter++;
@@ -56,7 +59,7 @@ public class Weapon : MonoBehaviour
             isFriendly = true;
         }
     }
-    
+
     public string GetUniqueName()
     {
         return uniqueName; //for the debug to work in GM1
@@ -64,7 +67,6 @@ public class Weapon : MonoBehaviour
 
     public void Shoot(Vector3 target)
     {
-        Animator animator = GetComponent<Animator>();
 
         if (CurrentAmmo > 0)
         {
@@ -81,7 +83,7 @@ public class Weapon : MonoBehaviour
                     Debug.LogWarning("Bullet prefab has not been assigned for this weapon");
                 }
 
-                //animator.SetBool("Shoot", true);
+                animator.SetBool("Shoot", true);
 
                 float spread = 1f / (accuracy * personalityScript.accuracy);
 
@@ -108,24 +110,24 @@ public class Weapon : MonoBehaviour
 
                 lastShot = Time.time;
                 CurrentAmmo -= 1;
-                }
+            }
         }
         else
         {
-            //animator.SetBool("Shoot", false);
+            animator.SetBool("Shoot", false);
             StartReload(3f);
         }
     }
-    
+
     private bool isReloading = false;
-    
+
     public void StartReload(float reloadDuration)
     {
         if (isReloading) return; //prevents multiple reloads
         isReloading = true;
         ReloadTime = reloadDuration;
     }
-    
+
     private void FixedUpdate()
     {
         if (!isReloading) return;
@@ -151,7 +153,7 @@ public class Weapon : MonoBehaviour
         };
         return newWeapon;
     }
-    
+
     private Weapon GetWeaponFromImage(RectTransform image)
     {
         string imageTag = image.tag;//gets tag from current image and find weapon with same tag
@@ -209,7 +211,7 @@ public class Weapon : MonoBehaviour
 
     public int GetDamageUpgradePoints() => damageUpgradePoints;
     public int GetRangeUpgradePoints() => rangeUpgradePoints;
-    
+
 }
 
 /// <summary>
