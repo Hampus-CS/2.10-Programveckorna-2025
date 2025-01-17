@@ -25,7 +25,7 @@ public class Buttons : MonoBehaviour
     [SerializeField] private Transform content; // Parent for dynamically created weapon images
     [SerializeField] private TMP_Text scrapText; // Scrap display text
 
-    private List<GameObject> stockpileImages = new List<GameObject>(); // List to track created images
+    private List<GameObject> stockpileImages = new(); // List to track created images
 
 
     [Header("Save UI")]
@@ -100,6 +100,7 @@ public class Buttons : MonoBehaviour
          5 = SidePanel
          6 = skill 1 info
          7 = skill 2 info
+        
         */
 
         UpdateStockpileUI();
@@ -334,60 +335,7 @@ public class Buttons : MonoBehaviour
         var sortedStockpile = gameManager.stockpile.OrderByDescending(w => w.Tier).ToList();
 
         Debug.Log($"Stockpile count: {sortedStockpile.Count}");
-
-        // Create new images or update existing ones
-        foreach (var weapon in sortedStockpile)
-        {
-            Debug.Log($"Creating UI for weapon: {weapon.Name} (x{weapon.Quantity})");
-
-            // Check if this weapon already exists in the UI
-            var existingImage = stockpileImages
-                .FirstOrDefault(image => image.name == weapon.Name);
-
-            if (existingImage != null)
-            {
-                // Update the existing entry
-                TMP_Text existingWeaponText = existingImage.transform.Find("WeaponText").GetComponent<TMP_Text>();
-                existingWeaponText.text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())})";
-                continue;
-            }
-
-            // Instantiate a new image for this weapon
-            GameObject weaponImage = Instantiate(imageTemplate, content);
-            weaponImage.name = weapon.Name; // Set name for easier identification
-
-            // Update Instantiation Code - Resets RectTransform
-            RectTransform rectTransform = weaponImage.GetComponent<RectTransform>();
-            rectTransform.localScale = Vector3.one; // Reset scale to default
-            rectTransform.anchoredPosition = Vector2.zero; // Let layout control positioning
-            rectTransform.sizeDelta = new Vector2(0, 100); // Optional: Adjust height if needed
-
-            TMP_Text newWeaponText = weaponImage.transform.Find("WeaponText").GetComponent<TMP_Text>();
-            if (newWeaponText == null)
-            {
-                Debug.LogError("WeaponText is null or missing from the template!");
-                continue;
-            }
-
-            newWeaponText.text = $"{weapon.Name} (x{(weapon.Quantity == -1 ? "∞" : weapon.Quantity.ToString())})";
-
-            Image weaponIcon = weaponImage.GetComponent<Image>();
-            if (weaponIcon == null)
-            {
-                Debug.LogError("Image component is missing on the weapon template!");
-                continue;
-            }
-
-            if (weapon.Icon != null)
-            {
-                weaponIcon.sprite = weapon.Icon;
-            }
-
-            // Add to the list for future reference
-            stockpileImages.Add(weaponImage);
-        }
     }
-
 
     public void BuyWeapon(string tag, int cost)
     {
@@ -401,7 +349,6 @@ public class Buttons : MonoBehaviour
             Debug.LogError("GameManager reference is not assigned in Buttons.cs.");
         }
     }
-
 }
 
 /// <summary>
