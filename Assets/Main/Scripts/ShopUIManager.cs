@@ -42,14 +42,14 @@ public class ShopUIManager : MonoBehaviour
             Debug.LogWarning("No weapon connected to current image");
             return;
         }
-        GameManager.Instance.BuyWeapon(weapon.tag, weaponCost); //if current image has tag the BuyWeapon void is called from GameManager
+        GameManager.Instance.BuyWeapon(weapon.tag, weaponCost); // If current image has tag the BuyWeapon void is called from GameManager
         buttons.UpdateStockpileUI(); // Refresh the stockpile UI
 
     }
 
-    public void MoveRight()//if this void is called the images will move right
+    public void MoveRight()// If this void is called the images will move right
     {
-        if(currentIndex >= images.Length -1)//chechs if index has reached its maximum value to stop from scrolling
+        if(currentIndex >= images.Length -1) // Chechs if index has reached its maximum value to stop from scrolling
         {
             Debug.Log("Cant scroll further right");
             return;
