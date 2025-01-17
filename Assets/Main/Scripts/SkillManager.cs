@@ -169,7 +169,7 @@ public class LongerBarrels : BaseSkill
     protected override void Execute()
     {
         // + Longer range
-        troopPersonalityScript.range += 1;
+        //troopPersonalityScript.range += 1;
     }
 }
 
