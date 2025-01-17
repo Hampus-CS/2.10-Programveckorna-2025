@@ -1484,10 +1484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &195102771
 GameObject:
   m_ObjectHideFlags: 0
@@ -2098,10 +2094,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &209009472
 GameObject:
   m_ObjectHideFlags: 0
@@ -2742,12 +2734,15 @@ MonoBehaviour:
   - Name: Weapon 1
     Quantity: 0
     Tier: 3
+    Icon: {fileID: 0}
   - Name: Weapon 3
     Quantity: 0
     Tier: 2
+    Icon: {fileID: 0}
   - Name: Weapon 4
     Quantity: 0
     Tier: 1
+    Icon: {fileID: 0}
   weaponPrefabs:
   - tag: 1
     weaponPrefab: {fileID: 5207141877086924392, guid: f7d4a7d5257f81b439f069a85694061f, type: 3}
@@ -4200,10 +4195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &355818349
 GameObject:
   m_ObjectHideFlags: 0
@@ -4559,10 +4550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &407706839
 GameObject:
   m_ObjectHideFlags: 0
@@ -4612,18 +4599,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6274576a21a32f943b39d408be3f2bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
-  - {fileID: 1388061981}
-  - {fileID: 1481471195}
-  - {fileID: 672558764}
-  - {fileID: 1127103158}
-  - {fileID: 208720239}
-  CurrentState: 0
-  ShowDebugGizmos: 1
-  PlayerOwnedColor: {r: 0, g: 1, b: 0, a: 1}
-  EnemyOwnedColor: {r: 1, g: 0, b: 0, a: 1}
-  ContestedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  NeutralColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &412295218
 GameObject:
   m_ObjectHideFlags: 0
@@ -6261,18 +6236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6274576a21a32f943b39d408be3f2bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
-  - {fileID: 715669349}
-  - {fileID: 801905599}
-  - {fileID: 173264712}
-  - {fileID: 1813760408}
-  - {fileID: 396515428}
-  CurrentState: 0
-  ShowDebugGizmos: 1
-  PlayerOwnedColor: {r: 0, g: 1, b: 0, a: 1}
-  EnemyOwnedColor: {r: 1, g: 0, b: 0, a: 1}
-  ContestedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  NeutralColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &573443920
 GameObject:
   m_ObjectHideFlags: 0
@@ -6414,10 +6377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &587546959
 GameObject:
   m_ObjectHideFlags: 0
@@ -7727,10 +7686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &677145406
 GameObject:
   m_ObjectHideFlags: 0
@@ -8150,10 +8105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &717353700
 GameObject:
   m_ObjectHideFlags: 0
@@ -8388,10 +8339,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &730636302
 GameObject:
   m_ObjectHideFlags: 0
@@ -9058,10 +9005,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &768523787
 GameObject:
   m_ObjectHideFlags: 0
@@ -9272,10 +9215,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &806763430
 GameObject:
   m_ObjectHideFlags: 0
@@ -9756,10 +9695,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &844066737
 GameObject:
   m_ObjectHideFlags: 0
@@ -10549,18 +10484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6274576a21a32f943b39d408be3f2bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
-  - {fileID: 355266730}
-  - {fileID: 1026096997}
-  - {fileID: 767498197}
-  - {fileID: 1690920618}
-  - {fileID: 2047497437}
-  CurrentState: 0
-  ShowDebugGizmos: 1
-  PlayerOwnedColor: {r: 0, g: 1, b: 0, a: 1}
-  EnemyOwnedColor: {r: 1, g: 0, b: 0, a: 1}
-  ContestedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  NeutralColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &879816246
 GameObject:
   m_ObjectHideFlags: 0
@@ -10760,10 +10683,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &890652307
 GameObject:
   m_ObjectHideFlags: 0
@@ -11506,15 +11425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0a517547751df4b92143ca82aad73c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopButton: {fileID: 219993250}
-  shopPanel: {fileID: 861821841}
-  images:
-  - {fileID: 1384917909}
-  - {fileID: 1394737216}
-  - {fileID: 848403886}
-  moveDistance: 1000
-  moveDuration: 0.8
-  weaponCost: 20
 --- !u!4 &932735566
 Transform:
   m_ObjectHideFlags: 0
@@ -12588,10 +12498,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1031544066
 GameObject:
   m_ObjectHideFlags: 0
@@ -13013,10 +12919,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1044360702
 GameObject:
   m_ObjectHideFlags: 0
@@ -13461,18 +13363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6274576a21a32f943b39d408be3f2bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
-  - {fileID: 1572356077}
-  - {fileID: 1215164574}
-  - {fileID: 882121002}
-  - {fileID: 1838136788}
-  - {fileID: 729269995}
-  CurrentState: 0
-  ShowDebugGizmos: 1
-  PlayerOwnedColor: {r: 0, g: 1, b: 0, a: 1}
-  EnemyOwnedColor: {r: 1, g: 0, b: 0, a: 1}
-  ContestedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  NeutralColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1081047729
 GameObject:
   m_ObjectHideFlags: 0
@@ -14200,10 +14090,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1158707404
 GameObject:
   m_ObjectHideFlags: 0
@@ -14757,10 +14643,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1215164573
 GameObject:
   m_ObjectHideFlags: 0
@@ -14827,10 +14709,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1226568807
 GameObject:
   m_ObjectHideFlags: 0
@@ -15586,18 +15464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6274576a21a32f943b39d408be3f2bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
-  - {fileID: 1043264039}
-  - {fileID: 1692356677}
-  - {fileID: 1653971108}
-  - {fileID: 2119077850}
-  - {fileID: 1493198205}
-  CurrentState: 0
-  ShowDebugGizmos: 1
-  PlayerOwnedColor: {r: 0, g: 1, b: 0, a: 1}
-  EnemyOwnedColor: {r: 1, g: 0, b: 0, a: 1}
-  ContestedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  NeutralColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1301911249
 GameObject:
   m_ObjectHideFlags: 0
@@ -16638,10 +16504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1392796514
 GameObject:
   m_ObjectHideFlags: 0
@@ -18115,10 +17977,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1481556744
 GameObject:
   m_ObjectHideFlags: 0
@@ -18329,10 +18187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1498887401
 GameObject:
   m_ObjectHideFlags: 0
@@ -19730,10 +19584,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1573899676
 GameObject:
   m_ObjectHideFlags: 0
@@ -20276,18 +20126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6274576a21a32f943b39d408be3f2bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots:
-  - {fileID: 580877233}
-  - {fileID: 838793240}
-  - {fileID: 2071074612}
-  - {fileID: 1213554657}
-  - {fileID: 2072842224}
-  CurrentState: 0
-  ShowDebugGizmos: 1
-  PlayerOwnedColor: {r: 0, g: 1, b: 0, a: 1}
-  EnemyOwnedColor: {r: 1, g: 0, b: 0, a: 1}
-  ContestedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  NeutralColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1630422399
 GameObject:
   m_ObjectHideFlags: 0
@@ -20770,10 +20608,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1686360255
 GameObject:
   m_ObjectHideFlags: 0
@@ -20997,7 +20831,7 @@ MonoBehaviour:
     skillName: RooftopKorean
   - button: {fileID: 2134710504}
     skillName: IncreasedTrainFirepower
-  buttonTemplate: {fileID: 491912665}
+  imageTemplate: {fileID: 0}
   content: {fileID: 1513381645}
   scrapText: {fileID: 1983590776}
   saveHandler: {fileID: 318974227}
@@ -21227,10 +21061,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1692356676
 GameObject:
   m_ObjectHideFlags: 0
@@ -21297,10 +21127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1694467820
 GameObject:
   m_ObjectHideFlags: 0
@@ -22579,10 +22405,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1817758604
 GameObject:
   m_ObjectHideFlags: 0
@@ -22782,10 +22604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &1874862456
 GameObject:
   m_ObjectHideFlags: 0
@@ -23230,24 +23048,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c308a6fc056980c4e8d43a3e3c443b4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSoldierPrefabs:
-  - {fileID: 1639296028334649981, guid: 153de70c24524a44095ccbf7f6367f48, type: 3}
-  - {fileID: 1639296028334649981, guid: 6a14555ced998754088a5ee74be61af4, type: 3}
-  - {fileID: 1639296028334649981, guid: 9587d004a27bd1e46983771797959648, type: 3}
-  - {fileID: 1639296028334649981, guid: 383e06261c0b64d468328ec372584847, type: 3}
-  enemySoldierPrefabs:
-  - {fileID: 3087335521371444203, guid: 70f915b98d7f3ea4d90ffdff19439043, type: 3}
-  - {fileID: 3087335521371444203, guid: 3f13edbc008718c4f9b9fbfc6be9dce7, type: 3}
-  - {fileID: 3087335521371444203, guid: 4227609c97e09ff48bc0b646b670bb2c, type: 3}
-  - {fileID: 3087335521371444203, guid: d74318f23e54c114ba58bd4946d596d2, type: 3}
-  playerSpawnPoint: {fileID: 234227949}
-  enemySpawnPoint: {fileID: 288971684}
-  playerSpawnInterval: 5
-  enemySpawnInterval: 8
-  playerLineManager: {fileID: 873763456}
-  enemyLineManager: {fileID: 566271823}
-  maxPlayerSoldiers: 30
-  maxEnemySoldiers: 30
 --- !u!1 &1983590775
 GameObject:
   m_ObjectHideFlags: 0
@@ -24613,10 +24413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &2063650220
 GameObject:
   m_ObjectHideFlags: 0
@@ -24719,10 +24515,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &2072842223
 GameObject:
   m_ObjectHideFlags: 0
@@ -24789,10 +24581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &2079848789
 GameObject:
   m_ObjectHideFlags: 0
@@ -25474,10 +25262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9802c8cc4a7624cb2790395af29bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
-  FreeColor: {r: 0, g: 1, b: 0, a: 1}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  OccupationTimeThreshold: 1
 --- !u!1 &2132072811
 GameObject:
   m_ObjectHideFlags: 0
