@@ -3,7 +3,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class DebugVisualizer : MonoBehaviour
 {
-    [Header("Ownership Colors")]
+    /*[Header("Ownership Colors")]
     public Color PlayerOwnedColor = Color.green;
     public Color EnemyOwnedColor = Color.red;
     public Color ContestedColor = Color.yellow;
@@ -77,7 +77,7 @@ public class DebugVisualizer : MonoBehaviour
             // Draw a sphere to represent the slot
             Gizmos.DrawSphere(slot.position, 0.3f);
         }
-    }
+    }*/
 }
 
 /// <summary>

@@ -1,348 +1,349 @@
+using System.Collections.Generic;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
+using UnityEngine;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class BaseSoldier : MonoBehaviour
 {
-    [Header("Soldier Settings")]
-    public bool IsPlayer; // Differentiates between player and enemy soldiers
-    public float AttackDamage = 10f;
-    public float AttackRange = 2f;
-    public float AttackInterval = 1.5f; // Time between attacks
-
-    [Header("Personality Settings")]
-    public int health { get; set; }
-    public int stress { get; set; }
-    public int range { get; set; }
-    public float accuracy { get; set; }
-    public float suppresion { get; set; }
-    public string personality { get; set; }
-
-    [Header("Health UI")]
-    public GameObject HealthBarPrefab; // Prefab for the health bar UI
-    private Slider healthSlider; // The slider component of the health bar
-    private GameObject healthBarInstance;
-
-    private float currentHealth;
     private NavMeshAgent agent;
-    private Transform currentTargetSlot;
-    private bool isAtSlot = false;
+    private TroopPersonalityScript personality;
+    private RangeColliderScript rangeColliderScript;
+    public List<GameObject> waypoints = new List<GameObject>();
 
-    [Header("Combat")]
-    private float lastAttackTime;
-    private BaseSoldier targetEnemy; // Target enemy for combat
+    public bool inCombat = false;
+    public bool holdPosition = false;
+    public bool isAtCover = false;
+    public bool canMove = true;
 
-    private Animator animator;
+    private bool isFriendly;
 
-    public LineManager CurrentTargetLine { get; private set; }
-
-    private void Start()
+    void Start()
     {
-        animator = GetComponentInChildren<Animator>();
+        coverScript = FindAnyObjectByType<CoverScript>();
+        personality = GetComponent<TroopPersonalityScript>();
+        rangeColliderScript = GetComponentInChildren<RangeColliderScript>();
         agent = GetComponent<NavMeshAgent>();
+        agent.isStopped = true;
+        agent.ResetPath();
 
-        health = 100;
-        stress = 0;
-        range = 10;
-        suppresion = 0;
-        accuracy = 5;
-        Personality();
-
-        currentHealth = health;
-
-        if (agent == null)
+        GameObject[] findWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+        foreach (GameObject waypoint in findWaypoints)
         {
-            Debug.LogError($"{name}: NavMeshAgent component is missing! Ensure the prefab has a NavMeshAgent.");
+            waypoints.Add(waypoint);
         }
+        UpdateWaypoints();
 
-        // Set up the health bar
-        if (HealthBarPrefab != null)
-        {
-            healthBarInstance = Instantiate(HealthBarPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity, transform);
-            healthSlider = healthBarInstance.GetComponentInChildren<Slider>();
-            UpdateHealthBar();
-        }
-
-        FindNextLine();
+        isFriendly = personality.isFriendly;
     }
 
-    private void Update()
+    private void UpdateWaypoints()
     {
-        // Check for movement to slot
-        if (!isAtSlot && currentTargetSlot != null)
+        waypoints.Sort((a, b) =>
         {
+            float distanceA = Vector3.Distance(transform.position, a.transform.position);
+            float distanceB = Vector3.Distance(transform.position, b.transform.position);
+            return distanceA.CompareTo(distanceB);
+        });
 
-            MoveToSlot();
-        }
-
-        // Engage in combat if at slot
-        if (isAtSlot)
-        {
-            EngageCombat();
-        }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-
-        // Update the health bar
-        if (healthBarInstance != null)
-        {
-            var healthBarUI = healthBarInstance.GetComponent<HealthBarUI>();
-            if (healthBarUI != null)
-            {
-                healthBarUI.UpdateHealthBar(currentHealth, health);
-            }
-        }
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void UpdateHealthBar()
-    {
-        if (healthSlider != null)
-        {
-            healthSlider.value = currentHealth / health;
-        }
-    }
-
-    private void Die()
-    {
-        if (healthBarInstance != null)
-        {
-            Destroy(healthBarInstance);
-        }
-
-        // Notify the line about death
-        if (CurrentTargetLine != null)
-        {
-            CurrentTargetLine.RemoveSoldier(gameObject, IsPlayer);
-        }
-
-        // Notify the Spawner
-        var spawner = FindObjectOfType<Spawner>();
-        if (spawner != null)
-        {
-            spawner.SoldierDied(IsPlayer);
-        }
-
-        // Play death animation
-        animator.SetBool("Die", true);
-        StartCoroutine(DelayDeath());
-
-        print($"{name} has died.");
-    }
-
-    // Wait for the death animation to finish before destroying the object
-    private IEnumerator DelayDeath()
-    {
-        yield return new WaitForSeconds(1.5f);
-        animator.SetBool("Die", false);
-        Destroy(gameObject);
-    }
-
-    public void SetTargetLine(LineManager targetLine)
-    {
-        if (targetLine == null)
-        {
-            Debug.LogError($"{name}: Target line is null! Cannot set target line.");
-            return;
-        }
-
-        CurrentTargetLine = targetLine;
-
-        if (CurrentTargetLine.slots == null || CurrentTargetLine.slots.Length == 0)
-        {
-            Debug.LogError($"{name}: Target line {CurrentTargetLine.name} has no slots assigned!");
-            return;
-        }
-
-        MoveToSlot();
-    }
-
-    private void FindNextLine()
-    {
-        LineManager[] allLines = FindObjectsOfType<LineManager>();
-
-        foreach (var line in allLines)
-        {
-            if (IsValidLine(line))
-            {
-                SetTargetLine(line);
-                return;
-            }
-        }
-
-        Debug.LogWarning($"{name} could not find a valid line!");
-    }
-
-    private bool IsValidLine(LineManager line)
-    {
-        if (IsPlayer)
-        {
-            return line.CurrentState != LineManager.LineState.EnemyOwned;
-        }
-        else
-        {
-            return line.CurrentState != LineManager.LineState.PlayerOwned;
-        }
-    }
-
-    private void MoveToSlot()
-    {
-        if (agent == null)
-        {
-
-            // Attempt to find the NavMeshAgent if it wasn't initialized in Start()
-            agent = GetComponent<NavMeshAgent>();
-            if (agent == null)
-            {
-                Debug.LogError($"{name}: NavMeshAgent component is missing! Cannot move to slot.");
-                return;
-            }
-        }
-
-        if (CurrentTargetLine == null)
-        {
-            Debug.LogError($"{name}: CurrentTargetLine is null! Cannot move to slot.");
-            return;
-        }
-
-        currentTargetSlot = CurrentTargetLine.GetFreeSlot();
-
-        if (currentTargetSlot == null)
-        {
-            Debug.LogWarning($"{name}: No free slot available in line {CurrentTargetLine.name}. Holding position.");
-            HoldPosition();
-            return;
-        }
-
-        isAtSlot = false;
-        agent.isStopped = false;
-        animator.SetBool("Walk", true);
-        agent.SetDestination(currentTargetSlot.position);
-        Debug.Log($"{name} moving to slot at {currentTargetSlot.position}");
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.transform == currentTargetSlot)
-        {
-            isAtSlot = true;
-            agent.isStopped = true;
-            Debug.Log($"{name} reached its assigned slot in line {CurrentTargetLine.name}");
-        }
-    }
-
-    private void HoldPosition()
-    {
-        animator.SetBool("Walk", false);
-        if (agent == null) return; // Prevent null reference
+        agent.ResetPath();
         agent.isStopped = true;
     }
 
-    private void EngageCombat()
-    {
-        // Find the nearest enemy in range
-        Collider[] hits = Physics.OverlapSphere(transform.position, AttackRange);
+    private CoverScript coverScript;
 
-        foreach (var hit in hits)
+    // Modified MoveForwards for direction adjustment
+    public void MoveForwards()
+    {
+        if (!holdPosition && canMove)
         {
-            var enemy = hit.GetComponent<BaseSoldier>();
-            if (enemy != null && enemy.IsPlayer != IsPlayer)
+            StartCoroutine(TimerBetweenNavigation());
+            UpdateWaypoints();
+
+            Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left; // Right for friendly, left for enemy
+            GameObject closestWaypointInFront = null;
+            float closestDistance = Mathf.Infinity;
+
+            foreach (GameObject waypoint in waypoints)
             {
-                targetEnemy = enemy;
-                break;
+                coverScript = waypoint.GetComponent<CoverScript>();
+
+                if (Vector3.Distance(transform.position, waypoint.transform.position) < 1f || (coverScript != null && coverScript.occupiedBy != "none" && coverScript.occupiedBy != name))
+                {
+                    continue;
+                }
+
+                Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
+
+                // Adjust based on isFriendly
+                float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
+                if (dotProduct > 0) // Only consider waypoints in the desired direction
+                {
+                    float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestWaypointInFront = waypoint;
+                    }
+                }
+            }
+
+            if (closestWaypointInFront != null)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(closestWaypointInFront.transform.position);
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
+        }
+    }
+
+    // Modified HoldPosition for direction adjustment
+    public void HoldPosition()
+    {
+        StartCoroutine(TimerBetweenNavigation());
+        UpdateWaypoints();
+        Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left;
+
+        GameObject closestWaypointInFront = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (GameObject waypoint in waypoints)
+        {
+            coverScript = waypoint.GetComponent<CoverScript>();
+            float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+
+            if (coverScript != null && coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
+                continue;
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestWaypointInFront = waypoint;
             }
         }
 
-        if (targetEnemy != null && Time.time >= lastAttackTime + AttackInterval)
+        if (closestWaypointInFront == null)
         {
-            animator.SetBool("Shoot", true);
-            lastAttackTime = Time.time;
-            targetEnemy.TakeDamage(AttackDamage);
-            Debug.Log($"{name} attacked {targetEnemy.name} for {AttackDamage} damage.");
+            agent.isStopped = true;
+            return;
+        }
+
+        float distanceToWaypoint = Vector3.Distance(transform.position, closestWaypointInFront.transform.position);
+
+        if (distanceToWaypoint <= agent.stoppingDistance)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(forwardDirection);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+
+            isAtCover = true;
+            agent.isStopped = true;
+            return;
+        }
+
+        if (closestWaypointInFront != null)
+        {
+            isAtCover = false;
+            agent.isStopped = false;
+            agent.SetDestination(closestWaypointInFront.transform.position);
+            Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+        }
+        else
+        {
+            agent.isStopped = true;
         }
     }
 
-    private void RotateToFaceTarget(Transform target)
+    // Modified RunToNearestCover for direction adjustment
+    public void RunToNearestCover()
     {
-        Vector3 direction = (target.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-    }
-    public void Personality()
-    {
-        int rand = Random.Range(1, 6);
-        switch (rand)
+        if (!holdPosition)
         {
-            case 1:
-                personality = "Aggresive";
-                health += 10;
-                break;
-            case 2:
-                personality = "Coward";
-                stress += 1;
-                break;
-            case 3:
-                personality = "Sharpshooter";
-                accuracy += 1;
-                agent.speed *= 0.8f;
-                break;
-            case 4:
-                personality = "Triggerhappy";
-                accuracy -= 1;
-                range += 5;
-                break;
-            case 5:
-                personality = "Lightfooted";
-                health -= 10;
-                agent.speed *= 1.10f;
-                break;
+            StartCoroutine(TimerBetweenNavigation());
+            UpdateWaypoints();
+            Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left;
+
+            GameObject closestWaypointInFront = null;
+            float closestDistance = Mathf.Infinity;
+
+            foreach (GameObject waypoint in waypoints)
+            {
+                coverScript = waypoint.GetComponent<CoverScript>();
+                float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+
+                if (coverScript != null && coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
+                    continue;
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestWaypointInFront = waypoint;
+                }
+            }
+
+            float distanceToWaypoint = Vector3.Distance(transform.position, closestWaypointInFront.transform.position);
+
+            if (distanceToWaypoint <= agent.stoppingDistance)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(forwardDirection);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+
+                isAtCover = true;
+                agent.isStopped = true;
+                return;
+            }
+
+            if (closestWaypointInFront != null)
+            {
+                isAtCover = false;
+                agent.isStopped = false;
+                agent.SetDestination(closestWaypointInFront.transform.position);
+                Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
+        }
+    }
+
+    // Modified RunToBackToCover for direction adjustment
+    public void RunToBackToCover()
+    {
+        if (!holdPosition)
+        {
+            StartCoroutine(TimerBetweenNavigation());
+            UpdateWaypoints();
+            Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left;
+
+            GameObject closestWaypointInFront = null;
+            float closestDistance = Mathf.Infinity;
+
+            foreach (GameObject waypoint in waypoints)
+            {
+                coverScript = waypoint.GetComponent<CoverScript>();
+                Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
+
+                if (coverScript != null && coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
+                    continue;
+
+                float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
+                if (dotProduct < 0) // Only consider waypoints in the opposite direction for enemies
+                {
+                    float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestWaypointInFront = waypoint;
+                    }
+                }
+            }
+
+            if (closestWaypointInFront != null)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(closestWaypointInFront.transform.position);
+
+                Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
+        }
+    }
+
+    // Modified RunToEnemy for direction adjustment
+    public void RunToEnemy(Transform enemy)
+    {
+        if (!holdPosition && canMove)
+        {
+            StartCoroutine(TimerBetweenNavigation());
+            UpdateWaypoints();
+            Vector3 forwardDirection = isFriendly ? Vector3.right : Vector3.left;
+
+            GameObject closestWaypointInFront = null;
+            float closestDistance = Mathf.Infinity;
+
+            foreach (GameObject waypoint in waypoints)
+            {
+                coverScript = waypoint.GetComponent<CoverScript>();
+                Vector3 directionToWaypoint = (waypoint.transform.position - transform.position).normalized;
+
+                if (coverScript != null && coverScript.occupiedBy != "none" && coverScript.occupiedBy != name)
+                    continue;
+
+                float dotProduct = Vector3.Dot(forwardDirection, directionToWaypoint);
+
+                if (dotProduct < 0) // Only consider waypoints opposite for enemies
+                {
+                    float distance = Vector3.Distance(transform.position, waypoint.transform.position);
+                    if (distance <= personality.range)
+                    {
+                        if (distance < closestDistance)
+                        {
+                            closestDistance = distance;
+                            closestWaypointInFront = waypoint;
+                        }
+                    }
+                }
+            }
+
+            if (closestWaypointInFront != null)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(closestWaypointInFront.transform.position);
+
+                Vector3 directionToTarget = (closestWaypointInFront.transform.position - transform.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            }
+            else
+            {
+                agent.isStopped = true;
+            }
+        }
+    }
+
+    public void RotateToEnemy(Vector3 targetPosition)
+    {
+        // Calculate direction to the target
+        Vector3 directionToTarget = targetPosition - transform.position;
+
+        // Check if direction is non-zero before using LookRotation
+        if (directionToTarget != Vector3.zero)
+        {
+            // Normalize the direction to avoid issues with scale
+            directionToTarget.Normalize();
+
+            // Rotate towards the target
+            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 500f);
+        }
+    }
+
+    private IEnumerator TimerBetweenNavigation()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(3f);
+        canMove = true;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        personality.health -= damage;
+
+        if (personality.health <= 0)
+        {
+            Debug.Log("DEAD " + gameObject.name);
+            // Handle death
         }
     }
 }
-public interface ISoldierStats
-{
-    public int health { get; set; }
-    public int stress { get; set; }
-    public int range { get; set; }
-    public float accuracy { get; set; }
-    public float suppresion { get; set; }
-    public string personality { get; set; }
-
-    void Personality();
-}
-
-/// <summary>
-/// Key Features
-/// 
-///     Unified Soldier Behavior:
-///         - Differentiates between player and enemy soldiers using the IsPlayer flag.
-///         - Manages health, movement, and combat within a single script.
-/// 
-///     Health and Visual Feedback:
-///         - Includes a health bar system for visual damage indication.
-///         - Updates health bars dynamically as soldiers take damage.
-/// 
-///     Combat System:
-///         - Soldiers engage enemies within range and attack based on an interval.
-///         - Supports combat in contested lines.
-/// 
-///     Slot and Line Integration:
-///         - Soldiers move to assigned slots in their target line.
-///         - Notify LineManager when occupying or leaving a line.
-/// </summary>
-
-// How to Use
-// 1. Replace PlayerSoldier.cs, EnemySoldier.cs, and Health.cs with the new BaseSoldier.cs.
-// 2. Add this script to all soldier prefabs.
-// 3. Assign the IsPlayer flag in the Unity Inspector for player and enemy soldiers.

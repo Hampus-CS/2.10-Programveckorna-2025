@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SlotManager : MonoBehaviour
 {
-    [Header("Slot Properties")]
+    /*[Header("Slot Properties")]
     public GameObject OccupyingSoldier { get; private set; }
     public string OccupiedBy => OccupyingSoldier == null ? "none" : OccupyingSoldier.tag;
 
@@ -107,7 +107,7 @@ public class SlotManager : MonoBehaviour
 
         Gizmos.DrawSphere(transform.position, 0.5f);
     }
-
+    */
 
 }
 

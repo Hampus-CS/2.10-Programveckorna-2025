@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 3880280798339670270}
   - component: {fileID: 3901372917387687149}
   m_Layer: 0
-  m_Name: BulletPrefab
-  m_TagString: Untagged
+  m_Name: FriendlyBulletPrefab
+  m_TagString: FriendlyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 0
   damage: 0
+  isFriendly: 0
 --- !u!54 &7234654028727940962
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -147,7 +148,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

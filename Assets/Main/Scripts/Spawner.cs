@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    private static Spawner instance; // Singleton instance for the Spawner
+    /*private static Spawner instance; // Singleton instance for the Spawner
 
     [Header("Spawning Settings")]
     public GameObject[] playerSoldierPrefabs;
@@ -149,5 +149,5 @@ public class Spawner : MonoBehaviour
         }
 
         Debug.LogWarning($"Soldier died. Updated counts - Players: {currentPlayerSoldiers}, Enemies: {currentEnemySoldiers}");
-    }
+    }*/
 }

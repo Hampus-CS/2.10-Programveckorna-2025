@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LineManager : MonoBehaviour
 {
-    public enum LineState { Neutral, PlayerOwned, EnemyOwned, Contested }
+    /*public enum LineState { Neutral, PlayerOwned, EnemyOwned, Contested }
 
     [Header("Line Settings")]
     public Transform[] slots; // Slots belonging to this line
@@ -135,7 +135,7 @@ public class LineManager : MonoBehaviour
             if (slot != null)
                 Gizmos.DrawWireSphere(slot.position, 0.5f);
         }
-    }
+    }*/
 }
 
 

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class Artillery : MonoBehaviour
 {
-    public float GroundDistance = 20; // How high up the nuke will spawn
+    /*public float GroundDistance = 20; // How high up the nuke will spawn
     public GameObject ArtilleryMark;
     public GameObject artilleryPrefab;
     public float NukeImpactSpeed = 5f; //just how long itll take the nuke to hit the ground
@@ -84,5 +84,5 @@ public class Artillery : MonoBehaviour
     {
         ArtilleryMark.SetActive(true);
         Debug.Log("Show mark");
-    }
+    }*/
 }
