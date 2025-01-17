@@ -115,6 +115,21 @@ public class ShopUIManager : MonoBehaviour
             weapon.UpgradeRange();
         }
     }
+
+    public void ReduceWeaponCostByPercentage(float percentage)
+    {
+        if (percentage <= 0 || percentage > 100)
+        {
+            Debug.LogWarning("Invalid percentage for cost reduction.");
+            return;
+        }
+
+        float reductionFactor = 1 - (percentage / 100f);
+        weaponCost = Mathf.RoundToInt(weaponCost * reductionFactor);
+        Debug.Log($"Weapon cost reduced to {weaponCost}. Reduction: {percentage}%");
+    }
+
+
 }
 
 /// <summary>
