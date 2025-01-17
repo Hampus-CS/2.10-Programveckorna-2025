@@ -19,7 +19,7 @@ public class CameraScript : MonoBehaviour
             pos.z += panSpeed * Time.deltaTime;
         }
         
-        pos.z = Mathf.Clamp(pos.z, -panLimit, panLimit);
+        pos.z = Mathf.Clamp(pos.z, 15, 230);
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         pos.y -= scroll * scrollSpeed * 100f * Time.deltaTime;
