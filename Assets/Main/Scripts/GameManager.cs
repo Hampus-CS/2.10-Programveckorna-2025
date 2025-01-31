@@ -200,12 +200,15 @@ public class GameManager : MonoBehaviour
         if (existingWeapon != null)
         {
             existingWeapon.Quantity += initialQuantity;
+            Debug.Log($"Updated {weaponName} quantity to {existingWeapon.Quantity}");
         }
         else
         {
             stockpile.Add(new WeaponStock(weaponName, initialQuantity, tier, icon));
+            Debug.Log($"Added {weaponName} to stockpile with quantity {initialQuantity}");
         }
     }
+
 
     public WeaponStock GetBestWeapon() // "w" stands for weapon
     {
@@ -260,6 +263,14 @@ public class GameManager : MonoBehaviour
                         );
 
                         Debug.Log($"Bought weapon: {weaponComponent.GetUniqueName()}");
+                        Debug.Log($"Stockpile Count: {stockpile.Count}");
+
+                        // Update the stockpile UI
+                        Buttons buttons = FindObjectOfType<Buttons>();
+                        if (buttons != null)
+                        {
+                            buttons.UpdateStockpileUI();
+                        }
                     }
                     return;
                 }
@@ -271,6 +282,8 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("Not enough scrap.");
         }
     }
+
+
 
     public void UpgradeWeaponDamage(RectTransform currentImage, int cost)
     {
