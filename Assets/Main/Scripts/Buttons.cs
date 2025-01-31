@@ -21,8 +21,8 @@ public class Buttons : MonoBehaviour
     [SerializeField] private List<SkillButtonMapping> skillButtonMappings = new(); // Skill Buttons Mapping
 
     [Header("Stockpile UI")]
-    [SerializeField] private GameObject imageTemplate; // Prefab of the weapon image with text
-    [SerializeField] private Transform content; // Parent for dynamically created weapon images
+    [SerializeField] private GameObject weaponImageTemplate;  // Assign the prefab in Unity
+    [SerializeField] private Transform content;  // Parent where the prefab will be instantiated
     [SerializeField] private TMP_Text scrapText; // Scrap display text
 
     private List<GameObject> stockpileImages = new(); // List to track created images
@@ -288,51 +288,55 @@ public class Buttons : MonoBehaviour
 
     public void UpdateStockpileUI()
     {
-        Debug.Log("Starting UpdateStockpileUI");
+        Debug.Log("Updating Stockpile UI...");
 
-        // Clear old weapon images
-        foreach (var child in stockpileImages)
+        if (gameManager == null || weaponImageTemplate == null || content == null || scrapText == null)
         {
-            Destroy(child);
+            Debug.LogError("Missing UI references in Buttons.cs!");
+            return;
+        }
+
+        // Clear previous UI elements
+        foreach (var item in stockpileImages)
+        {
+            Destroy(item);
         }
         stockpileImages.Clear();
-
-        if (scrapText == null)
-        {
-            Debug.LogError("scrapText is null!");
-            return;
-        }
-        Debug.Log("scrapText is assigned.");
-
-        if (gameManager == null)
-        {
-            Debug.LogError("gameManager is null!");
-            return;
-        }
-        Debug.Log("gameManager is assigned.");
 
         // Update scrap text
         scrapText.text = $"Scrap: {gameManager.GetScrap()}";
 
-        if (imageTemplate == null)
-        {
-            Debug.LogError("imageTemplate is null!");
-            return;
-        }
-        Debug.Log("imageTemplate is assigned.");
-
-        if (content == null)
-        {
-            Debug.LogError("content is null!");
-            return;
-        }
-        Debug.Log("content is assigned.");
-
-        // Sort the stockpile by weapon tier (best to worst)
+        // Get sorted stockpile (higher tier first)
         var sortedStockpile = gameManager.stockpile.OrderByDescending(w => w.Tier).ToList();
 
-        Debug.Log($"Stockpile count: {sortedStockpile.Count}");
+        Debug.Log($"Stockpile UI Count: {sortedStockpile.Count}");
+
+        foreach (var weapon in sortedStockpile)
+        {
+            GameObject newItem = Instantiate(weaponImageTemplate, content);
+            newItem.SetActive(true);
+
+            // Assign Image and Text
+            Image weaponImage = newItem.transform.Find("WeaponImage")?.GetComponent<Image>();
+            TMP_Text quantityText = newItem.transform.Find("QuantityText")?.GetComponent<TMP_Text>();
+
+            if (weaponImage != null && weapon.Icon != null)
+            {
+                weaponImage.sprite = weapon.Icon;
+            }
+
+            if (quantityText != null)
+            {
+                quantityText.text = $"x{weapon.Quantity}";
+            }
+
+            Debug.Log($"Displaying {weapon.Name} x{weapon.Quantity} in UI");
+            stockpileImages.Add(newItem);
+        }
     }
+
+
+
 
     public void BuyWeapon(string tag, int cost)
     {
