@@ -12,6 +12,7 @@ public class SkillManager : MonoBehaviour
     TroopPersonalityScript troopPersonalityScript;
     ShopUIManager ShopUIManager;
 
+
     void Start()
     {
         // Initialize skills
@@ -148,6 +149,8 @@ public interface ISkill
 /// </summary>
 public abstract class BaseSkill : ISkill
 {
+    protected Buttons button;
+
     public string Name { get; private set; }
     public bool IsUnlocked { get; set; }
     public int Cost { get; private set; }
@@ -191,13 +194,17 @@ public abstract class BaseSkill : ISkill
 /// 
 /// </summary>
 
+
+
 public class WeaponSmith : BaseSkill
 {
     public WeaponSmith(int cost) : base("WeaponSmith", cost, requiresTarget: false) { }
 
     protected override void Execute(GameObject target = null)
     {
-        Debug.Log("Weapon crafting system unlocked.");
+        button.button[2].gameObject.SetActive(true);
+        button.button[3].gameObject.SetActive(true);
+        Debug.Log("Weapon upgrading system unlocked.");
         // Logic to unlock weapon crafting system globally
     }
 }
