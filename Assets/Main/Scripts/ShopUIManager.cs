@@ -8,7 +8,7 @@ public class ShopUIManager : MonoBehaviour
     public GameObject shopButton;
     public GameObject shopPanel;
     public RectTransform[] images;//assign the images recttransform/hitbox in inspector
-    public float moveDistance = 200f; //how far the images will move 
+    private float moveDistance = 1000f; //how far the images will move 
     public float moveDuration = 0.5f; //how long it will take the images
     private Vector3[] initialPositions;
     private int currentIndex = 0; //tracks what image is being wieved so u cant go to far right/left
@@ -25,13 +25,13 @@ public class ShopUIManager : MonoBehaviour
             initialPositions[i] = images[i].anchoredPosition;
         }
     }
-   
+
     public void BuyWeaponButton() //the button used to by weapons, checks what image is selected for the moment
     {
         RectTransform currentImage = GetCurrentImage();
         Debug.Log($"Current image: {currentImage.name}");
 
-        if(currentImage == null)
+        if (currentImage == null)
         {
             Debug.LogWarning("No weapon image selected rn");
             return;
@@ -49,19 +49,19 @@ public class ShopUIManager : MonoBehaviour
 
     public void MoveRight()// If this void is called the images will move right
     {
-        if(currentIndex >= images.Length -1) // Chechs if index has reached its maximum value to stop from scrolling
+        if (currentIndex >= images.Length - 1) // Chechs if index has reached its maximum value to stop from scrolling
         {
             Debug.Log("Cant scroll further right");
             return;
         }
         currentIndex++;
-        for(int i = 0; i < images.Length; i++)
+        for (int i = 0; i < images.Length; i++)
         {
             Vector3 targetPosition = initialPositions[i] - Vector3.right * moveDistance * currentIndex;
             StartCoroutine(MoveImage(images[i], targetPosition));
         }
     }
-  
+
     public void MoveLeft()//if this void is called the images will move left
     {
         if (currentIndex <= 0)//cant scroll to far left
