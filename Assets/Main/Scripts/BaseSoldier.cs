@@ -63,8 +63,11 @@ public class BaseSoldier : MonoBehaviour
 
     private void UpdateWaypoints()
     {
-        // Sort waypoints in a fixed order (e.g., by name)
-        waypoints.Sort((a, b) => a.name.CompareTo(b.name));
+        Vector3 position = transform.position;
+
+        waypoints.Sort((a, b) =>
+            Vector3.Distance(a.transform.position, position)
+            .CompareTo(Vector3.Distance(b.transform.position, position)));
 
         // Reverse the order for hostile units to traverse the waypoints backward
         if (isHostile)
