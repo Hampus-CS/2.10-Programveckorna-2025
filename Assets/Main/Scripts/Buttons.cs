@@ -221,7 +221,10 @@ public class Buttons : MonoBehaviour
     {
         menus[22].SetActive(false); // Close shop
     }
-
+    public void OnBuyWeaponButton(string tag, int cost)
+    {
+        GameManager.Instance.BuyWeapon(tag, cost);
+    }
     public void SkillTree()
     {
         Time.timeScale = 0;
@@ -262,7 +265,6 @@ public class Buttons : MonoBehaviour
             if (skillManager != null)
             {
                 skillManager.Unlock(skillName);
-                print($"Unlocked {skillName}");
                 isSkillInfoActive = false;
             }
             else
@@ -336,9 +338,12 @@ public class Buttons : MonoBehaviour
             stockpileImages.Add(newItem);
         }
     }
-
-
-
+    public void EnableWeaponButtons()
+    {
+        button[2].gameObject.SetActive(true);
+        button[3].gameObject.SetActive(true);
+        print("upgraderingar aktiverade");
+    }
 
     public void BuyWeapon(string tag, int cost)
     {

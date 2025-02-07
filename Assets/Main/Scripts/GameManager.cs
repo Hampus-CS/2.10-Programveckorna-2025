@@ -2,11 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     [Header("Important Values")]
-    [SerializeField] private int scrap = 1000; // Currency for the player
+    public int scrap = 1000; // Currency for the player
     [SerializeField] private int rp; // Research
     [SerializeField] private int mp; // Manpower
 
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     [Header("Weapon Management")]
     public List<Weapon> purchasedWeapons = new List<Weapon>(); // List of purchased weapons
     public List<WeaponStock> stockpile = new List<WeaponStock>(); // Unified weapon stockpile
+    public List<GameObject> weaponPanels; // Assign the 3 weapon GameObjects in the Inspector
     public List<WeaponPrefabInfo> weaponPrefabs; // List of weapon prefabs
 
     [Header("References")]
@@ -247,31 +249,22 @@ public class GameManager : MonoBehaviour
             {
                 if (weaponInfo.tag == tag)
                 {
-                    GameObject newWeapon = Instantiate(weaponInfo.weaponPrefab);
-                    Weapon weaponComponent = newWeapon.GetComponent<Weapon>();
-
-                    if (weaponComponent != null)
+                    GameObject weaponPanel = weaponPanels.Find(panel => panel.CompareTag(tag));
+                    if (weaponPanel != null)
                     {
-                        purchasedWeapons.Add(weaponComponent);
+                        weaponPanel.SetActive(true);
 
-                        // Add weapon to stockpile and include the icon
-                        AddWeaponToStockpile(
-                            weaponComponent.GetUniqueName(),
-                            1, // Quantity
-                            weaponComponent.GetDamage(), // Tier
-                            weaponComponent.Icon // Pass the icon from the prefab
-                        );
+                        TMP_Text quantityText = weaponPanel.transform.Find("QuantityText").GetComponent<TMP_Text>();
+                        int currentQuantity = int.Parse(quantityText.text);
+                        quantityText.text = (currentQuantity + 1).ToString();
 
-                        Debug.Log($"Bought weapon: {weaponComponent.GetUniqueName()}");
-                        Debug.Log($"Stockpile Count: {stockpile.Count}");
-
-                        // Update the stockpile UI
-                        Buttons buttons = FindObjectOfType<Buttons>();
-                        if (buttons != null)
-                        {
-                            buttons.UpdateStockpileUI();
-                        }
+                        Debug.Log($"Bought weapon: {tag}, New quantity: {quantityText.text}");
                     }
+                    else
+                    {
+                        Debug.LogWarning($"No weapon panel found with the tag {tag}");
+                    }
+
                     return;
                 }
             }
@@ -282,8 +275,6 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("Not enough scrap.");
         }
     }
-
-
 
     public void UpgradeWeaponDamage(RectTransform currentImage, int cost)
     {

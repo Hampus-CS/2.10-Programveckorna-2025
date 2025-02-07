@@ -98,6 +98,7 @@ public class ShopUIManager : MonoBehaviour
 
     public void UpgradeCurrentWeaponDamage()
     {
+
         RectTransform currentImage = GetCurrentImage();
         Weapon weapon = GameManager.Instance.GetWeaponFromImage(currentImage);
         if (weapon != null)
@@ -136,7 +137,7 @@ public class ShopUIManager : MonoBehaviour
 /// Key Features:
 /// 
 ///     Weapon Purchasing:
-///         - Allows players to buy weapons through the shop UI.
+///         - Allows players to weweapons through the shop UI.
 ///         - Automatically deducts scrap and updates the stockpile.
 /// 
 ///     Weapon Navigation:

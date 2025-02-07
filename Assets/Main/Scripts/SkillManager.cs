@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using System.IO;
 using Unity.Burst.Intrinsics;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class SkillManager : MonoBehaviour
 {
-    private Dictionary<string, ISkill> skills = new();
+    public Dictionary<string, ISkill> skills = new();
 
     TroopPersonalityScript troopPersonalityScript;
     ShopUIManager ShopUIManager;
-
 
     void Start()
     {
@@ -55,6 +55,7 @@ public class SkillManager : MonoBehaviour
             Debug.LogWarning($"Skill '{skill.Name}' already exists.");
         }
     }
+
     public void Unlock(string skillName)
     {
         if (skills.TryGetValue(skillName, out ISkill skill))
@@ -64,6 +65,7 @@ public class SkillManager : MonoBehaviour
                 if (GameManager.Instance.TrySpendScrap(skill.Cost))
                 {
                     skill.Unlock();
+
                 }
                 else
                 {
@@ -100,8 +102,6 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-
-
     public void DisplaySkills()
     {
         Debug.Log("Skills Status:");
@@ -110,30 +110,12 @@ public class SkillManager : MonoBehaviour
             Debug.Log($"{skill.Name} - {(skill.IsUnlocked ? "Unlocked" : $"Locked (Cost: {skill.Cost})")}");
         }
     }
-
-
-    public void UseStandardisedProduction()
-    {
-        ShopUIManager shopUIManager = FindObjectOfType<ShopUIManager>(); // Locate the ShopUIManager in the scene
-        if (shopUIManager != null)
-        {
-            StandardisedProduction standardisedProduction = new StandardisedProduction(100);
-            standardisedProduction.Unlock(); // Unlock the skill before using it
-            standardisedProduction.Use();   // Use the skill (internally calls Execute)
-        }
-        else
-        {
-            Debug.LogError("ShopUIManager not found in the scene.");
-        }
-    }
-
-
-
 }
 
 /// <summary>
 /// Interface for all skills
 /// </summary>
+/// 
 public interface ISkill
 {
     string Name { get; }
@@ -164,12 +146,6 @@ public abstract class BaseSkill : ISkill
         IsUnlocked = false;
     }
 
-    public void Unlock()
-    {
-        IsUnlocked = true;
-        Debug.Log($"Skill '{Name}' has been unlocked.");
-    }
-
     public void Use(GameObject target = null)
     {
         if (IsUnlocked)
@@ -179,6 +155,7 @@ public abstract class BaseSkill : ISkill
                 Debug.LogWarning($"Skill '{Name}' requires a target, but none was provided.");
                 return;
             }
+
             Execute(target);
         }
         else
@@ -188,42 +165,55 @@ public abstract class BaseSkill : ISkill
     }
 
     protected abstract void Execute(GameObject target = null);
+
+    public void Unlock()
+    {
+        Use();
+    }
 }
 
 /// <summary>
-/// 
+/// Skills
 /// </summary>
-
 
 
 public class WeaponSmith : BaseSkill
 {
-    public WeaponSmith(int cost) : base("WeaponSmith", cost, requiresTarget: false) { }
+    public WeaponSmith(int cost) : base("WeaponSmith", cost) { }
 
     protected override void Execute(GameObject target = null)
     {
-        button.button[2].gameObject.SetActive(true);
-        button.button[3].gameObject.SetActive(true);
-        Debug.Log("Weapon upgrading system unlocked.");
-        // Logic to unlock weapon crafting system globally
+        Buttons buttons = Object.FindObjectOfType<Buttons>();
+        if (buttons != null)
+        {
+            buttons.EnableWeaponButtons();
+            Debug.Log("Weapon upgrades are now available.");
+        }
+        else
+        {
+            Debug.LogWarning("Buttons reference not found.");
+        }
     }
 }
 
 public class LongerBarrels : BaseSkill
 {
-    public LongerBarrels(int cost) : base("LongerBarrels", cost, requiresTarget: true) { }
+    public LongerBarrels(int cost) : base("LongerBarrels", cost) { }
 
     protected override void Execute(GameObject target)
     {
-        TroopPersonalityScript troopPersonality = target.GetComponent<TroopPersonalityScript>();
-        if (troopPersonality != null && troopPersonality.isFriendly)
+        if (target != null)
         {
-            troopPersonality.range += 1;
-            Debug.Log($"Increased range for {target.name} to {troopPersonality.range}");
-        }
-        else
-        {
-            Debug.LogWarning($"Target {target.name} is not a friendly soldier.");
+            TroopPersonalityScript troopPersonality = target.GetComponent<TroopPersonalityScript>();
+            if (troopPersonality != null && troopPersonality.isFriendly)
+            {
+                troopPersonality.range += 1;
+                Debug.Log($"Increased range for {target.name} to {troopPersonality.range}");
+            }
+            else
+            {
+                Debug.LogWarning($"Target {target.name} is not a friendly soldier.");
+            }
         }
     }
 }
@@ -234,62 +224,46 @@ public class HigherQualityAmmunition : BaseSkill
 
     protected override void Execute(GameObject target)
     {
-        // Example of applying damage increase
-        Weapon weapon = target.GetComponentInChildren<Weapon>();
-        if (weapon != null)
+        if (target != null)
         {
-            weapon.UpgradeDamage();
-            Debug.Log($"Increased weapon damage for {target.name}.");
+            Weapon weapon = target.GetComponentInChildren<Weapon>();
+            if (weapon != null)
+            {
+                weapon.UpgradeDamage();
+                Debug.Log($"Increased weapon damage for {target.name}.");
+            }
         }
     }
 }
 
 public class StandardisedProduction : BaseSkill
 {
-    public StandardisedProduction(int cost) : base("StandardisedProduction", cost, requiresTarget: false) { }
+    public StandardisedProduction(int cost) : base("StandardisedProduction", cost) { }
 
     protected override void Execute(GameObject target = null)
     {
-        ShopUIManager shopUIManager = Object.FindObjectOfType<ShopUIManager>();
-        if (shopUIManager != null)
-        {
-            shopUIManager.ReduceWeaponCostByPercentage(25);
-            Debug.Log("Weapon costs reduced by 25%.");
-        }
-        else
-        {
-            Debug.LogError("ShopUIManager not found. Cannot apply cost reduction.");
-        }
+        GameManager.Instance.scrap += 100;
+        Debug.Log("Weapon costs reduced by 25%.");
     }
 }
 
 public class RapidFire : BaseSkill
 {
-    public RapidFire(int cost) : base("RapidFire", cost, requiresTarget: true) { }
+    public RapidFire(int cost) : base("RapidFire", cost) { }
 
     protected override void Execute(GameObject target)
     {
-        TroopPersonalityScript troopPersonality = target.GetComponent<TroopPersonalityScript>();
-        if (troopPersonality != null && troopPersonality.isFriendly)
+        if (target != null)
         {
             Weapon weapon = target.GetComponentInChildren<Weapon>();
             if (weapon != null)
             {
-                weapon.shootCoolDown *= 0.8f; // Increase fire rate
+                weapon.shootCoolDown *= 0.8f;
                 Debug.Log($"Increased fire rate for {target.name}. New cooldown: {weapon.shootCoolDown}");
             }
-            else
-            {
-                Debug.LogWarning($"No weapon found for {target.name}.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"Target {target.name} is not a friendly soldier.");
         }
     }
 }
-
 public class LargerAmmunitionCapacity : BaseSkill
 {
     public LargerAmmunitionCapacity(int cost) : base("LargerAmmunitionCapacity", cost, requiresTarget: true) { }
