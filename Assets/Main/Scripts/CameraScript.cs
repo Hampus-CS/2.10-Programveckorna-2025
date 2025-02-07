@@ -6,11 +6,6 @@ public class CameraScript : MonoBehaviour
     public float panLimit = 50f;
     public float scrollSpeed = 10;
 
-    private void Start()
-    {
-        transform.position = new Vector3(110, 30, 50);
-    }
-
     void Update()
     {
         Vector3 pos = transform.position;
@@ -24,8 +19,7 @@ public class CameraScript : MonoBehaviour
             pos.z += panSpeed * Time.deltaTime;
         }
         
-        pos.z = Mathf.Clamp(pos.z, 15, 230);
-        pos.x = Mathf.Clamp(pos.x, 100, 115);
+        pos.z = Mathf.Clamp(pos.z, -80, 11);
         pos.y = Mathf.Clamp(pos.y, 25, 35);
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");

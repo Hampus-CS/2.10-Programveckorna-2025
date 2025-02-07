@@ -15,6 +15,9 @@ public class BaseSoldier : MonoBehaviour
     private RangeColliderScript rangeColliderScript;
     public List<GameObject> waypoints = new List<GameObject>();
 
+    private GameObject playerBase;
+    private GameObject enemyBase;
+
     public ParticleSystem bloodPartiles;
 
     private bool isTimerRunning = false;
@@ -45,6 +48,15 @@ public class BaseSoldier : MonoBehaviour
         agent.isStopped = true;
         agent.ResetPath();
 
+        // Find the base GameObjects by name in the scene
+        playerBase = GameObject.Find("PlayerBase"); // Ensure this matches the exact GameObject name
+        enemyBase = GameObject.Find("EnemyBase");
+
+        if (playerBase == null || enemyBase == null)
+        {
+            Debug.LogError("PlayerBase or EnemyBase GameObjects not found in the scene!");
+        }
+
         GameObject[] findWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
         foreach (GameObject waypoint in findWaypoints)
         {
@@ -60,10 +72,11 @@ public class BaseSoldier : MonoBehaviour
         Debug.Log($"isHostile after Start logic: {isHostile}. Starting at waypoint index: {currentWaypointIndex}");
     }
 
-
+    /*
     private void UpdateWaypoints()
     {
         Vector3 position = transform.position;
+        Vector3 basePos = new Vector3(-6.58f, 10f, 10f);
 
         waypoints.Sort((a, b) =>
             Vector3.Distance(a.transform.position, position)
@@ -77,65 +90,91 @@ public class BaseSoldier : MonoBehaviour
 
         Debug.Log($"Waypoints updated for {(isHostile ? "Enemy" : "Player")}. Waypoint count: {waypoints.Count}");
     }
+    */
+
+    private void UpdateWaypoints()
+    {
+        if (playerBase == null || enemyBase == null)
+        {
+            Debug.LogError("Base GameObjects are not assigned or found!");
+            return;
+        }
+
+        Vector3 position = transform.position;
+
+        // Sorting waypoints based on distance
+        waypoints.Sort((a, b) =>
+            isHostile
+                ? Vector3.Distance(b.transform.position, position).CompareTo(Vector3.Distance(a.transform.position, position)) // Enemies: farthest first
+                : Vector3.Distance(a.transform.position, position).CompareTo(Vector3.Distance(b.transform.position, position)) // Players: closest first
+        );
+
+        Debug.Log($"Waypoints updated for {(isHostile ? "Enemy" : "Player")}. Waypoint count: {waypoints.Count}");
+    }
 
 
+    private void AddWaypoint(Vector3 position, string name, bool atStart)
+    {
+        GameObject waypoint = new GameObject(name);
+        waypoint.transform.position = position;
 
+        if (atStart)
+            waypoints.Insert(0, waypoint);
+        else
+            waypoints.Add(waypoint);
+    }
 
     private CoverScript coverScript;
 
-    // Modified MoveForwards for direction adjustment
+    // Modified MoveForwards for direction adjustment //
     public void MoveForwards()
     {
         if (!holdPosition && canMove)
         {
             StartCoroutine(TimerBetweenNavigation());
 
-            // Check if we have valid waypoints
-            if (waypoints.Count == 0 || currentWaypointIndex < 0 || currentWaypointIndex >= waypoints.Count)
+            // Check for valid waypoints
+            if (currentWaypointIndex < 0 || currentWaypointIndex >= waypoints.Count)
             {
-                Debug.Log($"No valid waypoints for movement. Current index: {currentWaypointIndex}");
-                agent.isStopped = true;
+                // Move directly to the target base when waypoints are exhausted
+                GameObject targetBase = isHostile ? playerBase : enemyBase;
+                agent.isStopped = false;
+                agent.SetDestination(targetBase.transform.position);
+                animator.SetBool("Walk", true);
+                Debug.Log($"Moving directly to {(isHostile ? "PlayerBase" : "EnemyBase")}.");
                 return;
             }
 
+            // Move towards current waypoint
             GameObject targetWaypoint = waypoints[currentWaypointIndex];
             float distanceToWaypoint = Vector3.Distance(transform.position, targetWaypoint.transform.position);
 
-            // If the enemy reaches the current waypoint, update the index
             if (distanceToWaypoint <= agent.stoppingDistance)
             {
-                Debug.Log($"Reached waypoint: {targetWaypoint.name}. Updating index.");
-
                 if (isHostile)
-                {
-                    currentWaypointIndex--; // Enemies move backward through the list
-                }
+                    currentWaypointIndex = Mathf.Max(0, currentWaypointIndex - 1); // Prevent negative index
                 else
-                {
-                    currentWaypointIndex++; // Players move forward through the list
-                }
-
-                // Stop if the index is out of bounds
-                if (currentWaypointIndex < 0 || currentWaypointIndex >= waypoints.Count)
-                {
-                    Debug.Log("No more waypoints to move towards. Stopping.");
-                    agent.isStopped = true;
-                    animator.SetBool("Walk", false);
-                    int rand = Random.Range(0, walkingSounds.Count); // Random index
-                    audioSource.PlayOneShot(walkingSounds[rand]);    // Play the selected sound
-                    return;
-                }
-
-                // Update the target waypoint
-                targetWaypoint = waypoints[currentWaypointIndex];
-                Debug.Log($"Updated target waypoint: {targetWaypoint.name}. New index: {currentWaypointIndex}");
+                    currentWaypointIndex = Mathf.Min(waypoints.Count - 1, currentWaypointIndex + 1);
             }
 
-            // Move toward the current waypoint
-            agent.isStopped = false;
-            agent.SetDestination(targetWaypoint.transform.position);
-            animator.SetBool("Walk", true);
-            Debug.Log($"Moving to waypoint: {targetWaypoint.name}, Distance: {distanceToWaypoint}");
+            // Update the target
+            if (currentWaypointIndex >= 0 && currentWaypointIndex < waypoints.Count)
+            {
+                targetWaypoint = waypoints[currentWaypointIndex];
+                agent.isStopped = false;
+                agent.SetDestination(targetWaypoint.transform.position);
+                animator.SetBool("Walk", true);
+                Debug.Log($"Moving to waypoint: {targetWaypoint.name}");
+            }
+            else
+            {
+                // Move directly to the target base when waypoints are exhausted
+                GameObject targetBase = isHostile ? playerBase : enemyBase;
+                agent.isStopped = false;
+                agent.SetDestination(targetBase.transform.position);
+                animator.SetBool("Walk", true);
+                Debug.Log($"Moving directly to {(isHostile ? "PlayerBase" : "EnemyBase")}.");
+            }
         }
     }
 
