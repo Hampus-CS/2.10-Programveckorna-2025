@@ -62,8 +62,8 @@ public class Buttons : MonoBehaviour
 
         button[0].gameObject.SetActive(true);
         button[1].gameObject.SetActive(false);
-        button[2].gameObject.SetActive(false);
-        button[3].gameObject.SetActive(false);
+        //button[2].gameObject.SetActive(false);
+        //button[3].gameObject.SetActive(false);
 
         // Reg skills
         skillInfoHandlers[1] = new SkillInfo(6); // Skill 1 Info
