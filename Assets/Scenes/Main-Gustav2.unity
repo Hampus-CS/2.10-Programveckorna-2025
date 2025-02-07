@@ -3611,7 +3611,7 @@ Transform:
   m_GameObject: {fileID: 258304481}
   serializedVersion: 2
   m_LocalRotation: {x: 0.21516015, y: -0.67357713, z: 0.21516015, w: 0.67357713}
-  m_LocalPosition: {x: 107.6, y: 26.6, z: 39.9}
+  m_LocalPosition: {x: 39.5, y: 26.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12323,7 +12323,6 @@ MonoBehaviour:
   - {fileID: 1384917909}
   - {fileID: 1394737216}
   - {fileID: 848403886}
-  moveDistance: 200
   moveDuration: 0.5
   weaponCost: 20
   buttons: {fileID: 1688369878}
@@ -16352,7 +16351,7 @@ Transform:
   m_GameObject: {fileID: 1262651793}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.58, y: 10, z: 7.67}
+  m_LocalPosition: {x: -6.58, y: 10, z: 0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22364,7 +22363,7 @@ MonoBehaviour:
     skillName: RooftopKorean
   - button: {fileID: 2134710504}
     skillName: IncreasedTrainFirepower
-  imageTemplate: {fileID: 5894300402629643554, guid: 740635392ea4b294bad84f64b3ad0e64, type: 3}
+  weaponImageTemplate: {fileID: 0}
   content: {fileID: 1513381645}
   scrapText: {fileID: 1983590776}
   saveHandler: {fileID: 318974227}
@@ -25006,7 +25005,7 @@ Transform:
   m_GameObject: {fileID: 1974616109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.58, y: 10, z: 0}
+  m_LocalPosition: {x: -6.58, y: 10, z: 7.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

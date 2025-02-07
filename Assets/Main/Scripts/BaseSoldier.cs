@@ -151,12 +151,10 @@ public class BaseSoldier : MonoBehaviour
 
             if (distanceToWaypoint <= agent.stoppingDistance)
             {
-                Debug.Log($"Reached waypoint: {targetWaypoint.name}. Updating index.");
-
                 if (isHostile)
-                    currentWaypointIndex--; // Move backward for enemies
+                    currentWaypointIndex = Mathf.Max(0, currentWaypointIndex - 1); // Prevent negative index
                 else
-                    currentWaypointIndex++; // Move forward for players
+                    currentWaypointIndex = Mathf.Min(waypoints.Count - 1, currentWaypointIndex + 1);
             }
 
             // Update the target
