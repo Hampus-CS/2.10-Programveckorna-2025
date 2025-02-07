@@ -65,6 +65,7 @@ public class SkillManager : MonoBehaviour
                 if (GameManager.Instance.TrySpendScrap(skill.Cost))
                 {
                     skill.Unlock();
+                    skill.Use();
 
                 }
                 else
@@ -168,7 +169,8 @@ public abstract class BaseSkill : ISkill
 
     public void Unlock()
     {
-        Use();
+        IsUnlocked = true;
+        Debug.Log($"Skill '{Name}' unlocked.");
     }
 }
 
