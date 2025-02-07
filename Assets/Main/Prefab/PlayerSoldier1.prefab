@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebff88bb68194684dbe9cc6a37bd7c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 75
+  range: 10
   damageUpgradePoints: 2
   rangeUpgradePoints: 3
   bulletPrefab: {fileID: 1558594641397180924, guid: 059e08270c479d94c93424610934a633, type: 3}

@@ -28,8 +28,8 @@ public class RangeColliderScript : MonoBehaviour
     {
         if (isReady)
         {
-            EnemyByDistance();
             RemoveMissingObjects();
+            EnemyByDistance();
         }
     }
 
@@ -63,6 +63,7 @@ public class RangeColliderScript : MonoBehaviour
 
     private void EnemyByDistance()
     {
+        RemoveMissingObjects();
         triggers.Sort((enemy1, enemy2) =>
         Vector3.Distance(transform.position, enemy1.transform.position)
         .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
@@ -75,10 +76,13 @@ public class RangeColliderScript : MonoBehaviour
 
     private IEnumerator wait()
     {
+        collider.enabled = false;
+        isReady = false;
         yield return new WaitForSeconds(2);
         isFriendly = personality.isFriendly;
         isReady = true;
-        range = weapon.range;
+        range = weapon.range2;
         collider.radius = range;
+        collider.enabled = true;
     }
 }

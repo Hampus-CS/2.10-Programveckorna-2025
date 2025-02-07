@@ -34,6 +34,16 @@ public class BaseSoldier : MonoBehaviour
 
     Animator animator;
 
+    private float agentTimer = 4f;
+
+
+    private IEnumerator AgentTimer()
+    {
+        agent.enabled = false;
+        yield return new WaitForSeconds(agentTimer);
+        agent.enabled = true;
+    }
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -434,7 +444,7 @@ public class BaseSoldier : MonoBehaviour
         canMove = false;
         Debug.Log("Timer started. Movement disabled.");
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.5f);
 
         canMove = true;
         isTimerRunning = false;

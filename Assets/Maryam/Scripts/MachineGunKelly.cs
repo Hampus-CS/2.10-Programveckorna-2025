@@ -56,21 +56,20 @@ public class MachineGunKelly : MonoBehaviour //går inte att ändra namn tyvärr
             GameObject bullet = Instantiate(bulletPrefab, cannonBarrel.position, cannonBarrel.rotation);
             Bullet bulletScript = bullet.GetComponent<Bullet>();
             bulletScript.machingunBUllet = true;
+            bulletScript.isFriendly = true;
 
             if (uppgrade)
             {
-                bulletScript.damage = 2;
+                bulletScript.damage = 15;
                 bulletScript.range = 100;
-                bulletScript.speed = 45;
+                bulletScript.speed = 75;
             }
             else
             {
-                bulletScript.damage = 1;
+                bulletScript.damage = 8;
                 bulletScript.range = 100;
-                bulletScript.speed = 35;
+                bulletScript.speed = 55;
             }
-
-            bullet.transform.localScale = new Vector3(6, 1, 2);
         }
     }
 

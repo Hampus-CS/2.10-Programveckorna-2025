@@ -36,7 +36,7 @@ public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
         stress = 0;
         range = 10;
         suppresion = 0;
-        accuracy = 0.5f;
+        accuracy = 2f;
         Personality();
 
         startStress = stress;
@@ -60,12 +60,12 @@ public class TroopPersonalityScript : MonoBehaviour, ITroopInterfaceScript
                 break;
             case 3:
                 personality = "Sharpshooter";
-                accuracy -= 0.08f;
+                accuracy += 0.08f;
                 //agent.speed *= 0.85f;
                 break;
             case 4:
                 personality = "Triggerhappy";
-                accuracy += 0.1f;
+                accuracy -= 0.1f;
                 range += 5;
                 break;
             case 5:

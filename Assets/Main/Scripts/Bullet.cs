@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 10f; //bulet speed
+    public float speed = 20f; //bulet speed
     public float range;  //bullet range
     public int damage; //bullet damage
 
@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
         startPosition = transform.localPosition; //get starting position to calculate how far the buullet has traveled
         if (!machingunBUllet)
         {
-           range = weapon.range;
+          range = weapon.range2;
         }
     }
     void Update()
@@ -43,7 +43,7 @@ public class Bullet : MonoBehaviour
             Debug.Log("Bullet hit: " + other.gameObject.name);
             Destroy(gameObject); // Destroy the bullet
         }
-        if (isFriendly && other.gameObject.CompareTag("FriendlyTroop"))
+        if (!isFriendly && other.gameObject.CompareTag("FriendlyTroop"))
         {
             if (soldier != null)
             {

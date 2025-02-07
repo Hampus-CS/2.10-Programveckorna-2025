@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Weapon : MonoBehaviour
 {
     private int damage = 10; //set to private so weapons stats can ony be modified from weapon gameobject or weapon script
-    public float range = 60;
+    public float range2 = 20;
 
     [Header("Upgrade Points")] //to claridy what these ints are for
     public int damageUpgradePoints = 2; //the amount of points the weapons damage will increase with every update
@@ -28,7 +28,7 @@ public class Weapon : MonoBehaviour
     public Sprite Icon;
     private bool isFriendly;
 
-    private float accuracy = 0.2f;
+    private float accuracy = 5f;
     private TroopPersonalityScript personalityScript;
     private RangeColliderScript rangeColliderScript;
 
@@ -106,7 +106,7 @@ public class Weapon : MonoBehaviour
                 if (bulletScript != null)
                 {
                     bulletScript.damage = damage; //bullets damage is equal to weapon damage
-                    bulletScript.range = range; //bullets range is equal to weapons range
+                    bulletScript.range = range2; //bullets range is equal to weapons range
                     bulletScript.isFriendly = isFriendly;
                 }
                 else
@@ -153,7 +153,7 @@ public class Weapon : MonoBehaviour
         Weapon newWeapon = new Weapon
         {
             damage = this.damage,
-            range = this.range,
+            range2 = this.range2,
 
             bulletPrefab = this.bulletPrefab
         };
@@ -195,14 +195,14 @@ public class Weapon : MonoBehaviour
     {
         if (GameManager.Instance.TrySpendScrap(UpgradeRangeCost))
         {
-            range += rangeUpgradePoints;
+            range2 += rangeUpgradePoints;
             UpgradeRangeCost += costIncreaseFactor; // Increase the cost for the next upgrade
 
             // Update UI
             GameManager.Instance.weaponUI.UpdateCurrency(GameManager.Instance.GetScrap());
             GameManager.Instance.weaponUI.UpdateRangeUpgrade(UpgradeRangeCost);
 
-            Debug.Log($"Upgraded range. New range: {range}, New upgrade cost: {UpgradeRangeCost}");
+            Debug.Log($"Upgraded range. New range: {range2}, New upgrade cost: {UpgradeRangeCost}");
         }
         else
         {
@@ -213,7 +213,7 @@ public class Weapon : MonoBehaviour
 
     //public getters for weapon stats
     public int GetDamage() => damage;
-    public float GetRange() => range;
+    public float GetRange() => range2;
 
     public int GetDamageUpgradePoints() => damageUpgradePoints;
     public int GetRangeUpgradePoints() => rangeUpgradePoints;

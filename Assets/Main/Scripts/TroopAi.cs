@@ -35,11 +35,12 @@ public class TroopAi : MonoBehaviour
         personalityScript = GetComponent<TroopPersonalityScript>();
         weapon = GetComponent<Weapon>();
 
+        Time.fixedDeltaTime = 1 / 4f;
 
         isFriendly = personalityScript.isFriendly;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKeyUp(KeyCode.Space) && !BaseSoldier.holdPosition)
         {
@@ -119,7 +120,10 @@ public class TroopAi : MonoBehaviour
     private void Shoot()
     {
         animator.SetBool("Shoot", true);
-        weapon.Shoot(rangeColliderScript.triggers[0].transform.position);
+        if (rangeColliderScript.triggers[0]  != null)
+        {
+            weapon.Shoot(rangeColliderScript.triggers[0].transform.position);
+        }
     }
 
     private void MoveForward()
@@ -135,6 +139,9 @@ public class TroopAi : MonoBehaviour
 
     private void RotateTowardsEnemy()
     {
-        BaseSoldier.RotateToEnemy(rangeColliderScript.triggers[0].transform.position);
+        if (rangeColliderScript.triggers[0]  != null)
+        {
+            BaseSoldier.RotateToEnemy(rangeColliderScript.triggers[0].transform.position);
+        }
     }
 }
