@@ -17,13 +17,13 @@ public class StockpileManager : MonoBehaviour
     public void BuyWeapon(string weaponName, int cost)
     {
         gameManager.BuyWeapon(weaponName, cost);
-        buttons.UpdateStockpileUI();
+        //buttons.UpdateStockpileUI();
     }
 
     public void UseWeapon(string weaponName)
     {
         gameManager.UseWeapon(weaponName);
-        buttons.UpdateStockpileUI();
+        //buttons.UpdateStockpileUI();
     }
 
 }

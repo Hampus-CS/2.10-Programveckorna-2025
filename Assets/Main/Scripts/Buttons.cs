@@ -102,7 +102,7 @@ public class Buttons : MonoBehaviour
          5 = SidePanel
         */
 
-        UpdateStockpileUI();
+        //UpdateStockpileUI();
     }
 
     /// <summary>
@@ -197,7 +197,7 @@ public class Buttons : MonoBehaviour
     {
         gameManager.LoadGame(saveHandler);
         settings.LoadSettings(saveHandler);
-        UpdateStockpileUI(); // Directly update the UI here
+        //UpdateStockpileUI(); // Directly update the UI here
         Debug.Log("Game and settings loaded.");
     }
 
@@ -296,9 +296,9 @@ public class Buttons : MonoBehaviour
         Time.timeScale = 0;
         menus[0].SetActive(false); // Close Main menu
         menus[5].SetActive(true); // Open Weapon menu
-        UpdateStockpileUI();
+        //UpdateStockpileUI();
     }
-
+    /*
     public void UpdateStockpileUI()
     {
         Debug.Log("Updating Stockpile UI...");
@@ -347,24 +347,32 @@ public class Buttons : MonoBehaviour
             stockpileImages.Add(newItem);
         }
     }
+    */
     public void EnableWeaponButtons()
     {
         button[2].gameObject.SetActive(true);
         button[3].gameObject.SetActive(true);
     }
 
-    public void BuyWeapon(string tag, int cost)
+    public void BuyWeapon(string weaponName, int cost)
     {
         if (gameManager != null)
         {
-            gameManager.BuyWeapon(tag, cost);
-            UpdateStockpileUI();
+            if (gameManager.TrySpendScrap(cost)) // Check if the player can afford it
+            {
+                gameManager.BuyWeapon(weaponName, cost);
+            }
+            else
+            {
+                Debug.LogWarning("Not enough scrap to buy the weapon.");
+            }
         }
         else
         {
             Debug.LogError("GameManager reference is not assigned in Buttons.cs.");
         }
     }
+
 }
 
 /// <summary>

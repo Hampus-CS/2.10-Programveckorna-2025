@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class ShopUIManager : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class ShopUIManager : MonoBehaviour
     public int weaponCost = 20;
     public Buttons buttons;
 
+    private string[] weaponNames = { "Pistol", "Rifle", "Shotgun" };
+
+    public TMP_Text weaponDisplayText; // Displays current weapon
+    public TMP_Text[] weaponCountTexts; // Assign Weapon1, Weapon2, Weapon3 TMP_Texts
+
 
     public void Start()
     {
@@ -24,37 +30,46 @@ public class ShopUIManager : MonoBehaviour
         {
             initialPositions[i] = images[i].anchoredPosition;
         }
+
+        UpdateWeaponDisplay();
     }
 
-    public void BuyWeaponButton() //the button used to by weapons, checks what image is selected for the moment
+    public void BuyWeaponButton()
     {
-        RectTransform currentImage = GetCurrentImage();
-        Debug.Log($"Current image: {currentImage.name}");
+        string[] weaponNames = { "Pistol", "Rifle", "Shotgun" };
+        int currentIndex = GetCurrentWeaponIndex();
+        string weaponName = weaponNames[currentIndex];
 
-        if (currentImage == null)
-        {
-            Debug.LogWarning("No weapon image selected rn");
-            return;
-        }
-        Weapon weapon = GameManager.Instance.GetWeaponFromImage(currentImage);
-        if (weapon == null)
-        {
-            Debug.LogWarning("No weapon connected to current image");
-            return;
-        }
-        GameManager.Instance.BuyWeapon(weapon.tag, weaponCost); // If current image has tag the BuyWeapon void is called from GameManager
-        buttons.UpdateStockpileUI(); // Refresh the stockpile UI
+        GameManager.Instance.BuyWeapon(weaponName, 50); // Purchase the weapon
 
+        UpdateWeaponUI(currentIndex); // Ensure this updates the UI
     }
 
-    public void MoveRight()// If this void is called the images will move right
+
+    public void BuyWeaponButton(string weaponName, int cost)
     {
-        if (currentIndex >= images.Length - 1) // Chechs if index has reached its maximum value to stop from scrolling
+        if (string.IsNullOrEmpty(weaponName))
         {
-            Debug.Log("Cant scroll further right");
+            Debug.LogWarning("Weapon name is missing!");
             return;
         }
+
+        GameManager.Instance.BuyWeapon(weaponName, cost);
+        Debug.Log($"Bought weapon: {weaponName} for {cost} scrap.");
+    }
+
+
+    public void MoveRight()
+    {
+        if (currentIndex >= images.Length - 1)
+        {
+            Debug.Log("Can't scroll further right.");
+            return;
+        }
+
         currentIndex++;
+        UpdateWeaponDisplay();
+
         for (int i = 0; i < images.Length; i++)
         {
             Vector3 targetPosition = initialPositions[i] - Vector3.right * moveDistance * currentIndex;
@@ -62,14 +77,16 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
-    public void MoveLeft()//if this void is called the images will move left
+    public void MoveLeft()
     {
-        if (currentIndex <= 0)//cant scroll to far left
+        if (currentIndex <= 0)
         {
-            Debug.Log("Cant scroll further left");
+            Debug.Log("Can't scroll further left.");
             return;
         }
+
         currentIndex--;
+        UpdateWeaponDisplay();
 
         for (int i = 0; i < images.Length; i++)
         {
@@ -78,18 +95,51 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveImage(RectTransform image, Vector3 targetposition)
+    private IEnumerator MoveImage(RectTransform image, Vector3 targetPosition)
     {
         Vector3 startPosition = image.anchoredPosition;
         float elapsedTime = 0f;
+
         while (elapsedTime < moveDuration)
         {
-            image.anchoredPosition = Vector3.Lerp(startPosition, targetposition, elapsedTime / moveDuration); //image moves from start position to target position for its set duration
+            image.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, elapsedTime / moveDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        image.anchoredPosition = targetposition;
+
+        image.anchoredPosition = targetPosition;
     }
+
+    private void UpdateWeaponDisplay()
+    {
+        if (weaponDisplayText != null)
+        {
+            weaponDisplayText.text = weaponNames[currentIndex];
+        }
+
+        Debug.Log($"Current weapon: {weaponNames[currentIndex]} (Index: {currentIndex})");
+    }
+
+    public void UpdateWeaponUI(int weaponIndex)
+    {
+        string[] weaponNames = { "Pistol", "Rifle", "Shotgun" };
+        string weaponName = weaponNames[weaponIndex];
+
+        var weaponStock = GameManager.Instance.GetWeaponByName(weaponName);
+
+        if (weaponStock != null && weaponCountTexts.Length > weaponIndex)
+        {
+            weaponCountTexts[weaponIndex].text = weaponStock.Quantity.ToString(); // Update the quantity
+        }
+    }
+
+    public int GetCurrentWeaponIndex()
+    {
+        return currentIndex; // Returns the currently selected weapon index
+    }
+
+
+    /*
 
     public RectTransform GetCurrentImage()//here the current image on screen will be located to uppgrade specific weapons in the GameManager script
     {
@@ -116,7 +166,7 @@ public class ShopUIManager : MonoBehaviour
             weapon.UpgradeRange();
         }
     }
-
+    */
     public void ReduceWeaponCostByPercentage(float percentage)
     {
         if (percentage <= 0 || percentage > 100)

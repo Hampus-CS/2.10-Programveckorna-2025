@@ -18,10 +18,8 @@ public class GameManager : MonoBehaviour
     private Coroutine resourceGainCoroutine; // Store reference to the coroutine
 
     [Header("Weapon Management")]
-    public List<Weapon> purchasedWeapons = new List<Weapon>(); // List of purchased weapons
-    public List<WeaponStock> stockpile = new List<WeaponStock>(); // Unified weapon stockpile
-    public List<GameObject> weaponPanels; // Assign the 3 weapon GameObjects in the Inspector
-    public List<WeaponPrefabInfo> weaponPrefabs; // List of weapon prefabs
+    public List<WeaponStock> stockpile = new List<WeaponStock>();
+    public List<GameObject> weaponPanels;
 
     [Header("References")]
     public static GameManager Instance { get; private set; }
@@ -80,7 +78,6 @@ public class GameManager : MonoBehaviour
             {
                 Name = w.Name,
                 Quantity = w.Quantity,
-                Tier = w.Tier
             }).ToList()
         };
         saveHandler.Save(gameState);
@@ -96,7 +93,7 @@ public class GameManager : MonoBehaviour
         stockpile.Clear();
         foreach (var weaponData in gameState.Stockpile)
         {
-            stockpile.Add(new WeaponStock(weaponData.Name, weaponData.Quantity, weaponData.Tier));
+            stockpile.Add(new WeaponStock(weaponData.Name, weaponData.Quantity));
         }
     }
 
@@ -194,7 +191,9 @@ public class GameManager : MonoBehaviour
     }
 
     public float GetPlayerWeaponCooldown() => playerWeaponCooldown;
-
+    
+    
+    /*
     // Stockpile Management
     public void AddWeaponToStockpile(string weaponName, int initialQuantity, int tier, Sprite icon = null)
     {
@@ -210,8 +209,8 @@ public class GameManager : MonoBehaviour
             Debug.Log($"Added {weaponName} to stockpile with quantity {initialQuantity}");
         }
     }
-
-
+    */
+    /*
     public WeaponStock GetBestWeapon() // "w" stands for weapon
     {
         return stockpile
@@ -219,6 +218,7 @@ public class GameManager : MonoBehaviour
             .OrderByDescending(w => w.Tier) // Sort by tier
             .FirstOrDefault();
     }
+    */
 
     public void UseWeapon(string weaponName)
     {
@@ -241,41 +241,105 @@ public class GameManager : MonoBehaviour
         public GameObject weaponPrefab;
     }
 
-    public void BuyWeapon(string tag, int cost)
+    public void BuyWeapon(string weaponName, int cost)
     {
         if (TrySpendScrap(cost))
         {
-            foreach (var weaponInfo in weaponPrefabs)
+            var weaponStock = stockpile.FirstOrDefault(w => w.Name == weaponName);
+
+            if (weaponStock != null)
             {
-                if (weaponInfo.tag == tag)
-                {
-                    GameObject weaponPanel = weaponPanels.Find(panel => panel.CompareTag(tag));
-                    if (weaponPanel != null)
-                    {
-                        weaponPanel.SetActive(true);
-
-                        TMP_Text quantityText = weaponPanel.transform.Find("QuantityText").GetComponent<TMP_Text>();
-                        int currentQuantity = int.Parse(quantityText.text);
-                        quantityText.text = (currentQuantity + 1).ToString();
-
-                        Debug.Log($"Bought weapon: {tag}, New quantity: {quantityText.text}");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"No weapon panel found with the tag {tag}");
-                    }
-
-                    return;
-                }
+                // If the weapon already exists, just increase the quantity
+                weaponStock.Quantity = Mathf.Min(weaponStock.Quantity + 1, 999);
+                Debug.Log($"Bought {weaponName}. Quantity now: {weaponStock.Quantity}");
             }
-            Debug.LogWarning($"No weapon prefab found with the tag {tag}");
+            else
+            {
+                // No need to create a weapon, just track its quantity
+                weaponStock = new WeaponStock(weaponName, 1);
+                stockpile.Add(weaponStock);
+
+                Debug.Log($"Bought new weapon: {weaponName}. Quantity now: {weaponStock.Quantity}");
+            }
         }
         else
         {
-            Debug.LogWarning("Not enough scrap.");
+            Debug.LogWarning("Not enough scrap to buy the weapon.");
         }
     }
 
+
+    private Weapon FindWeaponInSceneOrPrefab(string weaponName)
+    {
+        // Example of finding it in the scene
+        return FindObjectsOfType<Weapon>().FirstOrDefault(w => w.name == weaponName);
+    }
+
+
+
+    public void UseWeaponForSoldier()
+    {
+        var weapon = stockpile
+            .Where(w => w.Quantity > 0)
+            .OrderByDescending(w => w.Quantity)
+            .FirstOrDefault();
+
+        if (weapon != null)
+        {
+            weapon.Quantity--;
+            UpdateWeaponUI(weapon.Name);
+        }
+    }
+
+    private void UpdateWeaponUI(string weaponName)
+    {
+        var panel = weaponPanels.FirstOrDefault(p => p.name == weaponName);
+        if (panel != null)
+        {
+            var quantityText = panel.GetComponentInChildren<TMP_Text>();
+            var weapon = stockpile.FirstOrDefault(w => w.Name == weaponName);
+            quantityText.text = weapon != null ? weapon.Quantity.ToString() : "0";
+        }
+    }
+
+    [System.Serializable]
+    public class WeaponStock
+    {
+        public string Name;
+        public int Quantity;
+        public int Damage;
+        public int Range;
+
+        public WeaponStock(string name, int quantity)
+        {
+            Name = name;
+            Quantity = quantity;
+            Damage = 10;  // Default damage
+            Range = 5;    // Default range
+        }
+
+        public void UpgradeDamage()
+        {
+            Damage += 5;  // Increase damage by 5 (or any value you prefer)
+            Debug.Log($"{Name} damage upgraded to: {Damage}");
+        }
+
+        public void UpgradeRange()
+        {
+            Range += 2;  // Increase range by 2 (adjust as needed)
+            Debug.Log($"{Name} range upgraded to: {Range}");
+        }
+    }
+
+    public WeaponStock GetWeaponByName(string weaponName)
+    {
+        return stockpile.FirstOrDefault(w => w.Name == weaponName);
+    }
+
+
+    //------------------------------------------------------------------
+
+    /*
     public void UpgradeWeaponDamage(RectTransform currentImage, int cost)
     {
         Weapon weapon = GetWeaponFromImage(currentImage);
@@ -325,7 +389,9 @@ public class GameManager : MonoBehaviour
         Debug.LogWarning($"No weapon prefab associated with the image tag: {imageTag}");
         return null;
     }
+    */
 
+    /*
     [System.Serializable]
     public class WeaponStock
     {
@@ -342,8 +408,9 @@ public class GameManager : MonoBehaviour
             Icon = icon;
         }
     }
+    */
 
-
+    //------------------------------------------------------------------
 }
 
 /// <summary>

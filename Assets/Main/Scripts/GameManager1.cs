@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using static GameManager;
 
 
 
@@ -120,34 +121,56 @@ public class GameManager1 : MonoBehaviour
     }
     public void UpgradeCurrentWeaponDamage()
     {
-        RectTransform currentImage = shopUIManager.GetCurrentImage();
-        Weapon weapon = GetWeaponFromImage(currentImage); 
+        int currentIndex = shopUIManager.GetCurrentWeaponIndex();
+        string[] weaponNames = { "Pistol", "Rifle", "Shotgun" };
 
-        if (weapon != null)
+        if (currentIndex >= 0 && currentIndex < weaponNames.Length)
         {
-            weapon.UpgradeDamage(); 
-            
+            string currentWeaponName = weaponNames[currentIndex];
+            WeaponStock weaponStock = GameManager.Instance.GetWeaponByName(currentWeaponName); // Now returns WeaponStock
+
+            if (weaponStock != null)
+            {
+                weaponStock.UpgradeDamage(); // Use WeaponStock's UpgradeDamage method
+                Debug.Log($"Upgraded damage for: {currentWeaponName}");
+            }
+            else
+            {
+                Debug.LogWarning($"No weapon found with the name: {currentWeaponName}");
+            }
         }
         else
         {
-            Debug.LogWarning("No weapon with same tag as this image");
+            Debug.LogWarning("Invalid weapon index.");
         }
-
     }
+
+
     public void UpgradeCurrentWeaponRange()
     {
-        RectTransform currentImage = shopUIManager.GetCurrentImage();
-        Weapon weapon = GetWeaponFromImage(currentImage); //gets tag of current image
+        int currentIndex = shopUIManager.GetCurrentWeaponIndex();
+        string[] weaponNames = { "Pistol", "Rifle", "Shotgun" };
 
-        if (weapon != null)
+        if (currentIndex >= 0 && currentIndex < weaponNames.Length)
         {
-            weapon.UpgradeRange(); //calls method from weapon script
-            
+            string currentWeaponName = weaponNames[currentIndex];
+            WeaponStock weaponStock = GameManager.Instance.GetWeaponByName(currentWeaponName); // Now returns WeaponStock
+
+            if (weaponStock != null)
+            {
+                weaponStock.UpgradeRange(); // Use WeaponStock's UpgradeRange method
+                Debug.Log($"Upgraded range for: {currentWeaponName}");
+            }
+            else
+            {
+                Debug.LogWarning($"No weapon found with the name: {currentWeaponName}");
+            }
         }
         else
         {
-            Debug.LogWarning("No weapon with same tag as this image");
+            Debug.LogWarning("Invalid weapon index.");
         }
-
     }
+
+
 }
