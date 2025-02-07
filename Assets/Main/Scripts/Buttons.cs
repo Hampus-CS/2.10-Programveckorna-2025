@@ -160,6 +160,7 @@ public class Buttons : MonoBehaviour
     }
     public void CloseSidePanel()
     {
+        Debug.Log("CloseSidePanel");
         button[0].gameObject.SetActive(true);
         button[1].gameObject.SetActive(false);
         menus[5].SetActive(false);

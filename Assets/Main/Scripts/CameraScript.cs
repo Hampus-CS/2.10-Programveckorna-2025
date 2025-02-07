@@ -8,7 +8,8 @@ public class CameraScript : MonoBehaviour
 
     private void Start()
     {
-        transform.position = new Vector3(100, 30, 40);
+       transform.position = new Vector3(15, 11, -35);
+
     }
 
     void Update()
@@ -24,9 +25,9 @@ public class CameraScript : MonoBehaviour
             pos.z += panSpeed * Time.deltaTime;
         }
         
-        pos.z = Mathf.Clamp(pos.z, 25, 275);
-        pos.y = Mathf.Clamp(pos.y, 25, 35);
-        pos.x = Mathf.Clamp(pos.x, 102, 110);
+        pos.z = Mathf.Clamp(pos.z, -35, 30);
+        pos.x = Mathf.Clamp(pos.x, 10, 15);
+        pos.y = Mathf.Clamp(pos.y, 11, 20);
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         pos.y -= scroll * scrollSpeed * 100f * Time.deltaTime;
