@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Unity.Burst.Intrinsics;
+using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
@@ -11,7 +12,8 @@ public class SkillManager : MonoBehaviour
     public Dictionary<string, ISkill> skills = new();
 
     TroopPersonalityScript troopPersonalityScript;
-    ShopUIManager ShopUIManager;
+    ShopUIManager shopUIManager;
+    Buttons buttons;
 
     void Start()
     {
@@ -41,6 +43,11 @@ public class SkillManager : MonoBehaviour
         UseSkill("WeapondSmith"); // Locked skill
         DisplaySkills();
         */
+
+        foreach (var skill in skills)
+        {
+            Debug.Log($"Registered skill: {skill.Key}");
+        }
     }
 
     public void AddSkill(ISkill skill)
@@ -55,32 +62,61 @@ public class SkillManager : MonoBehaviour
             Debug.LogWarning($"Skill '{skill.Name}' already exists.");
         }
     }
-
+    /*
     public void Unlock(string skillName)
     {
+        Debug.Log($"Attempting to unlock: {skillName}");
         if (skills.TryGetValue(skillName, out ISkill skill))
         {
+            Debug.Log($"Found skill: {skill.Name}");
             if (!skill.IsUnlocked)
             {
                 if (GameManager.Instance.TrySpendScrap(skill.Cost))
                 {
                     skill.Unlock();
-                    skill.Use();
-
+                    Debug.Log($"Unlocked: {skill.Name}");
+                    if (skill is BaseSkill baseSkill && !baseSkill.RequiresTarget)
+                    {
+                        Debug.Log($"Calling Use() for: {baseSkill.Name}");
+                        baseSkill.Use(); // This should trigger Execute()
+                    }
                 }
                 else
                 {
-                    Debug.LogWarning($"Not enough scrap to unlock '{skillName}'. Cost: {skill.Cost}");
+                    Debug.LogWarning($"Not enough scrap for {skillName}");
                 }
             }
             else
             {
-                Debug.Log($"Skill '{skillName}' is already unlocked.");
+                Debug.Log($"{skillName} is already unlocked.");
             }
         }
         else
         {
-            Debug.LogWarning($"Skill '{skillName}' does not exist.");
+            Debug.LogWarning($"Skill '{skillName}' not found.");
+        }
+    }
+    */
+    public void Unlock(string skillName)
+    {
+        Debug.Log($"Trying to unlock: '{skillName}'");
+
+        if (skills.TryGetValue(skillName, out ISkill skill))
+        {
+            Debug.Log($"Skill found: '{skill.Name}'");
+        }
+        else
+        {
+            Debug.LogWarning($"Skill '{skillName}' not found!");
+
+            // Debug: List potential close matches
+            foreach (var key in skills.Keys)
+            {
+                if (key.Trim() == skillName.Trim())
+                {
+                    Debug.LogWarning($"Close match found: '{key}' after trimming.");
+                }
+            }
         }
     }
 
@@ -182,19 +218,10 @@ public abstract class BaseSkill : ISkill
 public class WeaponSmith : BaseSkill
 {
     public WeaponSmith(int cost) : base("WeaponSmith", cost) { }
-
+    
     protected override void Execute(GameObject target = null)
     {
-        Buttons buttons = Object.FindObjectOfType<Buttons>();
-        if (buttons != null)
-        {
-            buttons.EnableWeaponButtons();
-            Debug.Log("Weapon upgrades are now available.");
-        }
-        else
-        {
-            Debug.LogWarning("Buttons reference not found.");
-        }
+        Debug.Log("Kör execute");
     }
 }
 

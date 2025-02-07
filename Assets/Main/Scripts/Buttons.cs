@@ -256,16 +256,26 @@ public class Buttons : MonoBehaviour
         isSkillInfoActive = false;
         Debug.LogWarning("Skillinfo inte öppen");
     }
-
+   
     public void UnlockSkillByIndex(int skillIndex)
     {
         if (skillIndex > 0 && skillIndex <= skillButtonMappings.Count)
         {
             var skillName = skillButtonMappings[skillIndex - 1].skillName;
+            Debug.Log($"Attempting to unlock skill: '{skillName}'");  // Added quotes to catch hidden spaces
+
             if (skillManager != null)
             {
-                skillManager.Unlock(skillName);
                 isSkillInfoActive = false;
+                // Compare with registered skills
+                foreach (var key in skillManager.skills.Keys)
+                {
+                    Debug.Log($"Comparing with registered skill: '{key}' - Match: {key == skillName}");
+                }
+
+                skillManager.Unlock(skillName);
+                Debug.Log($"Skill '{skillName}' unlocked successfully.");
+                
             }
             else
             {
@@ -277,7 +287,6 @@ public class Buttons : MonoBehaviour
             Debug.LogWarning("Invalid skill index.");
         }
     }
-
     /// <summary>
     /// Stockpile UI
     /// </summary>
@@ -342,7 +351,6 @@ public class Buttons : MonoBehaviour
     {
         button[2].gameObject.SetActive(true);
         button[3].gameObject.SetActive(true);
-        print("upgraderingar aktiverade");
     }
 
     public void BuyWeapon(string tag, int cost)
