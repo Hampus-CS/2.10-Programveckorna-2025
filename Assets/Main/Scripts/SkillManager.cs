@@ -18,7 +18,7 @@ public class SkillManager : MonoBehaviour
     void Start()
     {
         // Initialize skills
-        AddSkill(new WeaponSmith(50));
+        //AddSkill(new WeaponSmith(50));
         AddSkill(new LongerBarrels(50));
         AddSkill(new HigherQualityAmmunition(50));
         AddSkill(new StandardisedProduction(50));
@@ -214,7 +214,7 @@ public abstract class BaseSkill : ISkill
 /// Skills
 /// </summary>
 
-
+/*
 public class WeaponSmith : BaseSkill
 {
     public WeaponSmith(int cost) : base("WeaponSmith", cost) { }
@@ -224,6 +224,7 @@ public class WeaponSmith : BaseSkill
         Debug.Log("Kör execute");
     }
 }
+*/
 
 public class LongerBarrels : BaseSkill
 {
